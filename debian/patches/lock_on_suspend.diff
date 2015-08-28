@@ -1,0 +1,30 @@
+--- a/src/xfpm-manager.c
++++ b/src/xfpm-manager.c
+@@ -328,6 +328,7 @@
+ {
+     XfpmLidTriggerAction action;
+     gboolean on_battery, logind_handle_lid_switch;
++    gboolean lock_screen;
+ 
+     if ( LOGIND_RUNNING() )
+     {
+@@ -335,8 +336,18 @@
+               LOGIND_HANDLE_LID_SWITCH, &logind_handle_lid_switch,
+               NULL);
+ 
+-        if (logind_handle_lid_switch)
++        if (logind_handle_lid_switch) {
++              g_object_get (G_OBJECT (manager->priv->conf),
++                  LOCK_SCREEN_ON_SLEEP, &lock_screen,
++                  NULL);
++
++            if (lock_screen && lid_is_closed)
++	  	    xfpm_lock_screen ();
++            else if (lock_screen)
++                    XResetScreenSaver (gdk_x11_get_default_xdisplay ());
++
+             return;
++        }
+     }
+ 
+     g_object_get (G_OBJECT (power),

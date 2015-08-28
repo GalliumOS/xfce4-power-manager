@@ -1,0 +1,21 @@
+--- a/src/xfpm-xfconf.c
++++ b/src/xfpm-xfconf.c
+@@ -492,7 +492,7 @@
+                                                         NULL, NULL,
+                                                         XFPM_DO_SUSPEND,
+                                                         XFPM_DO_HIBERNATE,
+-                                                        XFPM_DO_HIBERNATE,
++                                                        XFPM_DO_SUSPEND,
+                                                         G_PARAM_READWRITE));
+ 
+     /**
+--- a/src/xfpm-power.c
++++ b/src/xfpm-power.c
+@@ -512,6 +512,7 @@
+     xfpm_power_get_properties (power);
+     /* Restore the brightness level from before we suspended */
+     xfpm_brightness_set_level (brightness, brightness_level);
++    XResetScreenSaver (gdk_x11_get_default_xdisplay ());
+ 
+ #ifdef WITH_NETWORK_MANAGER
+     if ( network_manager_sleep )

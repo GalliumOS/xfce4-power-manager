@@ -1,0 +1,8 @@
+xfce4-power-manager (1.3.0-1) experimental; urgency=low
+
+  Starting with 1.3, xfce4-power-manager no longer provides a tray icon, but
+  relies only on the Xfce panel plugin in the xfce4-power-manager-plugins
+  package, which is now recommended. The plugin (called Power Manager Plugin)
+  can then be added to the Xfce panel.
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Sun, 10 Aug 2014 11:09:34 +0200
