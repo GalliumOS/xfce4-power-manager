@@ -1,4 +1,0 @@
-SUBDIRS = 		\
-	icons		\
-	interfaces	\
-	appdata

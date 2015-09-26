@@ -1,9 +1,0 @@
-[Desktop Entry]
-_Name=Power Manager
-_Comment=Power management for the Xfce desktop
-Icon=xfpm-ac-adapter
-Exec=xfce4-power-manager
-Terminal=false
-Type=Application
-NotShowIn=GNOME;KDE;Unity;
-StartupNotify=false
