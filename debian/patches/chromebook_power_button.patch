@@ -1,0 +1,81 @@
+--- a/src/xfpm-button.c
++++ b/src/xfpm-button.c
+@@ -57,6 +57,8 @@
+ #define XFPM_BUTTON_GET_PRIVATE(o) \
+ (G_TYPE_INSTANCE_GET_PRIVATE((o), XFPM_TYPE_BUTTON, XfpmButtonPrivate))
+ 
++#define KEYCODE_AFTER_POWERB 85
++
+ static struct
+ {
+     XfpmButtonKey    key;
+@@ -65,10 +67,12 @@
+ 
+ struct XfpmButtonPrivate
+ {
+-    GdkScreen	*screen;
+-    GdkWindow   *window;
++    GdkScreen	 *screen;
++    GdkWindow    *window;
+     
+-    guint8       mapped_buttons;
++    guint8        mapped_buttons;
++    gboolean      power_pressed;
++    XfpmButtonKey power_key;
+ };
+ 
+ enum
+@@ -106,18 +110,31 @@
+     
+     XEvent *xev = (XEvent *) xevent;
+     
+-    if ( xev->type != KeyPress )
++    button = (XfpmButton *) data;
++    if ( xev->type != KeyPress  && !button->priv->power_pressed ) {
+     	return GDK_FILTER_CONTINUE;
+-    
++    } else if (xev->type == KEYCODE_AFTER_POWERB && button->priv->power_pressed ) {
++        g_signal_emit (G_OBJECT(button), signals[BUTTON_PRESSED], 0, button->priv->power_key);
++        button->priv->power_pressed = FALSE;
++    	return GDK_FILTER_REMOVE;
++    } else if (xev->type != KeyPress && button->priv->power_pressed) {
++        button->priv->power_pressed = FALSE;
++    	return GDK_FILTER_CONTINUE;
++    }
++
+     key = xfpm_button_get_key (xev->xkey.keycode);
+     
+     if ( key != BUTTON_UNKNOWN )
+     {
+ 	button = (XfpmButton *) data;
+     
+-	XFPM_DEBUG_ENUM (key, XFPM_TYPE_BUTTON_KEY, "Key press");
+-    
+-	g_signal_emit (G_OBJECT(button), signals[BUTTON_PRESSED], 0, key);
++        if ( key != BUTTON_POWER_OFF ) {
++	   g_signal_emit (G_OBJECT(button), signals[BUTTON_PRESSED], 0, key);
++           button->priv->power_pressed = FALSE;
++        } else {
++           button->priv->power_pressed = TRUE;
++           button->priv->power_key = key;
++        }
+ 	return GDK_FILTER_REMOVE;
+     }
+     
+@@ -224,7 +241,7 @@
+     if (xfpm_button_xevent_key (button, XF86XK_KbdBrightnessDown, BUTTON_KBD_BRIGHTNESS_DOWN) )
+ 	button->priv->mapped_buttons |= KBD_BRIGHTNESS_KEY_DOWN;
+ 
+-    gdk_window_add_filter (button->priv->window, 
++    gdk_window_add_filter (NULL,
+ 			   xfpm_button_filter_x_events, button);
+ }
+ 
+@@ -255,6 +272,7 @@
+     button->priv->mapped_buttons = 0;
+     button->priv->screen = NULL;
+     button->priv->window = NULL;
++    button->priv->power_pressed = FALSE;
+     
+     xfpm_button_setup (button);
+ }
