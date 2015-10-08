@@ -23,7 +23,7 @@
      }
  }
  
-+static gboolean
++gboolean
 +read_bat0(gpointer data) {
 +    int fd, b;
 +    char c;
@@ -46,3 +46,33 @@
  }
  
  static void xfpm_battery_get_property (GObject *object,
+--- a/src/xfpm-battery.h
++++ b/src/xfpm-battery.h
+@@ -67,6 +67,7 @@
+ const gchar 		   *xfpm_battery_get_battery_name(XfpmBattery *battery);
+ 
+ gchar 			   *xfpm_battery_get_time_left   (XfpmBattery *battery);
++gboolean                   read_bat0(gpointer data);
+ 
+ G_END_DECLS
+ 
+--- a/src/xfpm-manager.c
++++ b/src/xfpm-manager.c
+@@ -396,6 +396,7 @@
+ 	XFPM_DEBUG_ENUM (action, XFPM_TYPE_LID_TRIGGER_ACTION, "LID opened");
+ 
+ 	xfpm_dpms_force_level (manager->priv->dpms, DPMSModeOn);
++        read_bat0(NULL);
+     }
+ }
+ 
+--- a/src/xfpm-power.c
++++ b/src/xfpm-power.c
+@@ -513,6 +513,7 @@
+     /* Restore the brightness level from before we suspended */
+     xfpm_brightness_set_level (brightness, brightness_level);
+     XResetScreenSaver (gdk_x11_get_default_xdisplay ());
++    read_bat0(NULL);
+ 
+ #ifdef WITH_NETWORK_MANAGER
+     if ( network_manager_sleep )
