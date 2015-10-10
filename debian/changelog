@@ -1,46 +1,54 @@
+xfce4-power-manager (1.4.8-0ubuntu6) vivid; urgency=medium
+
+  * Patch to disable hibernation
+  * Patch to disable options for what to do on critical battery power
+  * Improved battery status patch to read status on resume
+
+ -- Hugh Greenberg <hugh@galliumos.org>  Fri, 09 Oct 2015 12:18:45 +1100
+
 xfce4-power-manager (1.4.8-0ubuntu4) vivid; urgency=medium
 
   * Patch for working around an issue where the power button would be triggered from the ac adapter or on sleep
 
- -- Hugh Greenberg <hugh@distroshare.com>  Sat, 26 Sep 2015 12:18:45 +1100
+ -- Hugh Greenberg <hugh@galliumos.org>  Sat, 26 Sep 2015 12:18:45 +1100
 
 xfce4-power-manager (1.4.8-0ubuntu3) vivid; urgency=medium
 
   * Patch for working around an issue where the battery status wouldn't update quickly
 
- -- Hugh Greenberg <hugh@distroshare.com>  Sat, 26 Sep 2015 12:18:45 +1100
+ -- Hugh Greenberg <hugh@galliumos.org>  Sat, 26 Sep 2015 12:18:45 +1100
 
 xfce4-power-manager (1.4.8-0ubuntu2) vivid; urgency=medium
 
   * Last patches weren't included by accident
 
- -- Hugh Greenberg <hugh@distroshare.com>  Fri, 18 Jul 2015 12:18:45 +1100
+ -- Hugh Greenberg <hugh@galliumos.org>  Fri, 18 Jul 2015 12:18:45 +1100
 
 xfce4-power-manager (1.4.8-0ubuntu1) vivid; urgency=medium
 
   * Patch for locking on suspend
   * Patch for resetting screensaver on resume
 
- -- Hugh Greenberg <hugh@distroshare.com>  Fri, 16 Jul 2015 12:18:45 +1100
+ -- Hugh Greenberg <hugh@galliumos.org>  Fri, 16 Jul 2015 12:18:45 +1100
 
 xfce4-power-manager (1.4.6-0ubuntu1) vivid; urgency=medium
 
   * Removed brightness and dbus hacks since I am removing light locker and that was the reason why we needed these hacks.
 
- -- Hugh Greenberg <hugh@distroshare.com>  Fri, 15 Jul 2015 12:18:45 +1100
+ -- Hugh Greenberg <hugh@galliumos.org>  Fri, 15 Jul 2015 12:18:45 +1100
 
 xfce4-power-manager (1.4.5-0ubuntu1) vivid; urgency=medium
 
   * A hack for forcing late locking if light locker is enabled to automatically lock the session. This fixes a bug that prevented suspend and showed a DBus error.
 
- -- Hugh Greenberg <hugh@distroshare.com>  Fri, 10 Jul 2015 12:18:45 +1100
+ -- Hugh Greenberg <hugh@galliumos.org>  Fri, 10 Jul 2015 12:18:45 +1100
 
 xfce4-power-manager (1.4.4-0ubuntu1) vivid; urgency=medium
 
   * Don't restore brightness levels after a resume. This previously restored them to state that the power manager set them to, not the user.
   * Changed the default suspend method to suspend, not hibernate 
 
- -- Hugh Greenberg <hugh@distroshare.com>  Fri, 10 Jul 2015 12:18:45 +1100
+ -- Hugh Greenberg <hugh@galliumos.org>  Fri, 10 Jul 2015 12:18:45 +1100
 
 xfce4-power-manager (1.4.3-0ubuntu1) vivid; urgency=medium
 
