@@ -1,0 +1,26 @@
+--- a/src/xfpm-power.c
++++ b/src/xfpm-power.c
+@@ -846,21 +846,9 @@
+ 
+     if ( power->priv->on_battery )
+     {
+-	if ( current_charge == XFPM_BATTERY_CHARGE_LOW )
+-	{
+-	    if ( notify )
+-		xfpm_notify_show_notification (power->priv->notify,
+-					       _("Power Manager"),
+-					       _("System is running on low power"),
+-					       gtk_status_icon_get_icon_name (GTK_STATUS_ICON (battery)),
+-					       10000,
+-					       FALSE,
+-					       XFPM_NOTIFY_NORMAL,
+-					       GTK_STATUS_ICON (battery));
+-
+-	}
+-	else if ( battery_charge == XFPM_BATTERY_CHARGE_LOW )
++	if ( current_charge == XFPM_BATTERY_CHARGE_LOW || battery_charge == XFPM_BATTERY_CHARGE_LOW)
+ 	{
++            read_bat0(NULL);
+ 	    if ( notify )
+ 	    {
+ 		gchar *msg;
