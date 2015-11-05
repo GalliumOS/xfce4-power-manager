@@ -1,3 +1,21 @@
+xfce4-power-manager (1.4.8-0ubuntu9) vivid; urgency=medium
+
+  * Added patch to increase the minimum brightness of the applet button brightness slider
+
+ -- Hugh Greenberg <hugh@galliumos.org>  Wed, 04 Nov 2015 12:18:45 +1100
+
+xfce4-power-manager (1.4.8-0ubuntu8) vivid; urgency=medium
+
+  * Added patch to improve low battery status notification
+
+ -- Hugh Greenberg <hugh@galliumos.org>  Mon, 12 Oct 2015 12:18:45 +1100
+
+xfce4-power-manager (1.4.8-0ubuntu7) vivid; urgency=medium
+
+  * Removed patch to disable options for what to do on critical battery power
+
+ -- Hugh Greenberg <hugh@galliumos.org>  Mon, 12 Oct 2015 12:18:45 +1100
+
 xfce4-power-manager (1.4.8-0ubuntu6) vivid; urgency=medium
 
   * Patch to disable hibernation

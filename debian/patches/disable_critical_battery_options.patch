@@ -1,0 +1,339 @@
+--- a/data/interfaces/xfpm-settings.ui
++++ b/data/interfaces/xfpm-settings.ui
+@@ -29,12 +29,6 @@
+     <property name="step_increment">1</property>
+     <property name="page_increment">10</property>
+   </object>
+-  <object class="GtkAdjustment" id="critical-power-level-spin-adjustment">
+-    <property name="lower">1</property>
+-    <property name="upper">20</property>
+-    <property name="value">5</property>
+-    <property name="step_increment">1</property>
+-  </object>
+   <object class="GtkAdjustment" id="display-blank-on-ac-adjustment">
+     <property name="upper">60</property>
+     <property name="value">10</property>
+@@ -854,132 +848,6 @@
+                       </packing>
+                     </child>
+                     <child>
+-                      <object class="GtkFrame" id="critical-power-frame">
+-                        <property name="visible">True</property>
+-                        <property name="can_focus">False</property>
+-                        <property name="label_xalign">0</property>
+-                        <property name="shadow_type">none</property>
+-                        <child>
+-                          <object class="GtkAlignment" id="alignment3">
+-                            <property name="visible">True</property>
+-                            <property name="can_focus">False</property>
+-                            <property name="border_width">6</property>
+-                            <property name="top_padding">6</property>
+-                            <property name="bottom_padding">12</property>
+-                            <property name="left_padding">6</property>
+-                            <child>
+-                              <object class="GtkVBox" id="vbox4">
+-                                <property name="visible">True</property>
+-                                <property name="can_focus">False</property>
+-                                <property name="spacing">3</property>
+-                                <child>
+-                                  <object class="GtkHBox" id="hbox2">
+-                                    <property name="visible">True</property>
+-                                    <property name="can_focus">False</property>
+-                                    <property name="spacing">6</property>
+-                                    <child>
+-                                      <object class="GtkLabel" id="critical-power-level-label">
+-                                        <property name="visible">True</property>
+-                                        <property name="can_focus">False</property>
+-                                        <property name="xalign">0</property>
+-                                        <property name="label" translatable="yes">Critical battery power level:</property>
+-                                      </object>
+-                                      <packing>
+-                                        <property name="expand">False</property>
+-                                        <property name="fill">True</property>
+-                                        <property name="position">0</property>
+-                                      </packing>
+-                                    </child>
+-                                    <child>
+-                                      <object class="GtkSpinButton" id="critical-power-level-spin">
+-                                        <property name="visible">True</property>
+-                                        <property name="can_focus">True</property>
+-                                        <property name="invisible_char">●</property>
+-                                        <property name="width_chars">4</property>
+-                                        <property name="primary_icon_activatable">False</property>
+-                                        <property name="secondary_icon_activatable">False</property>
+-                                        <property name="primary_icon_sensitive">True</property>
+-                                        <property name="secondary_icon_sensitive">True</property>
+-                                        <property name="adjustment">critical-power-level-spin-adjustment</property>
+-                                        <signal name="output" handler="critical_spin_output_cb" swapped="no"/>
+-                                        <signal name="value-changed" handler="critical_level_value_changed_cb" swapped="no"/>
+-                                      </object>
+-                                      <packing>
+-                                        <property name="expand">False</property>
+-                                        <property name="fill">True</property>
+-                                        <property name="position">1</property>
+-                                      </packing>
+-                                    </child>
+-                                  </object>
+-                                  <packing>
+-                                    <property name="expand">False</property>
+-                                    <property name="fill">True</property>
+-                                    <property name="position">0</property>
+-                                  </packing>
+-                                </child>
+-                                <child>
+-                                  <object class="GtkHBox" id="hbox3">
+-                                    <property name="visible">True</property>
+-                                    <property name="can_focus">False</property>
+-                                    <property name="spacing">6</property>
+-                                    <child>
+-                                      <object class="GtkLabel" id="critical-power-action-label">
+-                                        <property name="visible">True</property>
+-                                        <property name="can_focus">False</property>
+-                                        <property name="xalign">0</property>
+-                                        <property name="label" translatable="yes">On critical battery power:</property>
+-                                      </object>
+-                                      <packing>
+-                                        <property name="expand">False</property>
+-                                        <property name="fill">True</property>
+-                                        <property name="position">0</property>
+-                                      </packing>
+-                                    </child>
+-                                    <child>
+-                                      <object class="GtkComboBox" id="critical-power-action-combo">
+-                                        <property name="visible">True</property>
+-                                        <property name="can_focus">False</property>
+-                                        <signal name="changed" handler="battery_critical_changed_cb" swapped="no"/>
+-                                        <child>
+-                                          <object class="GtkCellRendererText" id="renderer7"/>
+-                                          <attributes>
+-                                            <attribute name="text">0</attribute>
+-                                          </attributes>
+-                                        </child>
+-                                      </object>
+-                                      <packing>
+-                                        <property name="expand">True</property>
+-                                        <property name="fill">True</property>
+-                                        <property name="position">1</property>
+-                                      </packing>
+-                                    </child>
+-                                  </object>
+-                                  <packing>
+-                                    <property name="expand">False</property>
+-                                    <property name="fill">True</property>
+-                                    <property name="position">1</property>
+-                                  </packing>
+-                                </child>
+-                              </object>
+-                            </child>
+-                          </object>
+-                        </child>
+-                        <child type="label">
+-                          <object class="GtkLabel" id="label9">
+-                            <property name="visible">True</property>
+-                            <property name="can_focus">False</property>
+-                            <property name="label" translatable="yes">&lt;b&gt;Critical power&lt;/b&gt;</property>
+-                            <property name="use_markup">True</property>
+-                          </object>
+-                        </child>
+-                      </object>
+-                      <packing>
+-                        <property name="expand">False</property>
+-                        <property name="fill">True</property>
+-                        <property name="position">1</property>
+-                      </packing>
+-                    </child>
+-                    <child>
+                       <object class="GtkFrame" id="security-frame">
+                         <property name="visible">True</property>
+                         <property name="can_focus">False</property>
+@@ -1805,12 +1673,6 @@
+       <action-widget response="-3">close-button</action-widget>
+     </action-widgets>
+   </object>
+-  <object class="GtkSizeGroup" id="sg-critical-power">
+-    <widgets>
+-      <widget name="critical-power-level-label"/>
+-      <widget name="critical-power-action-label"/>
+-    </widgets>
+-  </object>
+   <object class="GtkSizeGroup" id="sg-display-labels">
+     <widgets>
+       <widget name="display-blank-label"/>
+--- a/src/xfpm-battery.c
++++ b/src/xfpm-battery.c
+@@ -312,10 +312,7 @@
+     XfpmBatteryCharge charge;
+     guint critical_level, low_level;
+ 
+-    g_object_get (G_OBJECT (battery->priv->conf),
+-		  CRITICAL_POWER_LEVEL, &critical_level,
+-		  NULL);
+-
++    critical_level = 5;
+     low_level = critical_level + 10;
+ 
+     if ( battery->priv->percentage > low_level )
+--- a/src/xfpm-power.c
++++ b/src/xfpm-power.c
+@@ -638,7 +638,8 @@
+     NotifyNotification *n;
+ 
+     message = _("System is running on low power. "\
+-               "Save your work to avoid losing data");
++               "Save your work to avoid losing data. "\
++               "System will shutdown shortly. ");
+ 
+     n =
+ 	xfpm_notify_new_notification (power->priv->notify,
+@@ -649,7 +650,6 @@
+ 				      XFPM_NOTIFY_CRITICAL,
+ 				      GTK_STATUS_ICON (battery));
+ 
+-    xfpm_power_add_actions_to_notification (power, n);
+     xfpm_notify_critical (power->priv->notify, n);
+ 
+ }
+@@ -662,104 +662,9 @@
+ }
+ 
+ static void
+-xfpm_power_show_critical_action_gtk (XfpmPower *power)
+-{
+-    GtkWidget *dialog;
+-    GtkWidget *content_area;
+-    GtkWidget *cancel;
+-    const gchar *message;
+-    gboolean can_shutdown;
+-
+-    if ( LOGIND_RUNNING () )
+-    {
+-        g_object_get (G_OBJECT (power->priv->systemd),
+-                      "can-shutdown", &can_shutdown,
+-                      NULL);
+-    }
+-    else
+-    {
+-        g_object_get (G_OBJECT (power->priv->console),
+-                      "can-shutdown", &can_shutdown,
+-                      NULL);
+-    }
+-
+-    message = _("System is running on low power. "\
+-               "Save your work to avoid losing data");
+-
+-    dialog = gtk_dialog_new_with_buttons (_("Power Manager"), NULL, GTK_DIALOG_MODAL,
+-                                          NULL);
+-
+-    gtk_dialog_set_default_response (GTK_DIALOG (dialog),
+-                                     GTK_RESPONSE_CANCEL);
+-
+-    content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+-
+-    gtk_box_pack_start (GTK_BOX (content_area), gtk_label_new (message),
+-		        TRUE, TRUE, 8);
+-
+-    if ( power->priv->can_hibernate && power->priv->auth_hibernate )
+-    {
+-	GtkWidget *hibernate;
+-	hibernate = gtk_button_new_with_label (_("Hibernate"));
+-	gtk_dialog_add_action_widget (GTK_DIALOG (dialog), hibernate, GTK_RESPONSE_NONE);
+-
+-	g_signal_connect_swapped (hibernate, "clicked",
+-			          G_CALLBACK (xfpm_power_hibernate_clicked), power);
+-    }
+-
+-    if ( power->priv->can_suspend && power->priv->auth_suspend )
+-    {
+-	GtkWidget *suspend;
+-
+-	suspend = gtk_button_new_with_label (_("Suspend"));
+-	gtk_dialog_add_action_widget (GTK_DIALOG (dialog), suspend, GTK_RESPONSE_NONE);
+-
+-	g_signal_connect_swapped (suspend, "clicked",
+-			          G_CALLBACK (xfpm_power_suspend_clicked), power);
+-    }
+-
+-    if ( can_shutdown )
+-    {
+-	GtkWidget *shutdown;
+-
+-	shutdown = gtk_button_new_with_label (_("Shutdown"));
+-	gtk_dialog_add_action_widget (GTK_DIALOG (dialog), shutdown, GTK_RESPONSE_NONE);
+-
+-	g_signal_connect_swapped (shutdown, "clicked",
+-			          G_CALLBACK (xfpm_power_shutdown_clicked), power);
+-    }
+-
+-    cancel = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
+-    gtk_dialog_add_action_widget (GTK_DIALOG (dialog), cancel, GTK_RESPONSE_NONE);
+-
+-    g_signal_connect_swapped (cancel, "clicked",
+-			      G_CALLBACK (xfpm_power_close_critical_dialog), power);
+-
+-    g_signal_connect_swapped (dialog, "destroy",
+-			      G_CALLBACK (xfpm_power_close_critical_dialog), power);
+-    if ( power->priv->dialog )
+-    {
+-	gtk_widget_destroy (power->priv->dialog);
+-	power->priv->dialog = NULL;
+-
+-    }
+-    power->priv->dialog = dialog;
+-    gtk_widget_show_all (dialog);
+-}
+-
+-static void
+ xfpm_power_show_critical_action (XfpmPower *power, XfpmBattery *battery)
+ {
+-    gboolean supports_actions;
+-
+-    g_object_get (G_OBJECT (power->priv->notify),
+-		  "actions", &supports_actions,
+-		  NULL);
+-
+-    if ( supports_actions )
+-	xfpm_power_show_critical_action_notification (power, battery);
+-    else
+-	xfpm_power_show_critical_action_gtk (power);
++    xfpm_power_show_critical_action_notification (power, battery);
+ }
+ 
+ static void
+@@ -778,30 +683,14 @@
+ static void
+ xfpm_power_system_on_critical_power (XfpmPower *power, XfpmBattery *battery)
+ {
+-    XfpmShutdownRequest critical_action;
+ 
+-    g_object_get (G_OBJECT (power->priv->conf),
+-	          CRITICAL_BATT_ACTION_CFG, &critical_action,
+-		  NULL);
+-
+-    XFPM_DEBUG ("System is running on low power");
+-    XFPM_DEBUG_ENUM (critical_action, XFPM_TYPE_SHUTDOWN_REQUEST, "Critical battery action");
+-
+-    if ( critical_action == XFPM_DO_NOTHING )
+-    {
+-	xfpm_power_show_critical_action (power, battery);
+-    }
+-    else
+-    {
+-	if (power->priv->critical_action_done == FALSE)
+-	{
+-	    power->priv->critical_action_done = TRUE;
+-	    xfpm_power_process_critical_action (power, critical_action);
+-	}
+-	else
+-	{
+-	    xfpm_power_show_critical_action (power, battery);
+-	}
++    XFPM_DEBUG ("System is running on low power and will shutdown");
++
++    if (power->priv->critical_action_done == FALSE) {
++       power->priv->critical_action_done = TRUE;
++       xfpm_power_process_critical_action (power, XFPM_DO_SHUTDOWN);
++    } else {
++       xfpm_power_show_critical_action (power, battery);
+     }
+ }
+ 

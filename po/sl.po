@@ -1,0 +1,1007 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# kernc, 2015
+# Klemen Košir <klemen.kosir@kream.io>, 2013
+# Nenad Latinović <latinovic87@gmail.com>, 2013
+# Rok Kepa <rokkepa@gmail.com>, 2015
+# Uroš Preložnik <uros00@gmail.com>, 2013
+msgid ""
+msgstr ""
+"Project-Id-Version: Xfce4-power-manager\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-02-07 12:30+0100\n"
+"PO-Revision-Date: 2015-02-22 04:28+0000\n"
+"Last-Translator: kernc\n"
+"Language-Team: Slovenian (http://www.transifex.com/projects/p/xfce4-power-manager/language/sl/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sl\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);\n"
+
+#: ../data/interfaces/xfpm-settings.ui.h:1 ../settings/xfpm-settings.c:626
+#: ../settings/xfpm-settings.c:641 ../settings/xfpm-settings.c:668
+#: ../settings/xfpm-settings.c:1551
+msgid "Never"
+msgstr "Nikoli"
+
+#: ../data/interfaces/xfpm-settings.ui.h:2
+msgid "When the screensaver is activated"
+msgstr "Ko je ohranjevalnik zaslona aktiviran"
+
+#: ../data/interfaces/xfpm-settings.ui.h:3
+msgid "When the screensaver is deactivated"
+msgstr "Ko je ohranjevalni zaslona dekativiran"
+
+#: ../data/interfaces/xfpm-settings.ui.h:4
+msgid "Nothing"
+msgstr "Nič"
+
+#: ../data/interfaces/xfpm-settings.ui.h:5
+#: ../settings/xfpm-settings-main.c:142 ../src/xfpm-main.c:425
+msgid "Xfce Power Manager"
+msgstr "Upravljalnik porabe energije za Xfce"
+
+#: ../data/interfaces/xfpm-settings.ui.h:6
+msgid "Power manager settings"
+msgstr "Nastavitve upravljalnika porabe energije"
+
+#: ../data/interfaces/xfpm-settings.ui.h:7
+msgid "When power button is pressed:"
+msgstr "Ko je pritisnjen gumb za izklop:"
+
+#: ../data/interfaces/xfpm-settings.ui.h:8
+msgid "When sleep button is pressed:"
+msgstr "Ko je pritisnjen gumb za pripravljenost:"
+
+#: ../data/interfaces/xfpm-settings.ui.h:9
+msgid "When hibernate button is pressed:"
+msgstr "Ko je pritisnjen gumb za mirovanje:"
+
+#: ../data/interfaces/xfpm-settings.ui.h:10
+msgid "Handle display brightness _keys"
+msgstr "Obravnavaj tip_ke za svetlost zaslona"
+
+#: ../data/interfaces/xfpm-settings.ui.h:11
+msgid "<b>Buttons</b>"
+msgstr "<b>Gumbi</b>"
+
+#: ../data/interfaces/xfpm-settings.ui.h:12
+msgid "On battery"
+msgstr "Baterija"
+
+#: ../data/interfaces/xfpm-settings.ui.h:13 ../common/xfpm-power-common.c:444
+msgid "Plugged in"
+msgstr "Napajanje"
+
+#: ../data/interfaces/xfpm-settings.ui.h:14
+msgid "When laptop lid is closed:"
+msgstr "Ko je pokrov prenosnika zaprt:"
+
+#: ../data/interfaces/xfpm-settings.ui.h:15
+msgid "<b>Laptop Lid</b>"
+msgstr "<b>Pokrov prenosnika</b>"
+
+#: ../data/interfaces/xfpm-settings.ui.h:16
+msgid "Show notifications"
+msgstr "Pokaži obvestila"
+
+#: ../data/interfaces/xfpm-settings.ui.h:17
+msgid "<b>Appearance</b>"
+msgstr "<b>Videz</b>"
+
+#: ../data/interfaces/xfpm-settings.ui.h:18
+msgid "General"
+msgstr "Splošno"
+
+#: ../data/interfaces/xfpm-settings.ui.h:19
+msgid "When inactive for"
+msgstr "Po času neaktivnosti"
+
+#: ../data/interfaces/xfpm-settings.ui.h:20
+msgid "System sleep mode:"
+msgstr "Stanje pripravljenosti sistema:"
+
+#: ../data/interfaces/xfpm-settings.ui.h:21
+msgid "<b>System power saving</b>"
+msgstr "<b>Hranjenje energije sistema</b>"
+
+#: ../data/interfaces/xfpm-settings.ui.h:22
+msgid "Critical battery power level:"
+msgstr "Kritičen nivo baterije:"
+
+#: ../data/interfaces/xfpm-settings.ui.h:23
+msgid "On critical battery power:"
+msgstr "Ko je nivo baterije kritičen:"
+
+#: ../data/interfaces/xfpm-settings.ui.h:24
+msgid "<b>Critical power</b>"
+msgstr "<b>Kritična moč</b>"
+
+#: ../data/interfaces/xfpm-settings.ui.h:25
+msgid "Lock screen when system is going for sleep"
+msgstr "Zakleni zaslon pri prehodu v pripravljenost/mirovanje"
+
+#: ../data/interfaces/xfpm-settings.ui.h:26
+msgid "<b>Security</b>"
+msgstr "<b>Varnost</b>"
+
+#: ../data/interfaces/xfpm-settings.ui.h:27
+msgid "System"
+msgstr "Sistem"
+
+#: ../data/interfaces/xfpm-settings.ui.h:28
+msgid "Handle display power management"
+msgstr "Nadzoruj porabo energije zaslona"
+
+#: ../data/interfaces/xfpm-settings.ui.h:29
+msgid "Blank after"
+msgstr "Počrni čez"
+
+#: ../data/interfaces/xfpm-settings.ui.h:30
+msgid "Put to sleep after"
+msgstr "V stanje mirovanja čez"
+
+#: ../data/interfaces/xfpm-settings.ui.h:31
+msgid "Switch off after"
+msgstr "Ugasni čez"
+
+#: ../data/interfaces/xfpm-settings.ui.h:32
+msgid "<b>Display power management settings</b>"
+msgstr "<b>Nastavitve upravljanja porabe zaslona</b>"
+
+#: ../data/interfaces/xfpm-settings.ui.h:33
+msgid "On inactivity reduce to"
+msgstr "Ob neaktivnosti zmanjšaj na"
+
+#: ../data/interfaces/xfpm-settings.ui.h:34
+msgid "Reduce after"
+msgstr "Zmanjšaj po"
+
+#: ../data/interfaces/xfpm-settings.ui.h:35
+msgid "<b>Brightness reduction</b>"
+msgstr "<b>Zmanjšanje svetlosti</b>"
+
+#: ../data/interfaces/xfpm-settings.ui.h:36
+msgid "Display"
+msgstr "Zaslon"
+
+#: ../data/interfaces/xfpm-settings.ui.h:37
+msgid "Automatically lock the session:"
+msgstr "Samodejno zakleni sejo:"
+
+#: ../data/interfaces/xfpm-settings.ui.h:38
+msgid "Delay locking after screensaver for"
+msgstr "Zakasni zaklepanje seje za ohranjevalnikom zaslona za"
+
+#: ../data/interfaces/xfpm-settings.ui.h:39
+msgid "<b>Light Locker</b>"
+msgstr "<b>Light Locker</b>"
+
+#: ../data/interfaces/xfpm-settings.ui.h:40
+msgid "Security"
+msgstr "Varnost"
+
+#: ../settings/xfpm-settings.c:629
+msgid "One minute"
+msgstr "1 minuta"
+
+#: ../settings/xfpm-settings.c:631 ../settings/xfpm-settings.c:643
+#: ../settings/xfpm-settings.c:1560
+msgid "Minutes"
+msgstr "minut"
+
+#: ../settings/xfpm-settings.c:645 ../settings/xfpm-settings.c:652
+#: ../settings/xfpm-settings.c:653 ../settings/xfpm-settings.c:654
+msgid "One hour"
+msgstr "1 ura"
+
+#: ../settings/xfpm-settings.c:653 ../settings/xfpm-settings.c:657
+msgid "one minute"
+msgstr "1 minuta"
+
+#: ../settings/xfpm-settings.c:654 ../settings/xfpm-settings.c:658
+msgid "minutes"
+msgstr "minut"
+
+#: ../settings/xfpm-settings.c:656 ../settings/xfpm-settings.c:657
+#: ../settings/xfpm-settings.c:658
+msgid "hours"
+msgstr "ur"
+
+#: ../settings/xfpm-settings.c:670 ../settings/xfpm-settings.c:1553
+msgid "Seconds"
+msgstr "sekund"
+
+#: ../settings/xfpm-settings.c:676
+msgid "%"
+msgstr "%"
+
+#: ../settings/xfpm-settings.c:878 ../settings/xfpm-settings.c:957
+#: ../settings/xfpm-settings.c:1019 ../settings/xfpm-settings.c:1104
+#: ../settings/xfpm-settings.c:1196 ../settings/xfpm-settings.c:1304
+#: ../settings/xfpm-settings.c:1361 ../settings/xfpm-settings.c:1413
+#: ../src/xfpm-power.c:638
+msgid "Suspend"
+msgstr "V pripravljenost"
+
+#: ../settings/xfpm-settings.c:882 ../settings/xfpm-settings.c:1108
+msgid "Suspend operation not permitted"
+msgstr "Prehod v stanje pripravljenosti ni dovoljen"
+
+#: ../settings/xfpm-settings.c:886 ../settings/xfpm-settings.c:1112
+msgid "Suspend operation not supported"
+msgstr "Prehod v stanje pripravljenosti ni podprt"
+
+#: ../settings/xfpm-settings.c:892 ../settings/xfpm-settings.c:963
+#: ../settings/xfpm-settings.c:1025 ../settings/xfpm-settings.c:1118
+#: ../settings/xfpm-settings.c:1202 ../settings/xfpm-settings.c:1310
+#: ../settings/xfpm-settings.c:1367 ../settings/xfpm-settings.c:1419
+#: ../src/xfpm-power.c:627
+msgid "Hibernate"
+msgstr "Mirovanje"
+
+#: ../settings/xfpm-settings.c:896 ../settings/xfpm-settings.c:1122
+msgid "Hibernate operation not permitted"
+msgstr "Prehod v mirovanje ni dovoljen"
+
+#: ../settings/xfpm-settings.c:900 ../settings/xfpm-settings.c:1126
+msgid "Hibernate operation not supported"
+msgstr "Prehod v mirovanje ni podprt"
+
+#: ../settings/xfpm-settings.c:930 ../settings/xfpm-settings.c:1156
+#: ../settings/xfpm-settings.c:1502 ../settings/xfpm-settings.c:1633
+msgid "Hibernate and suspend operations not supported"
+msgstr "Prehoda v mirovanje in pripravljenost nista podprta"
+
+#: ../settings/xfpm-settings.c:935 ../settings/xfpm-settings.c:1161
+#: ../settings/xfpm-settings.c:1507 ../settings/xfpm-settings.c:1638
+msgid "Hibernate and suspend operations not permitted"
+msgstr "Prehoda v mirovanje in pripravljenost nista dovoljena"
+
+#: ../settings/xfpm-settings.c:952 ../settings/xfpm-settings.c:1299
+#: ../settings/xfpm-settings.c:1356 ../settings/xfpm-settings.c:1408
+msgid "Do nothing"
+msgstr "Ne naredi ničesar"
+
+#: ../settings/xfpm-settings.c:969 ../settings/xfpm-settings.c:1316
+#: ../src/xfpm-power.c:649
+msgid "Shutdown"
+msgstr "Izklopi"
+
+#: ../settings/xfpm-settings.c:973 ../settings/xfpm-settings.c:1320
+#: ../settings/xfpm-settings.c:1371 ../settings/xfpm-settings.c:1423
+msgid "Ask"
+msgstr "Vprašaj"
+
+#: ../settings/xfpm-settings.c:1014 ../settings/xfpm-settings.c:1191
+msgid "Switch off display"
+msgstr "Ugasni zaslon"
+
+#: ../settings/xfpm-settings.c:1029 ../settings/xfpm-settings.c:1206
+msgid "Lock screen"
+msgstr "Zakleni zaslon"
+
+#: ../settings/xfpm-settings.c:1474
+msgid "When all the power sources of the computer reach this charge level"
+msgstr "Stopnja, pri kateri je stanje računalnika kritično in nujno potrebuje vir napajanja"
+
+#: ../settings/xfpm-settings.c:1555
+msgid "One Minute"
+msgstr "1 minuta"
+
+#: ../settings/xfpm-settings.c:1892
+msgid "Device"
+msgstr "Naprava"
+
+#: ../settings/xfpm-settings.c:1914
+msgid "Type"
+msgstr "Vrsta"
+
+#: ../settings/xfpm-settings.c:1919
+msgid "PowerSupply"
+msgstr "Vir napajanja"
+
+#: ../settings/xfpm-settings.c:1920 ../src/xfpm-main.c:80
+msgid "True"
+msgstr "Da"
+
+#: ../settings/xfpm-settings.c:1920 ../src/xfpm-main.c:80
+msgid "False"
+msgstr "Ne"
+
+#: ../settings/xfpm-settings.c:1927
+msgid "Model"
+msgstr "Model"
+
+#: ../settings/xfpm-settings.c:1930
+msgid "Technology"
+msgstr "Tehnologija"
+
+#: ../settings/xfpm-settings.c:1937
+msgid "Current charge"
+msgstr "Trenutni naboj"
+
+#. TRANSLATORS: Unit here is Watt hour
+#: ../settings/xfpm-settings.c:1945 ../settings/xfpm-settings.c:1957
+#: ../settings/xfpm-settings.c:1969
+msgid "Wh"
+msgstr "Wh"
+
+#: ../settings/xfpm-settings.c:1947
+msgid "Fully charged (design)"
+msgstr "Polni naboj (proizvodno)"
+
+#: ../settings/xfpm-settings.c:1960
+msgid "Fully charged"
+msgstr "Polno nabito"
+
+#: ../settings/xfpm-settings.c:1971
+msgid "Energy empty"
+msgstr "Energija prazne baterije"
+
+#. TRANSLATORS: Unit here is Volt
+#: ../settings/xfpm-settings.c:1979
+msgid "V"
+msgstr "V"
+
+#: ../settings/xfpm-settings.c:1981
+msgid "Voltage"
+msgstr "Napetost"
+
+#: ../settings/xfpm-settings.c:1988
+msgid "Vendor"
+msgstr "Proizvajalec"
+
+#: ../settings/xfpm-settings.c:1993
+msgid "Serial"
+msgstr "Zaporedna številka"
+
+#: ../settings/xfpm-settings.c:2062
+msgid "Attribute"
+msgstr "Atribut"
+
+#: ../settings/xfpm-settings.c:2069
+msgid "Value"
+msgstr "Vrednost"
+
+#: ../settings/xfpm-settings.c:2282
+msgid "Check your power manager installation"
+msgstr "Prosimo, preverite namestitev upravljalnika porabe energije"
+
+#: ../settings/xfpm-settings.c:2352
+msgid "Devices"
+msgstr "Naprave"
+
+#: ../settings/xfpm-settings-main.c:80
+msgid "Settings manager socket"
+msgstr "Vtič upravljalnika nastavitev"
+
+#: ../settings/xfpm-settings-main.c:80
+msgid "SOCKET ID"
+msgstr "Št. vtiča"
+
+#: ../settings/xfpm-settings-main.c:81
+msgid "Display a specific device by UpDevice object path"
+msgstr "Pokaži določene naprave z UpDevice potjo objekta"
+
+#: ../settings/xfpm-settings-main.c:81
+msgid "UpDevice object path"
+msgstr "UpDevice pot objekta"
+
+#: ../settings/xfpm-settings-main.c:82 ../src/xfpm-main.c:255
+msgid "Enable debugging"
+msgstr "Omogoči razhroščevanje"
+
+#: ../settings/xfpm-settings-main.c:93 ../src/xfpm-main.c:311
+#, c-format
+msgid "Type '%s --help' for usage."
+msgstr "Za navodila o uporabi zaženite ukaz \"%s --help\"."
+
+#: ../settings/xfpm-settings-main.c:113 ../src/xfpm-main.c:341
+#, c-format
+msgid "Xfce power manager is not running"
+msgstr "Upravljalnik porabe energije za Xfce ni zagnan"
+
+#: ../settings/xfpm-settings-main.c:118
+msgid "Run"
+msgstr "Zaženi"
+
+#: ../settings/xfpm-settings-main.c:119
+msgid "Xfce4 Power Manager is not running, do you want to launch it now?"
+msgstr "Upravljalnik porabe energije za Xfce ni zagnan. Ali ga želite zagnati?"
+
+#: ../settings/xfpm-settings-main.c:144
+msgid "Failed to load power manager configuration, using defaults"
+msgstr "Nastavitev ni mogoče naložiti. Uporabljene bodo privzete nastavitve"
+
+#: ../settings/xfpm-settings-main.c:171
+msgid "Unable to connect to Xfce Power Manager"
+msgstr "Z upravljalnikom porabe energije za Xfce se ni mogoče povezati"
+
+#: ../settings/xfce4-power-manager-settings.desktop.in.h:1
+#: ../src/xfpm-power.c:306 ../src/xfpm-power.c:569 ../src/xfpm-power.c:613
+#: ../src/xfpm-power.c:777 ../src/xfpm-power.c:801 ../src/xfpm-battery.c:256
+#: ../src/xfce4-power-manager.desktop.in.h:1
+msgid "Power Manager"
+msgstr "Upravljalnik porabe energije"
+
+#: ../settings/xfce4-power-manager-settings.desktop.in.h:2
+msgid "Settings for the Xfce Power Manager"
+msgstr "Nastavitve upravljalnika porabe energije"
+
+#: ../common/xfpm-common.c:131
+msgid "translator-credits"
+msgstr "Uroš Preložnik <uros00@gmail.com>\nKlemen Košir <klemen913@gmail.com>"
+
+#: ../common/xfpm-power-common.c:45 ../common/xfpm-power-common.c:68
+msgid "Battery"
+msgstr "Baterija"
+
+#: ../common/xfpm-power-common.c:47 ../src/xfpm-battery.c:537
+msgid "UPS"
+msgstr "UPS"
+
+#: ../common/xfpm-power-common.c:49
+msgid "Line power"
+msgstr "Električno omrežje"
+
+#: ../common/xfpm-power-common.c:51
+msgid "Mouse"
+msgstr "Miška"
+
+#: ../common/xfpm-power-common.c:53
+msgid "Keyboard"
+msgstr "Tipkovnica"
+
+#: ../common/xfpm-power-common.c:55
+msgid "Monitor"
+msgstr "Zaslon"
+
+#: ../common/xfpm-power-common.c:57
+msgid "PDA"
+msgstr "Dlančnik"
+
+#: ../common/xfpm-power-common.c:59
+msgid "Phone"
+msgstr "Telefon"
+
+#: ../common/xfpm-power-common.c:61
+msgid "Tablet"
+msgstr "Grafična tablica"
+
+#: ../common/xfpm-power-common.c:63 ../common/xfpm-power-common.c:340
+msgid "Computer"
+msgstr "Računalnik"
+
+#: ../common/xfpm-power-common.c:65 ../common/xfpm-power-common.c:81
+#: ../common/xfpm-power-common.c:96 ../src/xfpm-battery.c:555
+msgid "Unknown"
+msgstr "Neznano"
+
+#: ../common/xfpm-power-common.c:83
+msgid "Lithium ion"
+msgstr "Litij-ionska"
+
+#: ../common/xfpm-power-common.c:85
+msgid "Lithium polymer"
+msgstr "Litijev polimer"
+
+#: ../common/xfpm-power-common.c:87
+msgid "Lithium iron phosphate"
+msgstr "Litij-železov fosfat"
+
+#: ../common/xfpm-power-common.c:89
+msgid "Lead acid"
+msgstr "Svinčeva kislina"
+
+#: ../common/xfpm-power-common.c:91
+msgid "Nickel cadmium"
+msgstr "Nikelj-kadmij"
+
+#: ../common/xfpm-power-common.c:93
+msgid "Nickel metal hybride"
+msgstr "Nikelj metal hibrid"
+
+#: ../common/xfpm-power-common.c:141
+msgid "Unknown time"
+msgstr "Neznano"
+
+#: ../common/xfpm-power-common.c:147
+#, c-format
+msgid "%i minute"
+msgid_plural "%i minutes"
+msgstr[0] "%i minuta"
+msgstr[1] "%i minuti"
+msgstr[2] "%i minute"
+msgstr[3] "%i minut"
+
+#: ../common/xfpm-power-common.c:158
+#, c-format
+msgid "%i hour"
+msgid_plural "%i hours"
+msgstr[0] "%i ura"
+msgstr[1] "%i uri"
+msgstr[2] "%i ure"
+msgstr[3] "%i ur"
+
+#. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
+#. * Swap order with "%2$s %2$i %1$s %1$i if needed
+#: ../common/xfpm-power-common.c:164
+#, c-format
+msgid "%i %s %i %s"
+msgstr "%i %s, %i %s"
+
+#: ../common/xfpm-power-common.c:165
+msgid "hour"
+msgid_plural "hours"
+msgstr[0] "ura"
+msgstr[1] "uri"
+msgstr[2] "ure"
+msgstr[3] "ur"
+
+#: ../common/xfpm-power-common.c:166
+msgid "minute"
+msgid_plural "minutes"
+msgstr[0] "minuta"
+msgstr[1] "minuti"
+msgstr[2] "minute"
+msgstr[3] "minut"
+
+#: ../common/xfpm-power-common.c:371
+#, c-format
+msgid ""
+"<b>%s %s</b>\n"
+"Fully charged (%0.0f%%, %s runtime)"
+msgstr "<b>%s %s</b>\nPolno nabito (%0.0f%%, čas izvajanja %s)"
+
+#: ../common/xfpm-power-common.c:379
+#, c-format
+msgid ""
+"<b>%s %s</b>\n"
+"Fully charged (%0.0f%%)"
+msgstr "<b>%s %s</b>\nPolno nabito (%0.0f%%)"
+
+#: ../common/xfpm-power-common.c:389
+#, c-format
+msgid ""
+"<b>%s %s</b>\n"
+"Charging (%0.0f%%, %s)"
+msgstr "<b>%s %s</b>\nPolnjenje (%0.0f%%, %s)"
+
+#: ../common/xfpm-power-common.c:397
+#, c-format
+msgid ""
+"<b>%s %s</b>\n"
+"Charging (%0.0f%%)"
+msgstr "<b>%s %s</b>\nPolnjenje (%0.0f%%)"
+
+#: ../common/xfpm-power-common.c:407
+#, c-format
+msgid ""
+"<b>%s %s</b>\n"
+"Discharging (%0.0f%%, %s)"
+msgstr "<b>%s %s</b>\nPraznjenje (%0.0f%%, %s)"
+
+#: ../common/xfpm-power-common.c:415
+#, c-format
+msgid ""
+"<b>%s %s</b>\n"
+"Discharging (%0.0f%%)"
+msgstr "<b>%s %s</b>\nPraznjenje (%0.0f%%)"
+
+#: ../common/xfpm-power-common.c:422
+#, c-format
+msgid ""
+"<b>%s %s</b>\n"
+"Waiting to discharge (%0.0f%%)"
+msgstr "<b>%s %s</b>\nČakanje na praznjenje (%0.0f%%)"
+
+#: ../common/xfpm-power-common.c:428
+#, c-format
+msgid ""
+"<b>%s %s</b>\n"
+"Waiting to charge (%0.0f%%)"
+msgstr "<b>%s %s</b>\nČakanje na polnjenje (%0.0f%%)"
+
+#: ../common/xfpm-power-common.c:434
+#, c-format
+msgid ""
+"<b>%s %s</b>\n"
+"is empty"
+msgstr "<b>%s %s</b>\nje prazna"
+
+#. On the 2nd line we want to know if the power cord is plugged
+#. * in or not
+#: ../common/xfpm-power-common.c:443
+#, c-format
+msgid ""
+"<b>%s %s</b>\n"
+"%s"
+msgstr "<b>%s %s</b>\n%s"
+
+#: ../common/xfpm-power-common.c:444
+msgid "Not plugged in"
+msgstr "Ni vklopljeno"
+
+#. Desktop pc with no battery, just display the vendor and model,
+#. * which will probably just be Computer
+#: ../common/xfpm-power-common.c:450
+#, c-format
+msgid "<b>%s %s</b>"
+msgstr "<b>%s %s</b>"
+
+#. unknown device state, just display the percentage
+#: ../common/xfpm-power-common.c:455
+#, c-format
+msgid ""
+"<b>%s %s</b>\n"
+"Unknown state"
+msgstr "<b>%s %s</b>\nStanje ni znano"
+
+#: ../src/xfpm-power.c:332
+msgid "_Hibernate"
+msgstr "_Mirovanje"
+
+#: ../src/xfpm-power.c:333
+msgid ""
+"An application is currently disabling the automatic sleep. Doing this action"
+" now may damage the working state of this application."
+msgstr "Program trenutno onemogoča samodejni prehod v stanje pripravljenosti. Če to dejanje vseeno izvedete, lahko izgubite svoje delo."
+
+#: ../src/xfpm-power.c:335
+msgid "Are you sure you want to hibernate the system?"
+msgstr "Ali ste prepričani, da želite preiti v stanje mirovanja?"
+
+#: ../src/xfpm-power.c:376
+msgid "Continue"
+msgstr "Nadaljuj"
+
+#: ../src/xfpm-power.c:377 ../src/xfpm-manager.c:366
+msgid ""
+"None of the screen lock tools ran successfully, the screen will not be "
+"locked."
+msgstr "Nobeno orodje za zaklepanje zaslona se ni uspešno izvedlo, zato zaslon ne bo zaklenjen."
+
+#: ../src/xfpm-power.c:380
+msgid "Do you still want to continue to suspend the system?"
+msgstr "Ali želite nadaljevati z mirovanjem sistema?"
+
+#: ../src/xfpm-power.c:532
+msgid "Hibernate the system"
+msgstr "Prehod v stanje mirovanja"
+
+#: ../src/xfpm-power.c:543
+msgid "Suspend the system"
+msgstr "Prehod v stanje pripravljenosti"
+
+#: ../src/xfpm-power.c:553
+msgid "Shutdown the system"
+msgstr "Izklop računalnika"
+
+#: ../src/xfpm-power.c:564 ../src/xfpm-power.c:610
+msgid "System is running on low power. Save your work to avoid losing data"
+msgstr "Baterija je skoraj prazna. Da bi preprečili izgubo podatkov, shranite svoje delo"
+
+#: ../src/xfpm-power.c:778
+msgid "System is running on low power"
+msgstr "Baterija je skoraj prazna"
+
+#: ../src/xfpm-power.c:797
+#, c-format
+msgid ""
+"Your %s charge level is low\n"
+"Estimated time left %s"
+msgstr "%s je skoraj prazna\nPreostali čas: %s"
+
+#: ../src/xfpm-power.c:1491 ../src/xfpm-power.c:1524 ../src/xfpm-power.c:1543
+#: ../src/xfpm-power.c:1566
+#, c-format
+msgid "Permission denied"
+msgstr "Dostop zavrnjen"
+
+#: ../src/xfpm-power.c:1551 ../src/xfpm-power.c:1574
+#, c-format
+msgid "Suspend not supported"
+msgstr "Stanje pripravljenosti ni podprto"
+
+#. generate a human-readable summary for the notification
+#: ../src/xfpm-backlight.c:172
+#, c-format
+msgid "Brightness: %.0f percent"
+msgstr "Svetlost: %.0f procentov"
+
+#: ../src/xfpm-battery.c:114 ../src/xfpm-battery.c:165
+#, c-format
+msgid "Your %s is fully charged"
+msgstr "%s je napolnjena"
+
+#: ../src/xfpm-battery.c:117 ../src/xfpm-battery.c:168
+#, c-format
+msgid "Your %s is charging"
+msgstr "%s se polni"
+
+#: ../src/xfpm-battery.c:127
+#, c-format
+msgid ""
+"%s (%i%%)\n"
+"%s until it is fully charged."
+msgstr "%s (%i %%)\n%s do napolnitve."
+
+#: ../src/xfpm-battery.c:135 ../src/xfpm-battery.c:171
+#, c-format
+msgid "Your %s is discharging"
+msgstr "%s se prazni"
+
+#: ../src/xfpm-battery.c:137
+#, c-format
+msgid "System is running on %s power"
+msgstr "Trenutni vir napajanja: %s"
+
+#: ../src/xfpm-battery.c:147
+#, c-format
+msgid ""
+"%s (%i%%)\n"
+"Estimated time left is %s."
+msgstr "%s (%i %%)\nPreostali čas: %s."
+
+#: ../src/xfpm-battery.c:153 ../src/xfpm-battery.c:174
+#, c-format
+msgid "Your %s is empty"
+msgstr "%s je prazna"
+
+#: ../src/xfpm-battery.c:534
+msgid "battery"
+msgstr "Baterija"
+
+#: ../src/xfpm-battery.c:540
+msgid "monitor battery"
+msgstr "Baterija zaslona"
+
+#: ../src/xfpm-battery.c:543
+msgid "mouse battery"
+msgstr "Baterija miške"
+
+#: ../src/xfpm-battery.c:546
+msgid "keyboard battery"
+msgstr "Baterija tipkovnice"
+
+#: ../src/xfpm-battery.c:549
+msgid "PDA battery"
+msgstr "Baterija dlančnika"
+
+#: ../src/xfpm-battery.c:552
+msgid "Phone battery"
+msgstr "Baterija telefona"
+
+#. generate a human-readable summary for the notification
+#: ../src/xfpm-kbd-backlight.c:115
+#, c-format
+msgid "Keyboard Brightness: %.0f percent"
+msgstr "Svetlost tipkovnice: %.0f procentov"
+
+#: ../src/xfpm-main.c:57
+#, c-format
+msgid ""
+"\n"
+"Xfce Power Manager %s\n"
+"\n"
+"Part of the Xfce Goodies Project\n"
+"http://goodies.xfce.org\n"
+"\n"
+"Licensed under the GNU GPL.\n"
+"\n"
+msgstr "\nUpravljalnik porabe energije za Xfce (različica %s)\n\nProgram je del projekta Xfce Goodies\nhttp://goodies.xfce.org\n\nDovoljenje: GNU GPL.\n\n"
+
+#: ../src/xfpm-main.c:113
+#, c-format
+msgid "With policykit support\n"
+msgstr "Podpora za PolicyKit: Da\n"
+
+#: ../src/xfpm-main.c:115
+#, c-format
+msgid "Without policykit support\n"
+msgstr "Podpora za PolicyKit: Ne\n"
+
+#: ../src/xfpm-main.c:118
+#, c-format
+msgid "With network manager support\n"
+msgstr "Podpora za upravljalnik omrežij: Da\n"
+
+#: ../src/xfpm-main.c:120
+#, c-format
+msgid "Without network manager support\n"
+msgstr "Podpora za upravljalnik omrežij: Ne\n"
+
+#: ../src/xfpm-main.c:134
+msgid "Can suspend"
+msgstr "Omogoča prehod v pripravljenost"
+
+#: ../src/xfpm-main.c:136
+msgid "Can hibernate"
+msgstr "Omogoča prehod v mirovanje"
+
+#: ../src/xfpm-main.c:138
+msgid "Authorized to suspend"
+msgstr "Dovoljenje za prehod v pripravljenost"
+
+#: ../src/xfpm-main.c:140
+msgid "Authorized to hibernate"
+msgstr "Dovoljenje za prehod v mirovanje"
+
+#: ../src/xfpm-main.c:142
+msgid "Authorized to shutdown"
+msgstr "Dovoljenje za izklop"
+
+#: ../src/xfpm-main.c:144
+msgid "Has battery"
+msgstr "Ima baterijo"
+
+#: ../src/xfpm-main.c:146
+msgid "Has brightness panel"
+msgstr "Omogoča spremembo svetlosti zaslona"
+
+#: ../src/xfpm-main.c:148
+msgid "Has power button"
+msgstr "Ima gumb za izklop"
+
+#: ../src/xfpm-main.c:150
+msgid "Has hibernate button"
+msgstr "Ima gumb za mirovanje"
+
+#: ../src/xfpm-main.c:152
+msgid "Has sleep button"
+msgstr "Ima gumb za pripravljenost"
+
+#: ../src/xfpm-main.c:154
+msgid "Has LID"
+msgstr "Podpora za LID"
+
+#: ../src/xfpm-main.c:254
+msgid "Do not daemonize"
+msgstr "Onemogoči ozadnji program"
+
+#: ../src/xfpm-main.c:256
+msgid "Dump all information"
+msgstr "Izpiši vse podatke"
+
+#: ../src/xfpm-main.c:257
+msgid "Restart the running instance of Xfce power manager"
+msgstr "Ponovno zaženi upravljalnik porabe energije"
+
+#: ../src/xfpm-main.c:258
+msgid "Show the configuration dialog"
+msgstr "Spremeni nastavitve"
+
+#: ../src/xfpm-main.c:259
+msgid "Quit any running xfce power manager"
+msgstr "Končaj vse zagnane primerke upravljalnika porabe energije"
+
+#: ../src/xfpm-main.c:260
+msgid "Version information"
+msgstr "Podatki o različici"
+
+#: ../src/xfpm-main.c:281
+#, c-format
+msgid "Failed to parse arguments: %s\n"
+msgstr "Razčlenjevanje ni uspelo: %s\n"
+
+#: ../src/xfpm-main.c:332
+msgid "Unable to get connection to the message bus session"
+msgstr "S sejo sporočilnega vodila ni mogoče vzpostaviti povezave"
+
+#: ../src/xfpm-main.c:426
+msgid "Another power manager is already running"
+msgstr "Drug upravljalnik porabe energije je že zagnan"
+
+#: ../src/xfpm-main.c:432
+#, c-format
+msgid "Xfce power manager is already running"
+msgstr "Upravljalnik porabe energije za Xfce je že zagnan"
+
+#: ../src/xfpm-inhibit.c:335
+#, c-format
+msgid "Invalid arguments"
+msgstr "Neveljavni argumenti"
+
+#: ../src/xfpm-inhibit.c:361
+#, c-format
+msgid "Invalid cookie"
+msgstr "Neveljaven piškotek"
+
+#: ../src/xfce4-power-manager.desktop.in.h:2
+msgid "Power management for the Xfce desktop"
+msgstr "Upravljalnik porabe energije za namizje Xfce"
+
+#. Odds are this is a desktop without any batteries attached
+#: ../panel-plugins/power-manager-plugin/power-manager-button.c:204
+msgid "Display battery levels for attached devices"
+msgstr "Pokaži polnost baterij priključenih naprav"
+
+#: ../panel-plugins/power-manager-plugin/power-manager-button.c:1223
+msgid "<b>Display brightness</b>"
+msgstr "<b>Svetlost zaslona</b>"
+
+#. Presentation mode checkbox
+#: ../panel-plugins/power-manager-plugin/power-manager-button.c:1241
+msgid "Presentation _mode"
+msgstr "Predstavitve_ni način"
+
+#. Power manager settings
+#: ../panel-plugins/power-manager-plugin/power-manager-button.c:1250
+msgid "_Power manager settings..."
+msgstr "Nastavitve u_pravljalnika porabe energije..."
+
+#: ../panel-plugins/power-manager-plugin/lxde/lxde-power-manager-plugin.c:54
+#: ../panel-plugins/power-manager-plugin/lxde-0.7/lxde-power-manager-plugin.c:56
+#: ../panel-plugins/power-manager-plugin/xfce/power-manager-plugin.desktop.in.in.h:1
+msgid "Power Manager Plugin"
+msgstr "Vstavek upravljalnika porabe energije"
+
+#: ../panel-plugins/power-manager-plugin/lxde/lxde-power-manager-plugin.c:56
+#: ../panel-plugins/power-manager-plugin/lxde-0.7/lxde-power-manager-plugin.c:57
+#: ../panel-plugins/power-manager-plugin/xfce/power-manager-plugin.desktop.in.in.h:2
+msgid ""
+"Display the battery levels of your devices and control the brightness of "
+"your display"
+msgstr "Pokaži nivo baterij naprav in prilagodi svetlost zaslona"
+
+#: ../data/appdata/xfce4-power-manager.appdata.xml.in.h:1
+msgid ""
+"Xfce power manager manages the power sources on the computer and the devices"
+" that can be controlled to reduce their power consumption (such as LCD "
+"brightness level, monitor sleep, CPU frequency scaling)."
+msgstr "Upravljalnik porabe energije Xfce upravlja z viri energije na računalniku in napravami, ki jih lahko nadzoruje za zmanjšanje porabe energije (knp. svetlost LCD zaslonov, mirovanje zaslonov, nadzorovanje hitrosti procesorja)."
+
+#: ../data/appdata/xfce4-power-manager.appdata.xml.in.h:2
+msgid ""
+"In addition, Xfce power manager provides a set of freedesktop-compliant DBus"
+" interfaces to inform other applications about current power level so that "
+"they can adjust their power consumption, and it provides the inhibit "
+"interface which allows applications to prevent automatic sleep actions via "
+"the power manager; as an example, the operating system’s package manager "
+"should make use of this interface while it is performing update operations."
+msgstr ""
+
+#: ../data/appdata/xfce4-power-manager.appdata.xml.in.h:3
+msgid ""
+"Xfce power manager also provides a plugin for the Xfce and LXDE panels to "
+"control LCD brightness levels and to monitor battery and device charge "
+"levels."
+msgstr ""
+
+#: ../data/appdata/xfce4-power-manager.appdata.xml.in.h:4
+msgid ""
+"This development release mostly fixes bugs and introduces better support for"
+" icon-themes by reducing the device icons and using standard names for them."
+" It also features updated translations. The panel plugin has been renamed to"
+" Power Manager Plugin."
+msgstr ""
+
+#: ../data/appdata/xfce4-power-manager.appdata.xml.in.h:5
+msgid ""
+"This development release fixes bugs with suspend and hibernate. It also "
+"improves the panel-plugin, incorporating the functionality of the (now "
+"dropped) brightness panel-plugin. A new popup notification was added to "
+"account for keyboard brightness changes and the Power Manager now also "
+"controls the X11 blank times."
+msgstr ""
+
+#: ../data/appdata/xfce4-power-manager.appdata.xml.in.h:6
+msgid ""
+"This development release introduces a lot of new features, among them "
+"suspending/hibernation without systemd and UPower>=0.99. It allows for "
+"individual control of systemd-inhibition, a new panel plugin to monitor "
+"battery and device charge levels replaces the trayicon. The settings dialog "
+"has been completely restructured for better oversight and many open bugs "
+"have been fixed and translations have been updated."
+msgstr ""
+
+#: ../data/appdata/xfce4-power-manager.appdata.xml.in.h:7
+msgid ""
+"This stable release fixes compilation problems, a memory leak and a few "
+"other minor bugs. Furthermore it provides updated translations."
+msgstr ""

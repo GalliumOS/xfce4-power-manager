@@ -3,4 +3,5 @@ lock_on_suspend.diff
 battery_status.diff
 chromebook_power_button.patch
 disable_hibernate.patch
-disable_critical_battery_options.patch
+low_battery_status_fix.patch
+increase_applet_brightness_min.patch
