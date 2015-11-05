@@ -328,7 +328,6 @@ xfpm_manager_lid_changed_cb (XfpmPower *power, gboolean lid_is_closed, XfpmManag
 {
     XfpmLidTriggerAction action;
     gboolean on_battery, logind_handle_lid_switch;
-    gboolean lock_screen;
 
     if ( LOGIND_RUNNING() )
     {
@@ -336,18 +335,8 @@ xfpm_manager_lid_changed_cb (XfpmPower *power, gboolean lid_is_closed, XfpmManag
               LOGIND_HANDLE_LID_SWITCH, &logind_handle_lid_switch,
               NULL);
 
-        if (logind_handle_lid_switch) {
-              g_object_get (G_OBJECT (manager->priv->conf),
-                  LOCK_SCREEN_ON_SLEEP, &lock_screen,
-                  NULL);
-
-            if (lock_screen && lid_is_closed)
-	  	    xfpm_lock_screen ();
-            else if (lock_screen)
-                    XResetScreenSaver (gdk_x11_get_default_xdisplay ());
-
+        if (logind_handle_lid_switch)
             return;
-        }
     }
 
     g_object_get (G_OBJECT (power),
@@ -396,7 +385,6 @@ xfpm_manager_lid_changed_cb (XfpmPower *power, gboolean lid_is_closed, XfpmManag
 	XFPM_DEBUG_ENUM (action, XFPM_TYPE_LID_TRIGGER_ACTION, "LID opened");
 
 	xfpm_dpms_force_level (manager->priv->dpms, DPMSModeOn);
-        read_bat0(NULL);
     }
 }
 

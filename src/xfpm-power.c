@@ -306,11 +306,15 @@ xfpm_power_get_properties (XfpmPower *power)
 
 #if !UP_CHECK_VERSION(0, 99, 0)
     power->priv->can_suspend = up_client_get_can_suspend(power->priv->upower);
+    power->priv->can_hibernate = up_client_get_can_hibernate(power->priv->upower);
 #else
     if ( LOGIND_RUNNING () )
     {
         g_object_get (G_OBJECT (power->priv->systemd),
                       "can-suspend", &power->priv->can_suspend,
+                      NULL);
+	g_object_get (G_OBJECT (power->priv->systemd),
+                      "can-hibernate", &power->priv->can_hibernate,
                       NULL);
     }
     else
@@ -320,10 +324,14 @@ xfpm_power_get_properties (XfpmPower *power)
 	    g_object_get (G_OBJECT (power->priv->console),
 			  "can-suspend", &power->priv->can_suspend,
 			  NULL);
+	    g_object_get (G_OBJECT (power->priv->console),
+			  "can-hibernate", &power->priv->can_hibernate,
+			  NULL);
 	}
 	else
 	{
 	    power->priv->can_suspend   = xfpm_suspend_can_suspend ();
+	    power->priv->can_hibernate = xfpm_suspend_can_hibernate ();
 	}
     }
 #endif
@@ -504,8 +512,6 @@ xfpm_power_sleep (XfpmPower *power, const gchar *sleep_time, gboolean force)
     xfpm_power_get_properties (power);
     /* Restore the brightness level from before we suspended */
     xfpm_brightness_set_level (brightness, brightness_level);
-    XResetScreenSaver (gdk_x11_get_default_xdisplay ());
-    read_bat0(NULL);
 
 #ifdef WITH_NETWORK_MANAGER
     if ( network_manager_sleep )
@@ -846,9 +852,21 @@ xfpm_power_battery_charge_changed_cb (XfpmBattery *battery, XfpmPower *power)
 
     if ( power->priv->on_battery )
     {
-	if ( current_charge == XFPM_BATTERY_CHARGE_LOW || battery_charge == XFPM_BATTERY_CHARGE_LOW)
+	if ( current_charge == XFPM_BATTERY_CHARGE_LOW )
 	{
-            read_bat0(NULL);
+	    if ( notify )
+		xfpm_notify_show_notification (power->priv->notify,
+					       _("Power Manager"),
+					       _("System is running on low power"),
+					       gtk_status_icon_get_icon_name (GTK_STATUS_ICON (battery)),
+					       10000,
+					       FALSE,
+					       XFPM_NOTIFY_NORMAL,
+					       GTK_STATUS_ICON (battery));
+
+	}
+	else if ( battery_charge == XFPM_BATTERY_CHARGE_LOW )
+	{
 	    if ( notify )
 	    {
 		gchar *msg;

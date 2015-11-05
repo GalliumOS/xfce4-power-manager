@@ -67,7 +67,6 @@ XfpmBatteryCharge	    xfpm_battery_get_charge      (XfpmBattery *battery);
 const gchar 		   *xfpm_battery_get_battery_name(XfpmBattery *battery);
 
 gchar 			   *xfpm_battery_get_time_left   (XfpmBattery *battery);
-gboolean                   read_bat0(gpointer data);
 
 G_END_DECLS
 

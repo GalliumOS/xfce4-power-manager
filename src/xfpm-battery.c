@@ -30,10 +30,6 @@
 #include <string.h>
 #endif
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-
 #include <gtk/gtk.h>
 #include <upower.h>
 
@@ -346,7 +342,6 @@ xfpm_battery_refresh (XfpmBattery *battery, UpDevice *device)
     guint state;
     gdouble percentage;
     guint64 to_empty, to_full;
-
     g_object_get(device,
 		 "is-present", &present,
 		 "percentage", &percentage,
@@ -375,17 +370,6 @@ xfpm_battery_refresh (XfpmBattery *battery, UpDevice *device)
     }
 }
 
-gboolean
-read_bat0(gpointer data) {
-    int fd, b;
-    char c;
-
-    if ((fd = open("/sys/class/power_supply/BAT0/status", O_RDONLY)) != -1) {
-       b = read(fd, &c, 1);
-       close(fd);
-    }
-}
-
 static void
 xfpm_battery_changed_cb (UpDevice *device,
 #if UP_CHECK_VERSION(0, 99, 0)
@@ -394,8 +378,6 @@ xfpm_battery_changed_cb (UpDevice *device,
 			 XfpmBattery *battery)
 {
     xfpm_battery_refresh (battery, device);
-    //Hack to refresh the battery status
-    g_timeout_add (1500, (GSourceFunc) read_bat0, NULL);
 }
 
 static void xfpm_battery_get_property (GObject *object,

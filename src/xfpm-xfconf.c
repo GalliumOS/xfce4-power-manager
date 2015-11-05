@@ -492,7 +492,7 @@ xfpm_xfconf_class_init (XfpmXfconfClass *klass)
                                                         NULL, NULL,
                                                         XFPM_DO_SUSPEND,
                                                         XFPM_DO_HIBERNATE,
-                                                        XFPM_DO_SUSPEND,
+                                                        XFPM_DO_HIBERNATE,
                                                         G_PARAM_READWRITE));
 
     /**
