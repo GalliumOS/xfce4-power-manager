@@ -1,0 +1,14 @@
+--- a/src/xfpm-manager.c
++++ b/src/xfpm-manager.c
+@@ -439,9 +439,9 @@
+ 		      NULL);
+ 
+ 	if ( id == TIMEOUT_INACTIVITY_ON_AC && on_battery == FALSE )
+-	    xfpm_manager_sleep_request (manager, sleep_mode, FALSE);
++	    xfpm_manager_sleep_request (manager, sleep_mode, TRUE);
+ 	else if ( id ==  TIMEOUT_INACTIVITY_ON_BATTERY && on_battery  )
+-	    xfpm_manager_sleep_request (manager, sleep_mode, FALSE);
++	    xfpm_manager_sleep_request (manager, sleep_mode, TRUE);
+     }
+ }
+ 

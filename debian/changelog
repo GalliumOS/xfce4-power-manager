@@ -1,4 +1,10 @@
-xfce4-power-manager (1.4.8-0ubuntu9) vivid; urgency=medium
+xfce4-power-manager (1.4.8-0ubuntu11) vivid; urgency=medium
+
+  * Added patch to force suspending when the idle timeout is reached
+
+ -- Hugh Greenberg <hugh@galliumos.org>  Sat, 07 Nov 2015 12:18:45 +1100
+
+xfce4-power-manager (1.4.8-0ubuntu10) vivid; urgency=medium
 
   * Added patch to increase the minimum brightness of the applet button brightness slider
 
