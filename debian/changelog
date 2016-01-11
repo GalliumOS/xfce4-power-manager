@@ -1,3 +1,9 @@
+xfce4-power-manager (1.4.3-0ubuntu1-galliumos12) vivid; urgency=medium
+
+  * Set package version to match provenance
+
+ -- reynhout <reynhout@galliumos.org>  Sun, 10 Jan 2016 21:05:33 +0000
+
 xfce4-power-manager (1.4.8-0ubuntu11) vivid; urgency=medium
 
   * Added patch to force suspending when the idle timeout is reached
