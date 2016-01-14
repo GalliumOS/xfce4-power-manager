@@ -19,7 +19,7 @@
      g_object_get(device,
  		 "is-present", &present,
  		 "percentage", &percentage,
-@@ -370,6 +375,17 @@
+@@ -370,6 +375,24 @@
      }
  }
  
@@ -27,17 +27,24 @@
 +read_bat0(gpointer data) {
 +    int fd, b;
 +    char c;
++    gboolean ret;
 +
++    ret = FALSE;
 +    if ((fd = open("/sys/class/power_supply/BAT0/status", O_RDONLY)) != -1) {
 +       b = read(fd, &c, 1);
 +       close(fd);
++
++       if (b == 1)
++	 ret = TRUE;
 +    }
++
++    return ret;
 +}
 +
  static void
  xfpm_battery_changed_cb (UpDevice *device,
  #if UP_CHECK_VERSION(0, 99, 0)
-@@ -378,6 +394,8 @@
+@@ -378,6 +401,8 @@
  			 XfpmBattery *battery)
  {
      xfpm_battery_refresh (battery, device);
@@ -58,6 +65,15 @@
  
 --- a/src/xfpm-manager.c
 +++ b/src/xfpm-manager.c
+@@ -62,7 +62,7 @@
+ #include "xfpm-enum-types.h"
+ #include "xfpm-dbus-monitor.h"
+ #include "xfpm-systemd.h"
+-
++#include "xfpm-battery.h"
+ 
+ static void xfpm_manager_finalize   (GObject *object);
+ 
 @@ -396,6 +396,7 @@
  	XFPM_DEBUG_ENUM (action, XFPM_TYPE_LID_TRIGGER_ACTION, "LID opened");
  

@@ -1,8 +1,8 @@
-xfce4-power-manager (1.4.3-0ubuntu1-galliumos12) vivid; urgency=medium
+xfce4-power-manager (1.4.3-0ubuntu1-galliumos1) vivid; urgency=medium
 
-  * Set package version to match provenance
+  * Added patch to reinitialize the saved media keys when the keymap has changed
 
- -- reynhout <reynhout@galliumos.org>  Sun, 10 Jan 2016 21:05:33 +0000
+ -- Hugh Greenberg <hugh@galliumos.org>  Sat, 07 Nov 2015 12:18:45 +1100
 
 xfce4-power-manager (1.4.8-0ubuntu11) vivid; urgency=medium
 

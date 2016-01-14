@@ -1,0 +1,68 @@
+--- a/src/xfpm-button.c
++++ b/src/xfpm-button.c
+@@ -87,6 +87,8 @@
+ 
+ G_DEFINE_TYPE(XfpmButton, xfpm_button, G_TYPE_OBJECT)
+ 
++static void xfpm_button_setup (XfpmButton *button);
++
+ static guint
+ xfpm_button_get_key (unsigned int keycode)
+ {
+@@ -102,6 +104,36 @@
+     return key;
+ }
+ 
++static void
++xfpm_button_reinit (XfpmButton *button)
++{
++    guint i;
++    Display *display;
++    guint modmask = AnyModifier;
++
++    display = gdk_x11_get_default_xdisplay ();
++    for ( i = 0; i < G_N_ELEMENTS (xfpm_key_map); i++)
++    {
++	gdk_error_trap_push ();
++	if (xfpm_key_map [i].key == BUTTON_UNKNOWN)
++	    continue;
++
++	XUngrabKey (display, xfpm_key_map [i].key_code, modmask,
++		    GDK_WINDOW_XID (button->priv->window));
++
++	XUngrabKey (display, xfpm_key_map [i].key_code, LockMask | modmask,
++		    GDK_WINDOW_XID (button->priv->window));
++
++	gdk_flush ();
++	gdk_error_trap_pop ();
++	xfpm_key_map [i].key_code = 0;
++	xfpm_key_map [i].key = 0;
++    }
++
++    xfpm_button_setup (button);
++    return;
++}
++
+ static GdkFilterReturn
+ xfpm_button_filter_x_events (GdkXEvent *xevent, GdkEvent *ev, gpointer data)
+ {
+@@ -111,6 +143,11 @@
+     XEvent *xev = (XEvent *) xevent;
+     
+     button = (XfpmButton *) data;
++    if ( xev->type == MappingNotify && xev->xmapping.request == MappingKeyboard) {
++	xfpm_button_reinit(button);
++	return GDK_FILTER_CONTINUE;
++    }
++
+     if ( xev->type != KeyPress  && !button->priv->power_pressed ) {
+     	return GDK_FILTER_CONTINUE;
+     } else if (xev->type == KEYCODE_AFTER_POWERB && button->priv->power_pressed ) {
+@@ -179,7 +216,6 @@
+     return TRUE;
+ }
+ 
+-
+ static gboolean
+ xfpm_button_xevent_key (XfpmButton *button, guint keysym , XfpmButtonKey key)
+ {
