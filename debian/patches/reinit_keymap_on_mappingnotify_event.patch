@@ -1,6 +1,17 @@
 --- a/src/xfpm-button.c
 +++ b/src/xfpm-button.c
-@@ -87,6 +87,9 @@
+@@ -81,12 +81,20 @@
+     LAST_SIGNAL
+ };
+ 
++guint mod_masks [] = {
++    0, /* modifier only */
++    LockMask
++};
++
+ #define DUPLICATE_SHUTDOWN_TIMEOUT 4.0f
+ 
+ static guint signals[LAST_SIGNAL] = { 0 };
  
  G_DEFINE_TYPE(XfpmButton, xfpm_button, G_TYPE_OBJECT)
  
@@ -10,14 +21,14 @@
  static guint
  xfpm_button_get_key (unsigned int keycode)
  {
-@@ -102,6 +105,35 @@
+@@ -102,6 +110,37 @@
      return key;
  }
  
 +static void
 +xfpm_button_reinit (XfpmButton *button)
 +{
-+    guint i;
++    guint i, j;
 +    Display *display;
 +
 +    display = gdk_x11_get_default_xdisplay ();
@@ -28,9 +39,11 @@
 +	if (xfpm_key_map [i].key == BUTTON_UNKNOWN)
 +	    continue;
 +
-+	XUngrabKey (display, xfpm_key_map [i].key_code,
-+		    0,
-+		    GDK_WINDOW_XID (button->priv->window));
++	for (j = 0; j < G_N_ELEMENTS (mod_masks); j++) {
++	    XUngrabKey (display, xfpm_key_map [i].key_code,
++			mod_masks [j],
++			GDK_WINDOW_XID (button->priv->window));
++	}
 +
 +	xfpm_key_map [i].key_code = 0;
 +	xfpm_key_map [i].key = 0;
@@ -46,7 +59,7 @@
  static GdkFilterReturn
  xfpm_button_filter_x_events (GdkXEvent *xevent, GdkEvent *ev, gpointer data)
  {
-@@ -111,6 +143,11 @@
+@@ -111,6 +150,11 @@
      XEvent *xev = (XEvent *) xevent;
      
      button = (XfpmButton *) data;
@@ -58,24 +71,24 @@
      if ( xev->type != KeyPress  && !button->priv->power_pressed ) {
      	return GDK_FILTER_CONTINUE;
      } else if (xev->type == KEYCODE_AFTER_POWERB && button->priv->power_pressed ) {
-@@ -146,32 +183,18 @@
+@@ -146,32 +190,21 @@
  {
      Display *display;
      guint ret;
 -    guint modmask = AnyModifier;
++    guint i;
      
      display = gdk_x11_get_default_xdisplay ();
      
      gdk_error_trap_push ();
- 
+-
 -    ret = XGrabKey (display, keycode, modmask,
-+    ret = XGrabKey (display, keycode, 0,
- 		    GDK_WINDOW_XID (button->priv->window), True,
- 		    GrabModeAsync, GrabModeAsync);
+-		    GDK_WINDOW_XID (button->priv->window), True,
+-		    GrabModeAsync, GrabModeAsync);
 -		    
-     if ( ret == BadAccess )
-     {
- 	g_warning ("Failed to grab modmask=%u, keycode=%li",
+-    if ( ret == BadAccess )
+-    {
+-	g_warning ("Failed to grab modmask=%u, keycode=%li",
 -		    modmask, (long int) keycode);
 -	return FALSE;
 -    }
@@ -89,11 +102,20 @@
 -	g_warning ("Failed to grab modmask=%u, keycode=%li",
 -		   LockMask | modmask, (long int) keycode);
 -	return FALSE;
-+		   0, (long int) keycode);
++    for (i = 0; i < G_N_ELEMENTS (mod_masks); i++) {
++	ret = XGrabKey (display, keycode, mod_masks [i],
++			GDK_WINDOW_XID (button->priv->window), True,
++			GrabModeAsync, GrabModeAsync);
++
++	if ( ret == BadAccess )
++	    {
++		g_warning ("Failed to grab modmask=%u, keycode=%li",
++			   0, (long int) keycode);
++	    }
      }
  
      gdk_flush ();
-@@ -179,7 +202,6 @@
+@@ -179,7 +212,6 @@
      return TRUE;
  }
  
@@ -101,7 +123,7 @@
  static gboolean
  xfpm_button_xevent_key (XfpmButton *button, guint keysym , XfpmButtonKey key)
  {
-@@ -206,11 +228,8 @@
+@@ -206,11 +238,8 @@
  }
  
  static void
@@ -114,7 +136,7 @@
      if ( xfpm_button_xevent_key (button, XF86XK_PowerOff, BUTTON_POWER_OFF) )
  	button->priv->mapped_buttons |= POWER_KEY;
      
-@@ -240,7 +259,15 @@
+@@ -240,7 +269,15 @@
  
      if (xfpm_button_xevent_key (button, XF86XK_KbdBrightnessDown, BUTTON_KBD_BRIGHTNESS_DOWN) )
  	button->priv->mapped_buttons |= KBD_BRIGHTNESS_KEY_DOWN;
