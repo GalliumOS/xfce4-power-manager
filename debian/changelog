@@ -2,7 +2,7 @@ xfce4-power-manager (1.4.3-0ubuntu1-galliumos1) vivid; urgency=medium
 
   * Added patch to reinitialize the saved media keys when the keymap has changed
 
- -- Hugh Greenberg <hugh@galliumos.org>  Sat, 07 Nov 2015 12:18:45 +1100
+ -- Hugh Greenberg <hugh@galliumos.org>  Thu, 14 Jan 2015 12:18:45 +1100
 
 xfce4-power-manager (1.4.8-0ubuntu11) vivid; urgency=medium
 
