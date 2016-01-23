@@ -65,7 +65,7 @@
      button = (XfpmButton *) data;
 +    if ( xev->type == MappingNotify && xev->xmapping.request == MappingKeyboard) {
 +	xfpm_button_reinit(button);
-+	return GDK_FILTER_CONTINUE;
++	return GDK_FILTER_REMOVE;
 +    }
 +
      if ( xev->type != KeyPress  && !button->priv->power_pressed ) {

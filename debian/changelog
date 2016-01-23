@@ -1,14 +1,20 @@
+xfce4-power-manager (1.4.3-0ubuntu1-galliumos3) vivid; urgency=medium
+
+  * return GDK_FILTER_REMOVE on a mappingnotify event
+
+ -- Hugh Greenberg <hugh@galliumos.org>  Thu, 21 Jan 2016 12:18:45 +1100
+
 xfce4-power-manager (1.4.3-0ubuntu1-galliumos2) vivid; urgency=medium
 
   * Grab and Ungrab the keycode with the LockMask modifier
 
- -- Hugh Greenberg <hugh@galliumos.org>  Sat, 16 Jan 2015 12:18:45 +1100
+ -- Hugh Greenberg <hugh@galliumos.org>  Sat, 16 Jan 2016 12:18:45 +1100
 
 xfce4-power-manager (1.4.3-0ubuntu1-galliumos1) vivid; urgency=medium
 
   * Added patch to reinitialize the saved media keys when the keymap has changed
 
- -- Hugh Greenberg <hugh@galliumos.org>  Thu, 14 Jan 2015 12:18:45 +1100
+ -- Hugh Greenberg <hugh@galliumos.org>  Thu, 14 Jan 2016 12:18:45 +1100
 
 xfce4-power-manager (1.4.8-0ubuntu11) vivid; urgency=medium
 
