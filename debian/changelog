@@ -1,4 +1,4 @@
-xfce4-power-manager (1.4.3-0ubuntu1-galliumos3) vivid; urgency=medium
+xfce4-power-manager (1.4.3-0ubuntu1-galliumos13) vivid; urgency=medium
 
   * return GDK_FILTER_REMOVE on a mappingnotify event
 
