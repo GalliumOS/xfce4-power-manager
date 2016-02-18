@@ -7,3 +7,4 @@ low_battery_status_fix.patch
 increase_applet_brightness_min.patch
 force_suspend.patch
 reinit_keymap_on_mappingnotify_event.patch
+add_backlight_min_on_substep.diff

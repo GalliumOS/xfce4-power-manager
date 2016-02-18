@@ -1,3 +1,9 @@
+xfce4-power-manager (1.4.3-0ubuntu1-galliumos13+dev1) vivid-galliumos; urgency=medium
+
+  * add backlight minimum ON substep
+
+ -- reynhout <reynhout@galliumos.org>  Thu, 18 Feb 2016 03:40:22 +0000
+
 xfce4-power-manager (1.4.3-0ubuntu1-galliumos13) vivid; urgency=medium
 
   * return GDK_FILTER_REMOVE on a mappingnotify event

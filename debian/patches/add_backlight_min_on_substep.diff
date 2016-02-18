@@ -1,0 +1,66 @@
+--- a/common/xfpm-brightness.c
++++ b/common/xfpm-brightness.c
+@@ -55,6 +55,7 @@
+     gint32		max_level;
+     gint32		current_level;
+     gint32		min_level;
++    gint32		min_on_level;
+     gint32		step;
+ };
+ 
+@@ -212,6 +213,7 @@
+ 		ret = TRUE;
+ 		brightness->priv->output = brightness->priv->resource->outputs[i];
+ 		brightness->priv->step =  max <= 20 ? 1 : max / 10;
++	        brightness->priv->min_on_level = max <= 20 ? 1 : max / 100;
+ 	    }
+ 	    
+ 	}
+@@ -282,7 +284,14 @@
+ 	return TRUE;
+     }
+     
+-    set_level = MAX (hw_level - brightness->priv->step, brightness->priv->min_level);
++    if ( hw_level <= brightness->priv->step && hw_level > brightness->priv->min_on_level )
++    {
++        set_level = brightness->priv->min_on_level;
++    }
++    else
++    {
++        set_level = MAX (hw_level - brightness->priv->step, brightness->priv->min_level);
++    }
+     
+     g_warn_if_fail (xfpm_brightness_xrandr_set_level (brightness, brightness->priv->output, set_level));
+ 	
+@@ -363,6 +372,7 @@
+ 	brightness->priv->helper_has_hw = TRUE;
+ 	brightness->priv->min_level = 0;
+ 	brightness->priv->max_level = ret;
++	brightness->priv->min_on_level = ret <= 20 ? 1 : ret / 100;
+ 	brightness->priv->step =  ret <= 20 ? 1 : ret / 10;
+     }
+ 
+@@ -512,7 +522,14 @@
+ 	return TRUE;
+     }
+     
+-    set_level = MAX (hw_level - brightness->priv->step, brightness->priv->min_level);
++    if ( hw_level <= brightness->priv->step && hw_level > brightness->priv->min_on_level )
++    {
++        set_level = brightness->priv->min_on_level;
++    }
++    else
++    {
++        set_level = MAX (hw_level - brightness->priv->step, brightness->priv->min_level);
++    }
+     
+     g_warn_if_fail (xfpm_brightness_helper_set_level (brightness, set_level));
+ 	
+@@ -556,6 +573,7 @@
+     brightness->priv->helper_has_hw = FALSE;
+     brightness->priv->max_level = 0;
+     brightness->priv->min_level = 0;
++    brightness->priv->min_on_level = 0;
+     brightness->priv->current_level = 0;
+     brightness->priv->output = 0;
+     brightness->priv->step = 0;
