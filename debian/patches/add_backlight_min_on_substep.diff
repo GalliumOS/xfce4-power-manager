@@ -12,7 +12,7 @@
  		ret = TRUE;
  		brightness->priv->output = brightness->priv->resource->outputs[i];
  		brightness->priv->step =  max <= 20 ? 1 : max / 10;
-+	        brightness->priv->min_on_level = max <= 20 ? 1 : max / 100;
++	        brightness->priv->min_on_level = max <= 100 ? 1 : max / 50;
  	    }
  	    
  	}
@@ -36,7 +36,7 @@
  	brightness->priv->helper_has_hw = TRUE;
  	brightness->priv->min_level = 0;
  	brightness->priv->max_level = ret;
-+	brightness->priv->min_on_level = ret <= 20 ? 1 : ret / 100;
++	brightness->priv->min_on_level = ret <= 100 ? 1 : ret / 50;
  	brightness->priv->step =  ret <= 20 ? 1 : ret / 10;
      }
  
