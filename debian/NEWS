@@ -1,3 +1,11 @@
+xfce4-power-manager (1.4.4-1) experimental; urgency=medium
+
+  Starting with version 1.4.4, the tray icon is now back and can be enabled in
+  the power manager settings.
+  
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Sun, 22 Mar 2015 15:16:46 +0100
+
 xfce4-power-manager (1.3.0-1) experimental; urgency=low
 
   Starting with 1.3, xfce4-power-manager no longer provides a tray icon, but

@@ -1,3 +1,217 @@
+commit 883782b8014564e367ae83ff8718b22e40193f5b
+Author: Matt Thirtytwo <matt.59491@gmail.com>
+Date:   Sat Mar 7 23:13:05 2015 +0100
+
+    function check_for_consolekit2 is not used if !UP_CHECK_VERSION(0, 99, 0)
+    
+    Signed-off-by: Eric Koegel <eric.koegel@gmail.com>
+
+commit 17c4bcf1354b26fb511ecb297fe01370051f469c
+Author: Eric Koegel <eric.koegel@gmail.com>
+Date:   Wed Mar 4 19:26:35 2015 +0300
+
+    trivial: typo in email
+
+commit 9814bb4c597fb1edeee964c5a8a31b798181f354
+Author: Andrzej <ndrwrdck@gmail.com>
+Date:   Wed Mar 4 10:01:37 2015 +0100
+
+    The scalemenuitem is actually an imagemenuitem
+
+commit a0b59185a3a222ed295d90664c3b3e604e310ec6
+Author: Theppitak Karoonboonyanan <theppitak@gmail.com>
+Date:   Tue Mar 3 12:30:51 2015 +0100
+
+    I18n: Update translation th (100%).
+    
+    205 translated messages.
+    
+    Transifex (https://www.transifex.com/projects/p/xfce/).
+
+commit 46a335b462c92064837642ce395ca55b41bc023c
+Author: gabrieltandil <gabriel.tandil@gmail.com>
+Date:   Tue Mar 3 12:30:51 2015 +0100
+
+    I18n: Update translation es (100%).
+    
+    205 translated messages.
+    
+    Transifex (https://www.transifex.com/projects/p/xfce/).
+
+commit dd471557c2961ab31a3655e545901d80e81bbd16
+Author: Alois Nešpor <info@aloisnespor.info>
+Date:   Tue Mar 3 12:30:51 2015 +0100
+
+    I18n: Update translation cs (100%).
+    
+    205 translated messages.
+    
+    Transifex (https://www.transifex.com/projects/p/xfce/).
+
+commit 5f8e72634a741439c8e84a3033fac6ff715afb90
+Author: abuyop <abuyop@gmail.com>
+Date:   Tue Mar 3 00:30:52 2015 +0100
+
+    I18n: Update translation ms (100%).
+    
+    205 translated messages.
+    
+    Transifex (https://www.transifex.com/projects/p/xfce/).
+
+commit 1e5860626dc8488c6cf43a43aca6c9d03838779b
+Author: Саша Петровић <salepetronije@gmail.com>
+Date:   Mon Mar 2 18:30:58 2015 +0100
+
+    I18n: Update translation sr (100%).
+    
+    205 translated messages.
+    
+    Transifex (https://www.transifex.com/projects/p/xfce/).
+
+commit 9dc31dce0aa5670ed3a2beb2923eca03678aa0b9
+Author: Anonymous <noreply@xfce.org>
+Date:   Mon Mar 2 18:30:57 2015 +0100
+
+    I18n: Update translation ru (100%).
+    
+    205 translated messages.
+    
+    Transifex (https://www.transifex.com/projects/p/xfce/).
+
+commit 1094cef72844a9e388d206f1d4037c9416a07383
+Author: Pjotr <pjotrvertaalt@gmail.com>
+Date:   Mon Mar 2 18:30:57 2015 +0100
+
+    I18n: Update translation nl (100%).
+    
+    205 translated messages.
+    
+    Transifex (https://www.transifex.com/projects/p/xfce/).
+
+commit 792c5e9a44348eb5ccb1a8a0a1b2d9f012c52ee6
+Author: Edin Veskovic <edin.veskovic@openmailbox.org>
+Date:   Mon Mar 2 18:30:57 2015 +0100
+
+    I18n: Update translation hr (100%).
+    
+    205 translated messages.
+    
+    Transifex (https://www.transifex.com/projects/p/xfce/).
+
+commit 3c216f5c0ba02c40116ec5bc35db32832e43ba93
+Author: Urien Desterres <urien.desterres@gmail.com>
+Date:   Mon Mar 2 18:30:57 2015 +0100
+
+    I18n: Update translation fr (100%).
+    
+    205 translated messages.
+    
+    Transifex (https://www.transifex.com/projects/p/xfce/).
+
+commit 91276f2e625dce2dabced781ea0f578cf695c6cb
+Author: gabrieltandil <gabriel.tandil@gmail.com>
+Date:   Mon Mar 2 18:30:57 2015 +0100
+
+    I18n: Update translation es (100%).
+    
+    205 translated messages.
+    
+    Transifex (https://www.transifex.com/projects/p/xfce/).
+
+commit e921e4e3dbf76e8cf2eb3939f15004a8cf2035c6
+Author: Tobias Bannert <tobannert@gmail.com>
+Date:   Mon Mar 2 18:30:57 2015 +0100
+
+    I18n: Update translation de (100%).
+    
+    205 translated messages.
+    
+    Transifex (https://www.transifex.com/projects/p/xfce/).
+
+commit 0901f0c609306a5abf3d88511ae28f13393172c0
+Author: Alois Nešpor <info@aloisnespor.info>
+Date:   Mon Mar 2 18:30:57 2015 +0100
+
+    I18n: Update translation cs (100%).
+    
+    205 translated messages.
+    
+    Transifex (https://www.transifex.com/projects/p/xfce/).
+
+commit 356b138e8ed42342ed20a5867caa4441de9f58ba
+Author: 玉堂白鹤 <yjwork@qq.com>
+Date:   Mon Mar 2 12:31:00 2015 +0100
+
+    I18n: Update translation zh_CN (100%).
+    
+    205 translated messages.
+    
+    Transifex (https://www.transifex.com/projects/p/xfce/).
+
+commit c037339928293ea2701af08a9b37962313ea29d2
+Author: Seong-ho Cho <darkcircle.0426@gmail.com>
+Date:   Mon Mar 2 12:31:00 2015 +0100
+
+    I18n: Update translation ko (100%).
+    
+    205 translated messages.
+    
+    Transifex (https://www.transifex.com/projects/p/xfce/).
+
+commit 907d0382d057001e95fc5e2ba5df84764de7a10a
+Author: Cristian Marchi <cri.penta@gmail.com>
+Date:   Mon Mar 2 12:31:00 2015 +0100
+
+    I18n: Update translation it (100%).
+    
+    205 translated messages.
+    
+    Transifex (https://www.transifex.com/projects/p/xfce/).
+
+commit 4587bf48016eaf903ad026beac1b28705bfea59d
+Author: Kiril Kirilov <cybercop_montana@abv.bg>
+Date:   Mon Mar 2 12:31:00 2015 +0100
+
+    I18n: Update translation bg (100%).
+    
+    205 translated messages.
+    
+    Transifex (https://www.transifex.com/projects/p/xfce/).
+
+commit 7e3be2a03b4d4b950b31554bb93ce0cebf29475e
+Author: Olivier Duchateau <duchateau.olivier@gmail.com>
+Date:   Mon Mar 2 06:41:31 2015 +0000
+
+    Fix xfpm panel plugin crashes at startup when the locale is not UTF8
+    
+    Signed-off-by: Eric Koegel <eric.koegel@gmail.com>
+
+commit 041f110b875ad854b3792d1a101d87c0ac271ad1
+Author: Eric Koegel <eric.koegel@gmail.com>
+Date:   Sun Feb 22 13:32:34 2015 +0300
+
+    Bring back the tray icon (Bug #11054)
+    
+    This patch uses the PowerManagerButton to implement the tray icon.
+    It doesn't do the show when (dis)charging stuff since it will
+    display different battery types now, however that can be added
+    back if desired.
+
+commit ba081cefcb97c1903ce05d353cb0ee030e020195
+Author: Eric Koegel <eric.koegel@gmail.com>
+Date:   Sun Mar 1 09:19:13 2015 +0300
+
+    Fix dbus call for CK2 suspend (Bug #11610)
+    
+    Looks like the parameter order got messed up when adding the
+    suspend/hibernate code for ConsoleKit2. This patch fixes it.
+
+commit 294585512209054ec08343d06d0a218e042b2f54
+Author: Simon Steinbeiss <simon.steinbeiss@elfenbeinturm.at>
+Date:   Sat Feb 28 17:33:51 2015 +0100
+
+    Post release tag bump.
+
 commit 27921bdc81165d8e34f52779bc7876ecf8149544
 Author: Simon Steinbeiss <simon.steinbeiss@elfenbeinturm.at>
 Date:   Sat Feb 28 14:24:30 2015 +0100

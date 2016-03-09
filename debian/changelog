@@ -1,102 +1,70 @@
-xfce4-power-manager (1.4.3-0ubuntu1-galliumos14) vivid-galliumos; urgency=medium
+xfce4-power-manager (1.4.4-4ubuntu2-galliumos1) xenial; urgency=high
 
-  * add backlight minimum ON substep @ 2% of max
+  * Added galliumos patches to debian/patches
 
- -- reynhout <reynhout@galliumos.org>  Sat, 27 Feb 2016 02:58:14 +0000
+ -- Hugh Greenberg <hugh@galliumos.org>  Mon, 07 Mar 2016 15:05:59 +0000
 
-xfce4-power-manager (1.4.3-0ubuntu1-galliumos13) vivid; urgency=medium
+xfce4-power-manager (1.4.4-4ubuntu2) xenial; urgency=high
 
-  * return GDK_FILTER_REMOVE on a mappingnotify event
+  * Drop redundant libsystemd-login-dev build-dependency. This package
+    doesn't link against libsystemd, and instead detects logind presence
+    dynamically and calls out to it via DBus.
 
- -- Hugh Greenberg <hugh@galliumos.org>  Thu, 21 Jan 2016 12:18:45 +1100
+ -- Dimitri John Ledkov <xnox@ubuntu.com>  Mon, 04 Jan 2016 15:05:59 +0000
 
-xfce4-power-manager (1.4.3-0ubuntu1-galliumos2) vivid; urgency=medium
+xfce4-power-manager (1.4.4-4ubuntu1) wily; urgency=medium
 
-  * Grab and Ungrab the keycode with the LockMask modifier
+  * Merge from Debian. Remaining Ubuntu changes:
+  * debian/control
+    - Add libsystemd-login-dev build dep to use logind for session tracking.
+    - Enable building of lxpanel plugin
+    - Update depends for xfce4-power-manager-plugins to xfce4-panel | lxpanel
+  * debian/rules
+    - Do not include xfce4-panel in shlibs
 
- -- Hugh Greenberg <hugh@galliumos.org>  Sat, 16 Jan 2016 12:18:45 +1100
+ -- Jackson Doak <noskcaj@ubuntu.com>  Tue, 26 May 2015 06:20:12 +1000
 
-xfce4-power-manager (1.4.3-0ubuntu1-galliumos1) vivid; urgency=medium
+xfce4-power-manager (1.4.4-4) unstable; urgency=medium
 
-  * Added patch to reinitialize the saved media keys when the keymap has changed
+  * debian/rules:
+    - use linux suspend/hibernate backend on Linux and Hurd, and freebsd on
+    kFreeBSD.
 
- -- Hugh Greenberg <hugh@galliumos.org>  Thu, 14 Jan 2016 12:18:45 +1100
+ -- Yves-Alexis Perez <corsac@debian.org>  Sat, 16 May 2015 10:32:12 +0200
 
-xfce4-power-manager (1.4.8-0ubuntu11) vivid; urgency=medium
+xfce4-power-manager (1.4.4-3) unstable; urgency=medium
 
-  * Added patch to force suspending when the idle timeout is reached
+  * Upload to unstable.
 
- -- Hugh Greenberg <hugh@galliumos.org>  Sat, 07 Nov 2015 12:18:45 +1100
+ -- Yves-Alexis Perez <corsac@debian.org>  Wed, 06 May 2015 18:15:26 +0200
 
-xfce4-power-manager (1.4.8-0ubuntu10) vivid; urgency=medium
+xfce4-power-manager (1.4.4-2) experimental; urgency=medium
 
-  * Added patch to increase the minimum brightness of the applet button brightness slider
+  * debian/patches:
+    - 01_fix-light-locker-schema-loading added, make schema search recursive,
+      fix detection of light-locker settings.
 
- -- Hugh Greenberg <hugh@galliumos.org>  Wed, 04 Nov 2015 12:18:45 +1100
+ -- Yves-Alexis Perez <corsac@debian.org>  Thu, 23 Apr 2015 23:13:34 +0200
 
-xfce4-power-manager (1.4.8-0ubuntu8) vivid; urgency=medium
+xfce4-power-manager (1.4.4-1) experimental; urgency=medium
 
-  * Added patch to improve low battery status notification
+  * New upstream release.
+    - the tray icon is back.                                    closes: #755551
+  * debian/NEWS: add a note about the re-introduction of the tray icon. 
 
- -- Hugh Greenberg <hugh@galliumos.org>  Mon, 12 Oct 2015 12:18:45 +1100
+ -- Yves-Alexis Perez <corsac@debian.org>  Sun, 22 Mar 2015 15:29:32 +0100
 
-xfce4-power-manager (1.4.8-0ubuntu7) vivid; urgency=medium
+xfce4-power-manager (1.4.3-1) experimental; urgency=medium
 
-  * Removed patch to disable options for what to do on critical battery power
+  * New upstream release.
+    - add symlinks for UPS icons.                               closes: #762500
+  * debian/patches:
+    - 0001-Use-translated-device-type-for-unknown-devices-bug-1 dropped,
+      included upstream.
+  * debian/control:
+    - drop libsystemd-daemon-dev build-dep, obsolete.           closes: #779778
 
- -- Hugh Greenberg <hugh@galliumos.org>  Mon, 12 Oct 2015 12:18:45 +1100
-
-xfce4-power-manager (1.4.8-0ubuntu6) vivid; urgency=medium
-
-  * Patch to disable hibernation
-  * Patch to disable options for what to do on critical battery power
-  * Improved battery status patch to read status on resume
-
- -- Hugh Greenberg <hugh@galliumos.org>  Fri, 09 Oct 2015 12:18:45 +1100
-
-xfce4-power-manager (1.4.8-0ubuntu4) vivid; urgency=medium
-
-  * Patch for working around an issue where the power button would be triggered from the ac adapter or on sleep
-
- -- Hugh Greenberg <hugh@galliumos.org>  Sat, 26 Sep 2015 12:18:45 +1100
-
-xfce4-power-manager (1.4.8-0ubuntu3) vivid; urgency=medium
-
-  * Patch for working around an issue where the battery status wouldn't update quickly
-
- -- Hugh Greenberg <hugh@galliumos.org>  Sat, 26 Sep 2015 12:18:45 +1100
-
-xfce4-power-manager (1.4.8-0ubuntu2) vivid; urgency=medium
-
-  * Last patches weren't included by accident
-
- -- Hugh Greenberg <hugh@galliumos.org>  Fri, 18 Jul 2015 12:18:45 +1100
-
-xfce4-power-manager (1.4.8-0ubuntu1) vivid; urgency=medium
-
-  * Patch for locking on suspend
-  * Patch for resetting screensaver on resume
-
- -- Hugh Greenberg <hugh@galliumos.org>  Fri, 16 Jul 2015 12:18:45 +1100
-
-xfce4-power-manager (1.4.6-0ubuntu1) vivid; urgency=medium
-
-  * Removed brightness and dbus hacks since I am removing light locker and that was the reason why we needed these hacks.
-
- -- Hugh Greenberg <hugh@galliumos.org>  Fri, 15 Jul 2015 12:18:45 +1100
-
-xfce4-power-manager (1.4.5-0ubuntu1) vivid; urgency=medium
-
-  * A hack for forcing late locking if light locker is enabled to automatically lock the session. This fixes a bug that prevented suspend and showed a DBus error.
-
- -- Hugh Greenberg <hugh@galliumos.org>  Fri, 10 Jul 2015 12:18:45 +1100
-
-xfce4-power-manager (1.4.4-0ubuntu1) vivid; urgency=medium
-
-  * Don't restore brightness levels after a resume. This previously restored them to state that the power manager set them to, not the user.
-  * Changed the default suspend method to suspend, not hibernate 
-
- -- Hugh Greenberg <hugh@galliumos.org>  Fri, 10 Jul 2015 12:18:45 +1100
+ -- Yves-Alexis Perez <corsac@debian.org>  Sun, 08 Mar 2015 21:57:47 +0100
 
 xfce4-power-manager (1.4.3-0ubuntu1) vivid; urgency=medium
 
@@ -142,8 +110,7 @@ xfce4-power-manager (1.4.1-2ubuntu1) vivid; urgency=medium
 
   * Merge from Debian. Remaining Ubuntu changes:
   * debian/control
-    - Switch to using logind for session tracking. Depend on systemd-services
-      and add libsystemd-login-dev build dependency.
+    - Add libsystemd-login-dev build dep to use logind for session tracking.
     - Enable building of lxpanel plugin
     - Update depends for xfce4-power-manager-plugins to xfce4-panel | lxpanel
   * debian/rules

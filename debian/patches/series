@@ -1,6 +1,6 @@
+01_fix-light-locker-schema-loading.patch
 suspendandbrightness.diff
 lock_on_suspend.diff
-battery_status.diff
 chromebook_power_button.patch
 disable_hibernate.patch
 low_battery_status_fix.patch
@@ -8,3 +8,4 @@ increase_applet_brightness_min.patch
 force_suspend.patch
 reinit_keymap_on_mappingnotify_event.patch
 add_backlight_min_on_substep.diff
+battery_status.diff

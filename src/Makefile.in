@@ -130,7 +130,9 @@ am_xfce4_power_manager_OBJECTS = $(am__objects_1) \
 	xfce4_power_manager-xfpm-notify.$(OBJEXT) \
 	xfce4_power_manager-xfpm-polkit.$(OBJEXT) \
 	xfce4_power_manager-xfpm-errors.$(OBJEXT) \
-	xfce4_power_manager-xfpm-suspend.$(OBJEXT)
+	xfce4_power_manager-xfpm-suspend.$(OBJEXT) \
+	xfce4_power_manager-power-manager-button.$(OBJEXT) \
+	xfce4_power_manager-scalemenuitem.$(OBJEXT)
 xfce4_power_manager_OBJECTS = $(am_xfce4_power_manager_OBJECTS)
 am__DEPENDENCIES_1 =
 xfce4_power_manager_DEPENDENCIES =  \
@@ -504,7 +506,11 @@ xfce4_power_manager_SOURCES = \
 	xfpm-errors.c				\
 	xfpm-errors.h				\
 	xfpm-suspend.c				\
-	xfpm-suspend.h
+	xfpm-suspend.h				\
+	../panel-plugins/power-manager-plugin/power-manager-button.c	\
+	../panel-plugins/power-manager-plugin/power-manager-button.h	\
+	../panel-plugins/power-manager-plugin/scalemenuitem.c			\
+	../panel-plugins/power-manager-plugin/scalemenuitem.h
 
 xfce4_power_manager_CFLAGS = \
 	-I$(top_srcdir)                         \
@@ -516,6 +522,7 @@ xfce4_power_manager_CFLAGS = \
 	-DSBINDIR=\"$(sbindir)\"                \
 	-DUPOWER_ENABLE_DEPRECATED              \
 	-DXFPM_SUSPEND_HELPER_CMD=\"$(prefix)/bin/xfce4-pm-helper\" \
+	-DXFPM_SYSTRAY							\
 	$(GOBJECT_CFLAGS)                       \
 	$(GTHREAD_CFLAGS)                       \
 	$(DBUS_GLIB_CFLAGS)                     \
@@ -754,6 +761,8 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xfce4_pm_helper-xfpm-pm-helper.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xfce4_power_manager-egg-idletime.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xfce4_power_manager-power-manager-button.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xfce4_power_manager-scalemenuitem.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xfce4_power_manager-xfpm-backlight.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xfce4_power_manager-xfpm-battery.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xfce4_power_manager-xfpm-button.Po@am__quote@
@@ -1074,6 +1083,34 @@ xfce4_power_manager-xfpm-suspend.obj: xfpm-suspend.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='xfpm-suspend.c' object='xfce4_power_manager-xfpm-suspend.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(xfce4_power_manager_CFLAGS) $(CFLAGS) -c -o xfce4_power_manager-xfpm-suspend.obj `if test -f 'xfpm-suspend.c'; then $(CYGPATH_W) 'xfpm-suspend.c'; else $(CYGPATH_W) '$(srcdir)/xfpm-suspend.c'; fi`
+
+xfce4_power_manager-power-manager-button.o: ../panel-plugins/power-manager-plugin/power-manager-button.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(xfce4_power_manager_CFLAGS) $(CFLAGS) -MT xfce4_power_manager-power-manager-button.o -MD -MP -MF $(DEPDIR)/xfce4_power_manager-power-manager-button.Tpo -c -o xfce4_power_manager-power-manager-button.o `test -f '../panel-plugins/power-manager-plugin/power-manager-button.c' || echo '$(srcdir)/'`../panel-plugins/power-manager-plugin/power-manager-button.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/xfce4_power_manager-power-manager-button.Tpo $(DEPDIR)/xfce4_power_manager-power-manager-button.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../panel-plugins/power-manager-plugin/power-manager-button.c' object='xfce4_power_manager-power-manager-button.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(xfce4_power_manager_CFLAGS) $(CFLAGS) -c -o xfce4_power_manager-power-manager-button.o `test -f '../panel-plugins/power-manager-plugin/power-manager-button.c' || echo '$(srcdir)/'`../panel-plugins/power-manager-plugin/power-manager-button.c
+
+xfce4_power_manager-power-manager-button.obj: ../panel-plugins/power-manager-plugin/power-manager-button.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(xfce4_power_manager_CFLAGS) $(CFLAGS) -MT xfce4_power_manager-power-manager-button.obj -MD -MP -MF $(DEPDIR)/xfce4_power_manager-power-manager-button.Tpo -c -o xfce4_power_manager-power-manager-button.obj `if test -f '../panel-plugins/power-manager-plugin/power-manager-button.c'; then $(CYGPATH_W) '../panel-plugins/power-manager-plugin/power-manager-button.c'; else $(CYGPATH_W) '$(srcdir)/../panel-plugins/power-manager-plugin/power-manager-button.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/xfce4_power_manager-power-manager-button.Tpo $(DEPDIR)/xfce4_power_manager-power-manager-button.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../panel-plugins/power-manager-plugin/power-manager-button.c' object='xfce4_power_manager-power-manager-button.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(xfce4_power_manager_CFLAGS) $(CFLAGS) -c -o xfce4_power_manager-power-manager-button.obj `if test -f '../panel-plugins/power-manager-plugin/power-manager-button.c'; then $(CYGPATH_W) '../panel-plugins/power-manager-plugin/power-manager-button.c'; else $(CYGPATH_W) '$(srcdir)/../panel-plugins/power-manager-plugin/power-manager-button.c'; fi`
+
+xfce4_power_manager-scalemenuitem.o: ../panel-plugins/power-manager-plugin/scalemenuitem.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(xfce4_power_manager_CFLAGS) $(CFLAGS) -MT xfce4_power_manager-scalemenuitem.o -MD -MP -MF $(DEPDIR)/xfce4_power_manager-scalemenuitem.Tpo -c -o xfce4_power_manager-scalemenuitem.o `test -f '../panel-plugins/power-manager-plugin/scalemenuitem.c' || echo '$(srcdir)/'`../panel-plugins/power-manager-plugin/scalemenuitem.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/xfce4_power_manager-scalemenuitem.Tpo $(DEPDIR)/xfce4_power_manager-scalemenuitem.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../panel-plugins/power-manager-plugin/scalemenuitem.c' object='xfce4_power_manager-scalemenuitem.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(xfce4_power_manager_CFLAGS) $(CFLAGS) -c -o xfce4_power_manager-scalemenuitem.o `test -f '../panel-plugins/power-manager-plugin/scalemenuitem.c' || echo '$(srcdir)/'`../panel-plugins/power-manager-plugin/scalemenuitem.c
+
+xfce4_power_manager-scalemenuitem.obj: ../panel-plugins/power-manager-plugin/scalemenuitem.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(xfce4_power_manager_CFLAGS) $(CFLAGS) -MT xfce4_power_manager-scalemenuitem.obj -MD -MP -MF $(DEPDIR)/xfce4_power_manager-scalemenuitem.Tpo -c -o xfce4_power_manager-scalemenuitem.obj `if test -f '../panel-plugins/power-manager-plugin/scalemenuitem.c'; then $(CYGPATH_W) '../panel-plugins/power-manager-plugin/scalemenuitem.c'; else $(CYGPATH_W) '$(srcdir)/../panel-plugins/power-manager-plugin/scalemenuitem.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/xfce4_power_manager-scalemenuitem.Tpo $(DEPDIR)/xfce4_power_manager-scalemenuitem.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../panel-plugins/power-manager-plugin/scalemenuitem.c' object='xfce4_power_manager-scalemenuitem.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(xfce4_power_manager_CFLAGS) $(CFLAGS) -c -o xfce4_power_manager-scalemenuitem.obj `if test -f '../panel-plugins/power-manager-plugin/scalemenuitem.c'; then $(CYGPATH_W) '../panel-plugins/power-manager-plugin/scalemenuitem.c'; else $(CYGPATH_W) '$(srcdir)/../panel-plugins/power-manager-plugin/scalemenuitem.c'; fi`
 
 xfpm_power_backlight_helper-xfpm-backlight-helper.o: xfpm-backlight-helper.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(xfpm_power_backlight_helper_CFLAGS) $(CFLAGS) -MT xfpm_power_backlight_helper-xfpm-backlight-helper.o -MD -MP -MF $(DEPDIR)/xfpm_power_backlight_helper-xfpm-backlight-helper.Tpo -c -o xfpm_power_backlight_helper-xfpm-backlight-helper.o `test -f 'xfpm-backlight-helper.c' || echo '$(srcdir)/'`xfpm-backlight-helper.c
