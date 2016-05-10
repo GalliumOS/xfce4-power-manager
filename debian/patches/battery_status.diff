@@ -83,10 +83,10 @@
  
 --- a/src/xfpm-power.c
 +++ b/src/xfpm-power.c
-@@ -506,6 +506,7 @@
-     /* Restore the brightness level from before we suspended */
-     xfpm_brightness_set_level (brightness, brightness_level);
-     XResetScreenSaver (gdk_x11_get_default_xdisplay ());
+@@ -503,6 +503,7 @@
+     g_signal_emit (G_OBJECT (power), signals [WAKING_UP], 0);
+     /* Check/update any changes while we slept */
+     xfpm_power_get_properties (power);
 +    read_bat0(NULL);
  
  #ifdef WITH_NETWORK_MANAGER
