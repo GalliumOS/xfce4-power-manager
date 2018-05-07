@@ -51,6 +51,7 @@
 
 #define BRIGHTNESS_DISABLED 	9
 
+static  GtkApplication *app			= NULL;
 static 	GtkBuilder *xml 			= NULL;
 static  GtkWidget  *nt				= NULL;
 
@@ -124,16 +125,12 @@ void        button_power_changed_cb                 (GtkWidget *w,
 void        button_hibernate_changed_cb            (GtkWidget *w, 
 						    XfconfChannel *channel);
 
-void        notify_toggled_cb                      (GtkWidget *w, 
-						    XfconfChannel *channel);
-void        systray_toggled_cb                     (GtkWidget *w,
-						    XfconfChannel *channel);
-
 void        on_sleep_mode_changed_cb      (GtkWidget *w,
 						    XfconfChannel *channel);
 
-void        dpms_toggled_cb                        (GtkWidget *w, 
-						    XfconfChannel *channel);
+void        dpms_toggled_cb                        (GtkWidget *w,
+                                                    gboolean is_active,
+                                                    XfconfChannel *channel);
 
 void        sleep_on_battery_value_changed_cb      (GtkWidget *w, 
 						    XfconfChannel *channel);
@@ -168,9 +165,6 @@ gchar      *format_brightness_value_cb             (GtkScale *scale,
 gchar      *format_brightness_percentage_cb        (GtkScale *scale, 
 						    gdouble value,
 						    gpointer data);
-
-void        brightness_handle_keys_toggled_cb      (GtkWidget *w,
-						    XfconfChannel *channel);
 
 void        brightness_on_battery_value_changed_cb (GtkWidget *w, 
 						    XfconfChannel *channel);
@@ -353,29 +347,6 @@ button_hibernate_changed_cb (GtkWidget *w, XfconfChannel *channel)
 }
 
 void
-notify_toggled_cb (GtkWidget *w, XfconfChannel *channel)
-{
-    gboolean val = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(w));
-    
-    if (!xfconf_channel_set_bool (channel, PROPERTIES_PREFIX GENERAL_NOTIFICATION_CFG, val) )
-    {
-	g_critical ("Cannot set value for property %s\n", GENERAL_NOTIFICATION_CFG);
-    }
-}
-
-void
-systray_toggled_cb (GtkWidget *w, XfconfChannel *channel)
-{
-    gboolean val = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(w));
-
-    if (!xfconf_channel_set_int (channel, PROPERTIES_PREFIX SHOW_TRAY_ICON_CFG, (int)val) )
-    {
-	g_critical ("Cannot set value for property %s\n", SHOW_TRAY_ICON_CFG);
-    }
-}
-
-
-void
 on_ac_sleep_mode_changed_cb (GtkWidget *w, XfconfChannel *channel)
 {
     GtkTreeModel     *model;
@@ -424,21 +395,19 @@ on_battery_sleep_mode_changed_cb (GtkWidget *w, XfconfChannel *channel)
 }
 
 void
-dpms_toggled_cb (GtkWidget *w, XfconfChannel *channel)
+dpms_toggled_cb (GtkWidget *w, gboolean is_active, XfconfChannel *channel)
 {
-    gboolean val = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(w));
+    xfconf_channel_set_bool (channel, PROPERTIES_PREFIX DPMS_ENABLED_CFG, is_active);
     
-    xfconf_channel_set_bool (channel, PROPERTIES_PREFIX DPMS_ENABLED_CFG, val);
-    
-    gtk_widget_set_sensitive (on_ac_dpms_off, val);
-    gtk_widget_set_sensitive (on_ac_dpms_sleep, val);
-    gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (xml, "dpms-sleep-label")), val);
-    gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (xml, "dpms-off-label")), val);
+    gtk_widget_set_sensitive (on_ac_dpms_off, is_active);
+    gtk_widget_set_sensitive (on_ac_dpms_sleep, is_active);
+    gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (xml, "dpms-sleep-label")), is_active);
+    gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (xml, "dpms-off-label")), is_active);
     
     if ( GTK_IS_WIDGET (on_battery_dpms_off ) )
     {
-	gtk_widget_set_sensitive (on_battery_dpms_off, val);
-    	gtk_widget_set_sensitive (on_battery_dpms_sleep, val);
+        gtk_widget_set_sensitive (on_battery_dpms_off, is_active);
+        gtk_widget_set_sensitive (on_battery_dpms_sleep, is_active);
     }
 }
 
@@ -638,11 +607,11 @@ format_dpms_value_cb (GtkScale *scale, gdouble value, gpointer data)
 {
     if ( (gint)value == 0 )
     	return g_strdup (_("Never"));
-    
+
     if ( (int)value == 1 )
 	return g_strdup (_("One minute"));
 
-    return g_strdup_printf ("%d %s", (int)value, _("Minutes"));
+    return g_strdup_printf ("%d %s", (int)value, _("minutes"));
 }
 
 
@@ -650,23 +619,23 @@ gchar *
 format_inactivity_value_cb (GtkScale *scale, gdouble value, gpointer data)
 {
     gint h, min;
-    
+
     if ( (gint)value <= 14 )
 	return g_strdup (_("Never"));
     else if ( (gint)value < 60 )
-	return g_strdup_printf ("%d %s", (gint)value, _("Minutes"));
+	return g_strdup_printf ("%d %s", (gint)value, _("minutes"));
     else if ( (gint)value == 60)
 	return g_strdup (_("One hour"));
 
     /* value > 60 */
     h = (gint)value/60;
     min = (gint)value%60;
-    
+
     if ( h <= 1 )
 	if ( min == 0 )      return g_strdup_printf ("%s", _("One hour"));
 	else if ( min == 1 ) return g_strdup_printf ("%s %s", _("One hour"),  _("one minute"));
 	else                 return g_strdup_printf ("%s %d %s", _("One hour"), min, _("minutes"));
-    else 
+    else
 	if ( min == 0 )      return g_strdup_printf ("%d %s", h, _("hours"));
 	else if ( min == 1 ) return g_strdup_printf ("%d %s %s", h, _("hours"), _("one minute"));
 	else                 return g_strdup_printf ("%d %s %d %s", h, _("hours"), min, _("minutes"));
@@ -680,29 +649,14 @@ format_brightness_value_cb (GtkScale *scale, gdouble value, gpointer data)
 {
     if ( (gint)value <= 9 )
     	return g_strdup (_("Never"));
-        
-    return g_strdup_printf ("%d %s", (int)value, _("Seconds"));
+
+    return g_strdup_printf ("%d %s", (int)value, _("seconds"));
 }
 
 gchar *
 format_brightness_percentage_cb (GtkScale *scale, gdouble value, gpointer data)
 {
     return g_strdup_printf ("%d %s", (int)value, _("%"));
-}
-
-void
-brightness_handle_keys_toggled_cb (GtkWidget *w, XfconfChannel *channel)
-{
-    gboolean val = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(w));
-
-    if ( !xfconf_channel_set_bool (channel, PROPERTIES_PREFIX HANDLE_BRIGHTNESS_KEYS, val) )
-    {
-        g_critical ("Cannot set value for property %s\n", HANDLE_BRIGHTNESS_KEYS);
-    }
-    if ( !xfconf_channel_set_int (channel, PROPERTIES_PREFIX BRIGHTNESS_SWITCH, !val) )
-    {
-        g_critical ("Cannot set value for property %s\n", BRIGHTNESS_SWITCH);
-    }
 }
 
 void
@@ -1278,16 +1232,13 @@ xfpm_settings_general (XfconfChannel *channel, gboolean auth_suspend,
     GtkWidget *hibernate_label;
     GtkWidget *sleep_w;
     GtkWidget *sleep_label;
-    GtkWidget *notify;
-    GtkWidget *systray;
-    
+    GtkWidget *dpms;
+
     guint  value;
     guint list_value;
     gboolean valid;
     gboolean val;
-    gint systray_val;
-    
-    GtkWidget *dpms;
+
     GtkListStore *list_store;
     GtkTreeIter iter;
 
@@ -1297,7 +1248,7 @@ xfpm_settings_general (XfconfChannel *channel, gboolean auth_suspend,
      * Global dpms settings (enable/disable)
      */
     val = xfconf_channel_get_bool (channel, PROPERTIES_PREFIX DPMS_ENABLED_CFG, TRUE);
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(dpms), val);
+    gtk_switch_set_state (GTK_SWITCH (dpms), val);
 
     /*
      * Power button
@@ -1458,20 +1409,6 @@ xfpm_settings_general (XfconfChannel *channel, gboolean auth_suspend,
 	gtk_widget_hide (sleep_w);
 	gtk_widget_hide (sleep_label);
     }
-    /*
-     * Enable/Disable Notification
-     */
-    
-    notify = GTK_WIDGET (gtk_builder_get_object (xml, "show-notifications"));
-    val = xfconf_channel_get_bool (channel, PROPERTIES_PREFIX GENERAL_NOTIFICATION_CFG, TRUE);
-    
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(notify), val);
-
-    /* Enable/Disable systray icon */
-    systray = GTK_WIDGET (gtk_builder_get_object (xml, "show-systray"));
-    systray_val = xfconf_channel_get_int (channel, PROPERTIES_PREFIX SHOW_TRAY_ICON_CFG, FALSE);
-
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(systray), systray_val);
 }
 
 static void
@@ -1483,7 +1420,6 @@ xfpm_settings_advanced (XfconfChannel *channel, gboolean auth_suspend,
     GtkWidget *critical_level;
     GtkWidget *lock;
     GtkWidget *label;
-    GtkWidget *brg_handle_keys;
 
     /*
      * Critical battery level
@@ -1530,13 +1466,6 @@ xfpm_settings_advanced (XfconfChannel *channel, gboolean auth_suspend,
     
     val = xfconf_channel_get_bool (channel, PROPERTIES_PREFIX LOCK_SCREEN_ON_SLEEP, TRUE);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(lock), val);
-
-    /*
-     * Handle brightness keys
-     */
-    brg_handle_keys = GTK_WIDGET (gtk_builder_get_object (xml, "handle-brightness-keys"));
-    val = xfconf_channel_get_bool (channel, PROPERTIES_PREFIX HANDLE_BRIGHTNESS_KEYS, TRUE);
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(brg_handle_keys), val);
 }
 
 /* Light Locker Integration */
@@ -1570,15 +1499,16 @@ format_light_locker_value_cb (GtkScale *scale, gdouble value, gpointer data)
 
     if ( (gint)value <= 0 )
         return g_strdup (_("Never"));
-    else if ( (gint)value < 60 )
-        return g_strdup_printf ("%d %s", (gint)value, _("Seconds"));
-    else if ( (gint)value == 60)
-        return g_strdup (_("One Minute"));
-
-    /* value > 60 */
-    min = (gint)value - 60;
-
-    return g_strdup_printf ("%d %s", (gint)min, _("Minutes"));
+    else if ( value <= 59.0 )
+        return g_strdup_printf ("%d %s", (gint)value, _("seconds"));
+    else if ( value >= 60.0)
+    {
+        min = (gint)value - 60;
+        if (min == 0)
+            return g_strdup_printf ("%d %s", (gint)min + 1, _("minute"));
+        else
+            return g_strdup_printf ("%d %s", (gint)min + 1, _("minutes"));
+    }
 }
 
 void
@@ -1588,7 +1518,7 @@ light_locker_late_locking_value_changed_cb (GtkWidget *widget, XfconfChannel *ch
     gint      value = (gint)gtk_range_get_value (GTK_RANGE (widget));
 
     if (value > 60) {
-        value = (value - 60) * 60;
+        value = ((value - 60) + 1) * 60;
     }
 
     variant = g_variant_new_uint32 (value);
@@ -1660,7 +1590,7 @@ static void xfpm_settings_light_locker (XfconfChannel *channel,
     }
 
     schema_source = g_settings_schema_source_get_default();
-    schema = g_settings_schema_source_lookup (schema_source, "apps.light-locker", FALSE);
+    schema = g_settings_schema_source_lookup (schema_source, "apps.light-locker", TRUE);
 
     if (schema != NULL && get_light_locker_path() != NULL) {
         security_frame = GTK_WIDGET (gtk_builder_get_object (xml, "security-frame"));
@@ -1707,7 +1637,7 @@ static void xfpm_settings_light_locker (XfconfChannel *channel,
 
         g_settings_schema_unref (schema);
     } else {
-        g_warning("Schema \"apps.light-locker\" not found. Not configuring Light Locker.");
+        XFPM_DEBUG ("Schema \"apps.light-locker\" not found. Not configuring Light Locker.");
         gtk_widget_hide (light_locker_tab);
     }
 }
@@ -2022,11 +1952,7 @@ update_device_details (UpDevice *device)
 }
 
 static void
-#if UP_CHECK_VERSION(0, 99, 0)
 device_changed_cb (UpDevice *device, GParamSpec *pspec, gpointer user_data)
-#else
-device_changed_cb (UpDevice *device, gpointer user_data)
-#endif
 {
     update_device_details (device);
 }
@@ -2057,11 +1983,7 @@ add_device (UpDevice *device)
     /* Make sure the devices tab is shown */
     gtk_widget_show (gtk_notebook_get_nth_page (GTK_NOTEBOOK (nt), devices_page_num));
 
-#if UP_CHECK_VERSION(0, 99, 0)
     signal_id = g_signal_connect (device, "notify", G_CALLBACK (device_changed_cb), NULL);
-#else
-    signal_id = g_signal_connect (device, "changed", G_CALLBACK (device_changed_cb), NULL);
-#endif
 
     sideview_store = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (sideview)));
 
@@ -2070,6 +1992,7 @@ add_device (UpDevice *device)
     /* Create the page that the update_device_details will update/replace */
     view = gtk_tree_view_new ();
     gtk_notebook_append_page (GTK_NOTEBOOK (device_details_notebook), view, NULL);
+    gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (view), FALSE);
 
     /* Create the list store that the devices view will display */
     devices_store = gtk_list_store_new (XFPM_DEVICE_INFO_LAST, G_TYPE_STRING, G_TYPE_STRING);
@@ -2082,14 +2005,12 @@ add_device (UpDevice *device)
     col = gtk_tree_view_column_new();
     gtk_tree_view_column_pack_start (col, renderer, FALSE);
     gtk_tree_view_column_set_attributes (col, renderer, "text", XFPM_DEVICE_INFO_NAME, NULL);
-    gtk_tree_view_column_set_title (col, _("Attribute"));
     gtk_tree_view_append_column (GTK_TREE_VIEW (view), col);
 
     /*Device Attribute Value*/
     col = gtk_tree_view_column_new();
     gtk_tree_view_column_pack_start (col, renderer, FALSE);
     gtk_tree_view_column_set_attributes (col, renderer, "text", XFPM_DEVICE_INFO_VALUE, NULL);
-    gtk_tree_view_column_set_title (col, _("Value"));
 
     gtk_tree_view_append_column (GTK_TREE_VIEW (view), col);
 
@@ -2162,28 +2083,15 @@ device_added_cb (UpClient *upclient, UpDevice *device, gpointer user_data)
     add_device (device);
 }
 
-#if UP_CHECK_VERSION(0, 99, 0)
 static void
 device_removed_cb (UpClient *upclient, const gchar *object_path, gpointer user_data)
 {
     remove_device (object_path);
 }
-#else
-static void
-device_removed_cb (UpClient *upclient, UpDevice *device, gpointer user_data)
-{
-    const gchar *object_path = up_device_get_object_path(device);
-    remove_device (object_path);
-}
-#endif
 
 static void
 add_all_devices (void)
 {
-#if !UP_CHECK_VERSION(0, 99, 0)
-    /* the device-add callback is called for each device */
-    up_client_enumerate_devices_sync(upower, NULL, NULL);
-#else
     GPtrArray *array = NULL;
     guint i;
 
@@ -2199,7 +2107,6 @@ add_all_devices (void)
         }
         g_ptr_array_free (array, TRUE);
     }
-#endif
 }
 
 static void
@@ -2241,7 +2148,8 @@ settings_quit (GtkWidget *widget, XfconfChannel *channel)
     g_object_unref (channel);
     xfconf_shutdown();
     gtk_widget_destroy (widget);
-    gtk_main_quit();
+    /* initiate the quit action on the application so it terminates */
+    g_action_group_activate_action(G_ACTION_GROUP(app), "quit", NULL);
 }
 
 static void dialog_response_cb (GtkDialog *dialog, gint response, XfconfChannel *channel)
@@ -2249,11 +2157,7 @@ static void dialog_response_cb (GtkDialog *dialog, gint response, XfconfChannel 
     switch(response)
     {
 	case GTK_RESPONSE_HELP:
-#if LIBXFCE4UI_CHECK_VERSION(4, 11, 1)
 	    xfce_dialog_show_help_with_version (NULL, "xfce4-power-manager", "start", NULL, XFPM_VERSION_SHORT);
-#else
-	    xfce_dialog_show_help (NULL, "xfce4-power-manager", "start", NULL);
-#endif
 	    break;
 	default:
 	    settings_quit (GTK_WIDGET (dialog), channel);
@@ -2274,14 +2178,17 @@ xfpm_settings_dialog_new (XfconfChannel *channel, gboolean auth_suspend,
                           gboolean has_battery, gboolean has_lcd_brightness,
                           gboolean has_lid, gboolean has_sleep_button,
                           gboolean has_hibernate_button, gboolean has_power_button,
-                          GdkNativeWindow id, gchar *device_id)
+                          Window id, gchar *device_id, GtkApplication *gtk_app)
 {
     GtkWidget *plug;
+    GtkWidget *parent;
     GtkWidget *dialog;
     GtkWidget *plugged_box;
     GtkWidget *viewport;
     GtkWidget *hbox;
     GtkWidget *frame;
+    GtkWidget *switch_widget;
+    GtkStyleContext *context;
     GtkListStore *list_store;
     GtkTreeViewColumn *col;
     GtkCellRenderer *renderer;
@@ -2326,6 +2233,18 @@ xfpm_settings_dialog_new (XfconfChannel *channel, gboolean auth_suspend,
                             G_TYPE_INT, gtk_range_get_adjustment (GTK_RANGE (on_ac_display_blank)),
                             "value");
 
+    switch_widget = GTK_WIDGET (gtk_builder_get_object (xml, "handle-brightness-keys"));
+    xfconf_g_property_bind (channel, PROPERTIES_PREFIX HANDLE_BRIGHTNESS_KEYS,
+                            G_TYPE_BOOLEAN, switch_widget, "active");
+
+    switch_widget = GTK_WIDGET (gtk_builder_get_object (xml, "show-notifications"));
+    xfconf_g_property_bind (channel, PROPERTIES_PREFIX GENERAL_NOTIFICATION_CFG,
+                            G_TYPE_BOOLEAN, switch_widget, "active");
+
+    switch_widget = GTK_WIDGET (gtk_builder_get_object (xml, "show-systray"));
+    xfconf_g_property_bind (channel, PROPERTIES_PREFIX SHOW_TRAY_ICON_CFG,
+                            G_TYPE_BOOLEAN, switch_widget, "active");
+
     dialog = GTK_WIDGET (gtk_builder_get_object (xml, "xfpm-settings-dialog"));
     nt = GTK_WIDGET (gtk_builder_get_object (xml, "main-notebook"));
 
@@ -2343,7 +2262,6 @@ xfpm_settings_dialog_new (XfconfChannel *channel, gboolean auth_suspend,
 
     gtk_tree_view_set_model (GTK_TREE_VIEW (sideview), GTK_TREE_MODEL (list_store));
 
-    gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (sideview),TRUE);
     col = gtk_tree_view_column_new ();
 
     renderer = gtk_cell_renderer_pixbuf_new ();
@@ -2365,7 +2283,9 @@ xfpm_settings_dialog_new (XfconfChannel *channel, gboolean auth_suspend,
     device_details_notebook = gtk_notebook_new ();
 
     gtk_notebook_set_show_tabs (GTK_NOTEBOOK (device_details_notebook), FALSE);
-    hbox = gtk_hbox_new (FALSE, 3);
+    context = gtk_widget_get_style_context (GTK_WIDGET (device_details_notebook));
+    gtk_style_context_add_class (context, "frame");
+    hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
 
     viewport = gtk_viewport_new (NULL, NULL);
     gtk_container_add (GTK_CONTAINER (viewport), sideview);
@@ -2442,7 +2362,16 @@ xfpm_settings_dialog_new (XfconfChannel *channel, gboolean auth_suspend,
 	plugged_box = GTK_WIDGET (gtk_builder_get_object (xml, "plug-child"));
 	plug = gtk_plug_new (id);
 	gtk_widget_show (plug);
-	gtk_widget_reparent (plugged_box, plug);
+
+    parent = gtk_widget_get_parent (plugged_box);
+    if (parent)
+    {
+        g_object_ref (plugged_box);
+        gtk_container_remove (GTK_CONTAINER (parent), plugged_box);
+        gtk_container_add (GTK_CONTAINER (plug), plugged_box);
+        g_object_unref (plugged_box);
+    }
+
 	g_signal_connect (plug, "delete-event", 
 			  G_CALLBACK (delete_event_cb), channel);
 	gdk_notify_startup_complete ();
@@ -2462,5 +2391,37 @@ xfpm_settings_dialog_new (XfconfChannel *channel, gboolean auth_suspend,
 	gtk_notebook_set_current_page (GTK_NOTEBOOK (nt), devices_page_num);
     }
 
+    /* keep a pointer to the GtkApplication instance so we can signal a
+     * quit message */
+    app = gtk_app;
+
     return dialog;
+}
+
+void
+xfpm_settings_show_device_id (gchar *device_id)
+{
+    GtkTreeIter *device_iter;
+
+    if (device_id == NULL)
+	return;
+
+    gtk_widget_show (gtk_notebook_get_nth_page (GTK_NOTEBOOK (nt), devices_page_num));
+    gtk_notebook_set_current_page (GTK_NOTEBOOK (nt), devices_page_num);
+
+    DBG("device_id %s", device_id);
+
+    device_iter = find_device_in_tree (device_id);
+    if (device_iter)
+    {
+        GtkTreeSelection *selection;
+
+	DBG("device found");
+
+	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (sideview));
+
+	gtk_tree_selection_select_iter (selection, device_iter);
+	view_cursor_changed_cb (GTK_TREE_VIEW (sideview), NULL);
+	gtk_tree_iter_free (device_iter);
+    }
 }

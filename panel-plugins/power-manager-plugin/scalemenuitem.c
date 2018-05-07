@@ -46,8 +46,6 @@ static gboolean scale_menu_item_motion_notify_event     (GtkWidget          *men
                                                          GdkEventMotion     *event);
 static gboolean scale_menu_item_grab_broken             (GtkWidget          *menuitem,
                                                          GdkEventGrabBroken *event);
-static void     scale_menu_item_grab_notify             (GtkWidget          *menuitem,
-                                                         gboolean            was_grabbed);
 static void     scale_menu_item_parent_set              (GtkWidget          *item,
                                                          GtkWidget          *previous_parent);
 static void     update_packing                          (ScaleMenuItem  *    self);
@@ -79,7 +77,9 @@ enum {
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 G_DEFINE_TYPE (ScaleMenuItem, scale_menu_item, GTK_TYPE_IMAGE_MENU_ITEM)
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 #define GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), TYPE_SCALE_MENU_ITEM, ScaleMenuItemPrivate))
 
@@ -109,7 +109,6 @@ scale_menu_item_class_init (ScaleMenuItemClass *item_class)
   widget_class->button_release_event = scale_menu_item_button_release_event;
   widget_class->motion_notify_event  = scale_menu_item_motion_notify_event;
   widget_class->grab_broken_event    = scale_menu_item_grab_broken;
-  widget_class->grab_notify          = scale_menu_item_grab_notify;
   widget_class->parent_set           = scale_menu_item_parent_set;
 
 
@@ -176,10 +175,13 @@ static void
 update_packing (ScaleMenuItem *self)
 {
   ScaleMenuItemPrivate *priv = GET_PRIVATE (self);
-  GtkBox *hbox = GTK_BOX (gtk_hbox_new (FALSE, 0));
-  GtkBox *vbox = GTK_BOX (gtk_vbox_new (FALSE, 0));
+  GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  GtkWidget *vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
   TRACE("entering");
+
+//  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+//  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
   if(priv->hbox)
     remove_children (GTK_CONTAINER (priv->hbox));
@@ -189,8 +191,8 @@ update_packing (ScaleMenuItem *self)
     gtk_container_remove (GTK_CONTAINER (self), priv->vbox);
   }
 
-  priv->hbox = GTK_WIDGET(hbox);
-  priv->vbox = GTK_WIDGET(vbox);
+  priv->hbox = GTK_WIDGET (hbox);
+  priv->vbox = GTK_WIDGET (vbox);
 
   /* add the new layout */
   if (priv->description_label && priv->percentage_label)
@@ -198,34 +200,33 @@ update_packing (ScaleMenuItem *self)
       /* [IC]  Description
        * [ON]  <----slider----> [percentage]%
        */
-      gtk_box_pack_start (vbox, priv->description_label, FALSE, FALSE, 0);
-      gtk_box_pack_start (vbox, priv->hbox, TRUE, TRUE, 0);
-      gtk_box_pack_start (hbox, priv->scale, TRUE, TRUE, 0);
-      gtk_box_pack_start (hbox, priv->percentage_label, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), priv->description_label, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), priv->hbox, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), priv->scale, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), priv->percentage_label, FALSE, FALSE, 0);
   }
   else if (priv->description_label)
   {
       /* [IC]  Description
        * [ON]  <----slider---->
        */
-      gtk_box_pack_start (vbox, priv->description_label, FALSE, FALSE, 0);
-      gtk_box_pack_start (vbox, priv->hbox, TRUE, TRUE, 0);
-      gtk_box_pack_start (hbox, priv->scale, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), priv->description_label, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), priv->hbox, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), priv->scale, TRUE, TRUE, 0);
   }
   else if (priv->percentage_label)
   {
       /* [ICON]  <----slider----> [percentage]%  */
-      gtk_box_pack_start (vbox, priv->hbox, TRUE, TRUE, 0);
-      gtk_box_pack_start (hbox, priv->scale, TRUE, TRUE, 0);
-      gtk_box_pack_start (hbox, priv->percentage_label, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), priv->hbox, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), priv->scale, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), priv->percentage_label, FALSE, FALSE, 0);
   }
   else
   {
       /* [ICON]  <----slider---->  */
-      gtk_box_pack_start (vbox, priv->hbox, TRUE, TRUE, 0);
-      gtk_box_pack_start (hbox, priv->scale, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), priv->hbox, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), priv->scale, TRUE, TRUE, 0);
   }
-
 
   gtk_widget_show_all (priv->vbox);
   gtk_widget_show_all (priv->hbox);
@@ -238,40 +239,22 @@ scale_menu_item_init (ScaleMenuItem *self)
 {
 }
 
-
-static void
-scale_menu_item_get_scale_allocation (ScaleMenuItem *menuitem,
-                                      GtkAllocation    *allocation)
-{
-  ScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
-  GtkAllocation parent_allocation;
-
-  gtk_widget_get_allocation (GTK_WIDGET (menuitem), &parent_allocation);
-  gtk_widget_get_allocation (priv->scale, allocation);
-
-  allocation->x -= parent_allocation.x;
-  allocation->y -= parent_allocation.y;
-}
-
 static gboolean
 scale_menu_item_button_press_event (GtkWidget      *menuitem,
                                     GdkEventButton *event)
 {
   ScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
   GtkAllocation alloc;
+  gint x, y;
 
   TRACE("entering");
 
-  scale_menu_item_get_scale_allocation (SCALE_MENU_ITEM (menuitem), &alloc);
+  gtk_widget_get_allocation (priv->scale, &alloc);
+  gtk_widget_translate_coordinates (menuitem, priv->scale, event->x, event->y, &x, &y);
 
-  event->x -= alloc.x;
-  event->y -= alloc.y;
-
-  event->x_root -= alloc.x;
-  event->y_root -= alloc.y;
-
-  gtk_widget_event (priv->scale,
-                    ((GdkEvent *)(void*)(event)));
+  if (x > 0 && x < alloc.width && y > 0 && y < alloc.height)
+    gtk_widget_event (priv->scale,
+                      ((GdkEvent *)(void*)(event)));
 
   if (!priv->grabbed)
     {
@@ -295,7 +278,6 @@ scale_menu_item_button_release_event (GtkWidget *menuitem,
   if (priv->grabbed)
     {
       priv->grabbed = FALSE;
-      scale_menu_item_grab_broken (menuitem, NULL);
       g_signal_emit (menuitem, signals[SLIDER_RELEASED], 0);
     }
 
@@ -309,29 +291,25 @@ scale_menu_item_motion_notify_event (GtkWidget      *menuitem,
   ScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
   GtkWidget *scale = priv->scale;
   GtkAllocation alloc;
+  gint x, y;
 
-  scale_menu_item_get_scale_allocation (SCALE_MENU_ITEM (menuitem), &alloc);
+  gtk_widget_get_allocation (priv->scale, &alloc);
+  gtk_widget_translate_coordinates (menuitem, priv->scale, event->x, event->y, &x, &y);
 
-  event->x -= alloc.x;
-  event->y -= alloc.y;
+  /* don't translate coordinates when the scale has the "grab" -
+   * GtkRange expects coords relative to its event window in that case
+   */
+  if (!priv->grabbed)
+  {
+    event->x = x;
+    event->y = y;
+  }
 
-  event->x_root -= alloc.x;
-  event->y_root -= alloc.y;
-
-  gtk_widget_event (scale, (GdkEvent*)event);
+  if (priv->grabbed ||
+      (x > 0 && x < alloc.width && y > 0 && y < alloc.height))
+    gtk_widget_event (scale, (GdkEvent*)event);
 
   return TRUE;
-}
-
-static void
-scale_menu_item_grab_notify (GtkWidget *menuitem,
-                             gboolean was_grabbed)
-{
-  ScaleMenuItemPrivate *priv = GET_PRIVATE (menuitem);
-
-  TRACE("entering");
-
-  GTK_WIDGET_GET_CLASS (priv->scale)->grab_notify (priv->scale, was_grabbed);
 }
 
 static gboolean
@@ -396,7 +374,7 @@ scale_menu_item_new_with_range (gdouble           min,
 
   priv = GET_PRIVATE (scale_item);
 
-  priv->scale = gtk_hscale_new_with_range (min, max, step);
+  priv->scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, min, max, step);
   priv->vbox = NULL;
   priv->hbox = NULL;
 
@@ -510,7 +488,7 @@ scale_menu_item_set_description_label (ScaleMenuItem *menuitem,
       gtk_label_set_markup (GTK_LABEL (priv->description_label), label);
 
       /* align left */
-      gtk_misc_set_alignment (GTK_MISC(priv->description_label), 0, 0);
+      gtk_widget_set_halign (GTK_WIDGET (priv->description_label), GTK_ALIGN_START);
     }
 
     update_packing (menuitem);
@@ -552,7 +530,7 @@ scale_menu_item_set_percentage_label (ScaleMenuItem *menuitem,
       /* create label */
       priv->percentage_label = gtk_label_new (label);
       /* align left */
-      gtk_misc_set_alignment (GTK_MISC(priv->percentage_label), 0, 0);
+      gtk_widget_set_halign (GTK_WIDGET (priv->percentage_label), GTK_ALIGN_START);
     }
 
     update_packing (menuitem);

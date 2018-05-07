@@ -1,7 +1,5 @@
 #include "xfpm-dbus-marshal.h"
-
-#include	<glib-object.h>
-
+#include <glib-object.h>
 
 #ifdef G_ENABLE_DEBUG
 #define g_marshal_value_peek_boolean(v)  g_value_get_boolean (v)
@@ -49,7 +47,6 @@
 #define g_marshal_value_peek_variant(v)  (v)->data[0].v_pointer
 #endif /* !G_ENABLE_DEBUG */
 
-
 /* VOID:STRING,BOOLEAN (xfpm-dbus-marshal.list:1) */
 void
 _xfpm_dbus_marshal_VOID__STRING_BOOLEAN (GClosure     *closure,
@@ -59,13 +56,13 @@ _xfpm_dbus_marshal_VOID__STRING_BOOLEAN (GClosure     *closure,
                                          gpointer      invocation_hint G_GNUC_UNUSED,
                                          gpointer      marshal_data)
 {
-  typedef void (*GMarshalFunc_VOID__STRING_BOOLEAN) (gpointer     data1,
-                                                     gpointer     arg_1,
-                                                     gboolean     arg_2,
-                                                     gpointer     data2);
-  register GMarshalFunc_VOID__STRING_BOOLEAN callback;
-  register GCClosure *cc = (GCClosure*) closure;
-  register gpointer data1, data2;
+  typedef void (*GMarshalFunc_VOID__STRING_BOOLEAN) (gpointer data1,
+                                                     gpointer arg1,
+                                                     gboolean arg2,
+                                                     gpointer data2);
+  GCClosure *cc = (GCClosure *) closure;
+  gpointer data1, data2;
+  GMarshalFunc_VOID__STRING_BOOLEAN callback;
 
   g_return_if_fail (n_param_values == 3);
 
@@ -96,14 +93,14 @@ _xfpm_dbus_marshal_VOID__STRING_BOOLEAN_BOOLEAN (GClosure     *closure,
                                                  gpointer      invocation_hint G_GNUC_UNUSED,
                                                  gpointer      marshal_data)
 {
-  typedef void (*GMarshalFunc_VOID__STRING_BOOLEAN_BOOLEAN) (gpointer     data1,
-                                                             gpointer     arg_1,
-                                                             gboolean     arg_2,
-                                                             gboolean     arg_3,
-                                                             gpointer     data2);
-  register GMarshalFunc_VOID__STRING_BOOLEAN_BOOLEAN callback;
-  register GCClosure *cc = (GCClosure*) closure;
-  register gpointer data1, data2;
+  typedef void (*GMarshalFunc_VOID__STRING_BOOLEAN_BOOLEAN) (gpointer data1,
+                                                             gpointer arg1,
+                                                             gboolean arg2,
+                                                             gboolean arg3,
+                                                             gpointer data2);
+  GCClosure *cc = (GCClosure *) closure;
+  gpointer data1, data2;
+  GMarshalFunc_VOID__STRING_BOOLEAN_BOOLEAN callback;
 
   g_return_if_fail (n_param_values == 4);
 

@@ -54,6 +54,7 @@ G_BEGIN_DECLS
 #define GENERAL_NOTIFICATION_CFG             "general-notification"
 #define PRESENTATION_MODE                    "presentation-mode"
 #define NETWORK_MANAGER_SLEEP                "network-manager-sleep"
+#define HEARTBEAT_COMMAND                    "heartbeat-command"
 #define SHOW_TRAY_ICON_CFG                   "show-tray-icon"
 
 #define POWER_SWITCH_CFG                     "power-button-action"
@@ -76,6 +77,7 @@ G_BEGIN_DECLS
 #define BRIGHTNESS_SWITCH_SAVE               "brightness-switch-restore-on-exit"
 #define HANDLE_BRIGHTNESS_KEYS               "handle-brightness-keys"
 #define SHOW_BRIGHTNESS_POPUP                "show-brightness-popup"
+#define SHOW_PANEL_LABEL                     "show-panel-label"
 
 G_END_DECLS
 

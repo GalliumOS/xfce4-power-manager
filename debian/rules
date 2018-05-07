@@ -14,8 +14,5 @@ override_dh_install:
 	find debian/tmp/usr/lib -name 'lib*.la' -delete
 	dh_install --fail-missing
 
-override_dh_shlibdeps:
-	dh_shlibdeps -- -xxfce4-panel
-
 %:
 	dh $@ --parallel

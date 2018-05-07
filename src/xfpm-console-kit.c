@@ -30,8 +30,6 @@
 #include <string.h>
 #endif
 
-#include <dbus/dbus-glib.h>
-
 #include "xfpm-console-kit.h"
 #include "xfpm-dbus-monitor.h"
 
@@ -48,8 +46,8 @@ static void xfpm_console_kit_get_property (GObject *object,
 
 struct XfpmConsoleKitPrivate
 {
-    DBusGConnection *bus;
-    DBusGProxy      *proxy;
+    GDBusConnection *bus;
+    GDBusProxy      *proxy;
     
     XfpmDBusMonitor *monitor;
     
@@ -75,23 +73,42 @@ xfpm_console_kit_get_info (XfpmConsoleKit *console)
 {
     GError *error = NULL;
     gchar *tmp = NULL;
+    GVariant *var;
 
-    dbus_g_proxy_call (console->priv->proxy, "CanStop", &error,
-		       G_TYPE_INVALID,
-		       G_TYPE_BOOLEAN, &console->priv->can_shutdown,
-		       G_TYPE_INVALID);
-		       
+    var = g_dbus_proxy_call_sync (console->priv->proxy, "CanStop",
+                                  NULL,
+                                  G_DBUS_CALL_FLAGS_NONE,
+                                  -1, NULL,
+                                  &error);
+
+    if (var)
+    {
+	g_variant_get (var,
+		       "(b)",
+		       &console->priv->can_shutdown);
+	g_variant_unref (var);
+    }
+
     if ( error )
     {
 	g_warning ("'CanStop' method failed : %s", error->message);
 	g_clear_error (&error);
     }
     
-    dbus_g_proxy_call (console->priv->proxy, "CanRestart", &error,
-		       G_TYPE_INVALID,
-		       G_TYPE_BOOLEAN, &console->priv->can_restart,
-		       G_TYPE_INVALID);
-		       
+    var = g_dbus_proxy_call_sync (console->priv->proxy, "CanRestart",
+                                  NULL,
+                                  G_DBUS_CALL_FLAGS_NONE,
+                                  -1, NULL,
+                                  &error);
+
+    if (var)
+    {
+	g_variant_get (var,
+		       "(b)",
+		       &console->priv->can_restart);
+	g_variant_unref (var);
+    }
+
     if ( error )
     {
 	g_warning ("'CanRestart' method failed : %s", error->message);
@@ -101,10 +118,11 @@ xfpm_console_kit_get_info (XfpmConsoleKit *console)
     /* start with FALSE */
     console->priv->can_suspend = FALSE;
 
-    dbus_g_proxy_call (console->priv->proxy, "CanSuspend", &error,
-		       G_TYPE_INVALID,
-		       G_TYPE_STRING, &tmp,
-		       G_TYPE_INVALID);
+    var = g_dbus_proxy_call_sync (console->priv->proxy, "CanSuspend",
+                                  NULL,
+                                  G_DBUS_CALL_FLAGS_NONE,
+                                  -1, NULL,
+                                  &error);
 
     if ( error )
     {
@@ -113,19 +131,24 @@ xfpm_console_kit_get_info (XfpmConsoleKit *console)
     }
     else
     {
+	g_variant_get (var,
+		       "(&s)",
+		       &tmp);
 	if (g_strcmp0 (tmp, "yes") == 0 || g_strcmp0 (tmp, "challenge") == 0)
 	{
 	    console->priv->can_suspend = TRUE;
 	}
+	g_variant_unref (var);
     }
 
     /* start with FALSE */
     console->priv->can_hibernate = FALSE;
 
-    dbus_g_proxy_call (console->priv->proxy, "CanHibernate", &error,
-		       G_TYPE_INVALID,
-		       G_TYPE_STRING, &tmp,
-		       G_TYPE_INVALID);
+    var = g_dbus_proxy_call_sync (console->priv->proxy, "CanHibernate",
+                                  NULL,
+                                  G_DBUS_CALL_FLAGS_NONE,
+                                  -1, NULL,
+                                  &error);
 
     if ( error )
     {
@@ -134,10 +157,14 @@ xfpm_console_kit_get_info (XfpmConsoleKit *console)
     }
     else
     {
+	g_variant_get (var,
+		       "(&s)",
+		       &tmp);
 	if (g_strcmp0 (tmp, "yes") == 0 || g_strcmp0 (tmp, "challenge") == 0)
 	{
 	    console->priv->can_hibernate = TRUE;
 	}
+	g_variant_unref (var);
     }
 }
 
@@ -193,7 +220,7 @@ xfpm_console_kit_init (XfpmConsoleKit *console)
     console->priv->bus   = NULL;
     console->priv->proxy = NULL;
     
-    console->priv->bus = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
+    console->priv->bus = g_bus_get_sync (G_BUS_TYPE_SYSTEM, NULL, &error);
     
     if ( error )
     {
@@ -202,12 +229,16 @@ xfpm_console_kit_init (XfpmConsoleKit *console)
 	return;
     }
     
-    console->priv->proxy = dbus_g_proxy_new_for_name_owner (console->priv->bus,
-							    "org.freedesktop.ConsoleKit",
-							    "/org/freedesktop/ConsoleKit/Manager",
-							    "org.freedesktop.ConsoleKit.Manager",
-							    NULL);
-						      
+    console->priv->proxy = g_dbus_proxy_new_sync (console->priv->bus,
+						  G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
+						  G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
+						  NULL,
+						  "org.freedesktop.ConsoleKit",
+						  "/org/freedesktop/ConsoleKit/Manager",
+						  "org.freedesktop.ConsoleKit.Manager",
+						  NULL,
+						  NULL);
+
     if ( !console->priv->proxy )
     {
 	g_warning ("Unable to create proxy for 'org.freedesktop.ConsoleKit'");
@@ -253,7 +284,7 @@ xfpm_console_kit_finalize (GObject *object)
     console = XFPM_CONSOLE_KIT (object);
     
     if ( console->priv->bus )
-	dbus_g_connection_unref (console->priv->bus);
+	g_object_unref (console->priv->bus);
 	
     if ( console->priv->proxy )
 	g_object_unref (console->priv->proxy);
@@ -281,43 +312,68 @@ xfpm_console_kit_new (void)
 
 void xfpm_console_kit_shutdown (XfpmConsoleKit *console, GError **error)
 {
+    GVariant *var;
+
     g_return_if_fail (console->priv->proxy != NULL );
     
-    dbus_g_proxy_call (console->priv->proxy, "Stop", error,
-		       G_TYPE_INVALID,
-		       G_TYPE_BOOLEAN, &console->priv->can_shutdown,
-		       G_TYPE_INVALID);
+    var = g_dbus_proxy_call_sync (console->priv->proxy, "Stop",
+                                  NULL,
+                                  G_DBUS_CALL_FLAGS_NONE,
+                                  -1, NULL,
+                                  error);
+
+    if (var)
+	g_variant_unref (var);
 }
 
 void xfpm_console_kit_reboot (XfpmConsoleKit *console, GError **error)
 {
+    GVariant *var;
+
     g_return_if_fail (console->priv->proxy != NULL );
     
-    dbus_g_proxy_call (console->priv->proxy, "Restart", error,
-		       G_TYPE_INVALID,
-		       G_TYPE_BOOLEAN, &console->priv->can_shutdown,
-		       G_TYPE_INVALID);
-    
+    var = g_dbus_proxy_call_sync (console->priv->proxy, "Restart",
+                                  NULL,
+                                  G_DBUS_CALL_FLAGS_NONE,
+                                  -1, NULL,
+                                  error);
+
+    if (var)
+	g_variant_unref (var);
 }
 
 void
 xfpm_console_kit_suspend (XfpmConsoleKit *console,
                           GError        **error)
 {
+    GVariant *var;
+
     g_return_if_fail (console->priv->proxy != NULL );
 
-    dbus_g_proxy_call (console->priv->proxy, "Suspend", error,
-		       G_TYPE_BOOLEAN, TRUE,
-		       G_TYPE_INVALID, G_TYPE_INVALID);
+    var = g_dbus_proxy_call_sync (console->priv->proxy, "Suspend",
+                                  g_variant_new ("(b)", TRUE),
+                                  G_DBUS_CALL_FLAGS_NONE,
+                                  -1, NULL,
+                                  error);
+
+    if (var)
+	g_variant_unref (var);
 }
 
 void
 xfpm_console_kit_hibernate (XfpmConsoleKit *console,
                             GError        **error)
 {
+    GVariant *var;
+
     g_return_if_fail (console->priv->proxy != NULL );
 
-    dbus_g_proxy_call (console->priv->proxy, "Hibernate", error,
-		       G_TYPE_BOOLEAN, TRUE,
-		       G_TYPE_INVALID, G_TYPE_INVALID);
+    var = g_dbus_proxy_call_sync (console->priv->proxy, "Hibernate",
+                                  g_variant_new ("(b)", TRUE),
+                                  G_DBUS_CALL_FLAGS_NONE,
+                                  -1, NULL,
+                                  error);
+
+    if (var)
+	g_variant_unref (var);
 }

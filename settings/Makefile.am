@@ -1,8 +1,11 @@
 bin_PROGRAMS = xfce4-power-manager-settings
 
 xfce4_power_manager_settings_SOURCES = 				\
-	xfce-power-manager-dbus-client.h			\
+	xfce-power-manager-dbus.h			\
+	xfce-power-manager-dbus.c			\
 	xfpm-settings-main.c					\
+	xfpm-settings-app.c					\
+	xfpm-settings-app.h					\
 	xfpm-settings.c						\
 	xfpm-settings.h						\
 	$(top_srcdir)/common/xfpm-config.h				\
@@ -51,11 +54,12 @@ manpage_DATA = xfce4-power-manager-settings.1
 
 if MAINTAINER_MODE
 
-BUILT_SOURCES = 				\
-	xfce-power-manager-dbus-client.h
+BUILT_SOURCES = 			\
+	xfce-power-manager-dbus.c	\
+	xfce-power-manager-dbus.h
 
-xfce-power-manager-dbus-client.h: $(top_srcdir)/src/org.xfce.Power.Manager.xml
-	dbus-binding-tool --mode=glib-client --prefix=xfpm_manager $< >$@
+xfce-power-manager-dbus.c xfce-power-manager-dbus.h: $(top_srcdir)/src/org.xfce.Power.Manager.xml
+	gdbus-codegen --interface-prefix=org.xfce. --c-namespace=Xfpm --generate-c-code=xfce-power-manager-dbus $<
 
 endif
 
@@ -69,7 +73,6 @@ desktop_DATA =	$(desktop_in_files:.desktop.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
 
 EXTRA_DIST = 					\
-	xfce-power-manager-dbus-client.h	\
 	$(desktop_in_files)			\
 	$(manpage_DATA)
 

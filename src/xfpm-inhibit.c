@@ -32,9 +32,6 @@
 
 #include <glib.h>
 
-#include <dbus/dbus-glib.h>
-#include <dbus/dbus-glib-lowlevel.h>
-
 #include <libxfce4util/libxfce4util.h>
 
 #include "xfpm-inhibit.h"
@@ -68,6 +65,7 @@ typedef struct
 enum
 {
     HAS_INHIBIT_CHANGED,
+    INHIBIT_LIST_CHANGED,
     LAST_SIGNAL
 };
 
@@ -102,7 +100,11 @@ xfpm_inhibit_has_inhibit_changed (XfpmInhibit *inhibit)
 	inhibit->priv->inhibited = TRUE;
 	g_signal_emit (G_OBJECT(inhibit), signals[HAS_INHIBIT_CHANGED], 0, inhibit->priv->inhibited);
     }
-    
+
+    /* Always emite the INHIBIT_LIST_CHANGED for any change so the panel plugin
+     * stays in sync */
+    g_signal_emit (G_OBJECT(inhibit), signals[INHIBIT_LIST_CHANGED], 0, inhibit->priv->inhibited);
+
     return inhibit->priv->inhibited;
 }
 
@@ -181,7 +183,7 @@ xfpm_inhibit_remove_application_by_cookie (XfpmInhibit *inhibit, guint cookie)
     
     if ( inhibitor )
     {
-	xfpm_dbus_monitor_remove_unique_name (inhibit->priv->monitor, DBUS_BUS_SESSION, inhibitor->unique_name);
+	xfpm_dbus_monitor_remove_unique_name (inhibit->priv->monitor, G_BUS_TYPE_SESSION, inhibitor->unique_name);
 	xfpm_inhibit_free_inhibitor (inhibit, inhibitor);
 	return TRUE;
     }
@@ -217,6 +219,15 @@ xfpm_inhibit_class_init(XfpmInhibitClass *klass)
 			 XFPM_TYPE_INHIBIT,
 			 G_SIGNAL_RUN_LAST,
 			 G_STRUCT_OFFSET(XfpmInhibitClass, has_inhibit_changed),
+			 NULL, NULL,
+			 g_cclosure_marshal_VOID__BOOLEAN,
+			 G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+
+    signals[INHIBIT_LIST_CHANGED] =
+	    g_signal_new ("inhibitors-list-changed",
+			 XFPM_TYPE_INHIBIT,
+			 G_SIGNAL_RUN_LAST,
+			 G_STRUCT_OFFSET(XfpmInhibitClass, inhibitors_list_changed),
 			 NULL, NULL,
 			 g_cclosure_marshal_VOID__BOOLEAN,
 			 G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
@@ -281,121 +292,180 @@ xfpm_inhibit_new(void)
     return XFPM_INHIBIT (xfpm_inhibit_object);
 }
 
+/***
+ * xfpm_inhibit_get_inhibit_list
+ * @inhibit: the XfpmInhibit object.
+ *
+ * Returns: An array of applications that are currently inhibiting xfpm.
+ *          Call g_free on the returned array when done using it.
+ */
+const gchar **
+xfpm_inhibit_get_inhibit_list (XfpmInhibit *inhibit)
+{
+    guint i;
+    Inhibitor *inhibitor;
+    const gchar **OUT_inhibitors;
+
+    XFPM_DEBUG ("entering xfpm_inhibit_get_inhibit_list");
+    
+    OUT_inhibitors = g_new (const gchar *, inhibit->priv->array->len + 1);
+    
+    for ( i = 0; i<inhibit->priv->array->len; i++)
+    {
+	inhibitor = g_ptr_array_index (inhibit->priv->array, i);
+	OUT_inhibitors[i] = inhibitor->app_name;
+    }
+    
+    OUT_inhibitors[inhibit->priv->array->len] = NULL;
+
+    return OUT_inhibitors;
+}
+
 /*
  * 
  * DBus server implementation for org.freedesktop.PowerManagement.Inhibit
  * 
  */
-static void xfpm_inhibit_inhibit  	(XfpmInhibit *inhibit,
+static gboolean xfpm_inhibit_inhibit  	(XfpmInhibit *inhibit,
+					 GDBusMethodInvocation *invocation,
 					 const gchar *IN_appname,
 					 const gchar *IN_reason,
-					 DBusGMethodInvocation *context);
+					 gpointer user_data);
 
 static gboolean xfpm_inhibit_un_inhibit (XfpmInhibit *inhibit,
-					 guint        IN_cookie,
-					 GError     **error);
+					 GDBusMethodInvocation *invocation,
+					 guint IN_cookie,
+					 gpointer user_data);
 
 static gboolean xfpm_inhibit_has_inhibit(XfpmInhibit *inhibit,
-					 gboolean    *OUT_has_inhibit,
-					 GError     **error);
+					 GDBusMethodInvocation *invocation,
+					 gpointer user_data);
 
 static gboolean xfpm_inhibit_get_inhibitors (XfpmInhibit *inhibit,
-					     gchar ***OUT_inhibitor,
-					     GError **error);
+					     GDBusMethodInvocation *invocation,
+					     gpointer user_data);
 
 #include "org.freedesktop.PowerManagement.Inhibit.h"
 
 static void xfpm_inhibit_dbus_class_init  (XfpmInhibitClass *klass)
 {
-    dbus_g_object_type_install_info(G_TYPE_FROM_CLASS(klass),
-				    &dbus_glib_xfpm_inhibit_object_info);
-				    
 }
 
 static void xfpm_inhibit_dbus_init	  (XfpmInhibit *inhibit)
 {
-    DBusGConnection *bus = dbus_g_bus_get (DBUS_BUS_SESSION, NULL);
-    
-    dbus_g_connection_register_g_object (bus,
-					 "/org/freedesktop/PowerManagement/Inhibit",
-					 G_OBJECT(inhibit));
+    GDBusConnection *bus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
+    XfpmPowerManagementInhibit *inhibit_dbus;
+
+    inhibit_dbus = xfpm_power_management_inhibit_skeleton_new ();
+    g_dbus_interface_skeleton_export (G_DBUS_INTERFACE_SKELETON (inhibit_dbus),
+                                      bus,
+                                      "/org/freedesktop/PowerManagement/Inhibit",
+                                      NULL);
+
+    g_signal_connect_swapped (inhibit_dbus,
+			      "handle-inhibit",
+			      G_CALLBACK (xfpm_inhibit_inhibit),
+			      inhibit);
+    g_signal_connect_swapped (inhibit_dbus,
+			      "handle-un-inhibit",
+			      G_CALLBACK (xfpm_inhibit_un_inhibit),
+			      inhibit);
+    g_signal_connect_swapped (inhibit_dbus,
+			      "handle-has-inhibit",
+			      G_CALLBACK (xfpm_inhibit_has_inhibit),
+			      inhibit);
+    g_signal_connect_swapped (inhibit_dbus,
+			      "handle-get-inhibitors",
+			      G_CALLBACK (xfpm_inhibit_get_inhibitors),
+			      inhibit);
 }
 
-static void xfpm_inhibit_inhibit  	(XfpmInhibit *inhibit,
+static gboolean xfpm_inhibit_inhibit  	(XfpmInhibit *inhibit,
+					 GDBusMethodInvocation *invocation,
 					 const gchar *IN_appname,
 					 const gchar *IN_reason,
-					 DBusGMethodInvocation *context)
+					 gpointer user_data)
 {
-    GError *error = NULL;
-    gchar *sender;
+    const gchar *sender;
     guint cookie;
     
     if ( IN_appname == NULL || IN_reason == NULL )
     {
-	g_set_error (&error, XFPM_ERROR, XFPM_ERROR_INVALID_ARGUMENTS, _("Invalid arguments"));
-	dbus_g_method_return_error (context, error);
-	return;
+	g_dbus_method_invocation_return_error (invocation,
+					       XFPM_ERROR,
+					       XFPM_ERROR_INVALID_ARGUMENTS,
+					       _("Invalid arguments"));
+
+	return TRUE;
     }
 
-    sender = dbus_g_method_get_sender (context);
+    sender = g_dbus_method_invocation_get_sender (invocation);
     cookie = xfpm_inhibit_add_application (inhibit, IN_appname, sender);
      
     XFPM_DEBUG("Inhibit send application name=%s reason=%s sender=%s", IN_appname, IN_reason ,sender);
     
     xfpm_inhibit_has_inhibit_changed (inhibit);
     
-    xfpm_dbus_monitor_add_unique_name (inhibit->priv->monitor, DBUS_BUS_SESSION, sender);
+    xfpm_dbus_monitor_add_unique_name (inhibit->priv->monitor, G_BUS_TYPE_SESSION, sender);
     
-    g_free (sender);
-    dbus_g_method_return (context, cookie);
+    xfpm_power_management_inhibit_complete_inhibit (user_data,
+                                                    invocation,
+                                                    cookie);
+
+    return TRUE;
 }
 
 static gboolean xfpm_inhibit_un_inhibit    (XfpmInhibit *inhibit,
-					    guint        IN_cookie,
-					    GError     **error)
+					    GDBusMethodInvocation *invocation,
+					    guint IN_cookie,
+					    gpointer user_data)
 {
     XFPM_DEBUG("UnHibit message received");
-    
+
     if (!xfpm_inhibit_remove_application_by_cookie (inhibit, IN_cookie))
     {
-	g_set_error (error, XFPM_ERROR, XFPM_ERROR_COOKIE_NOT_FOUND, _("Invalid cookie"));
-	return FALSE;
+	g_dbus_method_invocation_return_error (invocation,
+					       XFPM_ERROR,
+					       XFPM_ERROR_COOKIE_NOT_FOUND,
+					       _("Invalid cookie"));
+	return TRUE;
     }
     
     xfpm_inhibit_has_inhibit_changed (inhibit);
    
+    xfpm_power_management_inhibit_complete_un_inhibit (user_data, invocation);
+
     return TRUE;
 }
 
 static gboolean xfpm_inhibit_has_inhibit   (XfpmInhibit *inhibit,
-					    gboolean    *OUT_has_inhibit,
-					    GError     **error)
+					    GDBusMethodInvocation *invocation,
+					    gpointer user_data)
 {
     XFPM_DEBUG("Has Inhibit message received");
 
-    *OUT_has_inhibit = inhibit->priv->inhibited;
+    xfpm_power_management_inhibit_complete_has_inhibit (user_data,
+                                                        invocation,
+                                                        inhibit->priv->inhibited);
 
     return TRUE;
 }
 
 static gboolean xfpm_inhibit_get_inhibitors (XfpmInhibit *inhibit,
-					     gchar ***OUT_inhibitors,
-					     GError **error)
+					     GDBusMethodInvocation *invocation,
+					     gpointer user_data)
 {
-    guint i;
-    Inhibitor *inhibitor;
+    const gchar **OUT_inhibitors;
 
     XFPM_DEBUG ("Get Inhibitors message received");
     
-    *OUT_inhibitors = g_new (gchar *, inhibit->priv->array->len + 1);
-    
-    for ( i = 0; i<inhibit->priv->array->len; i++)
-    {
-	inhibitor = g_ptr_array_index (inhibit->priv->array, i);
-	(*OUT_inhibitors)[i] = g_strdup (inhibitor->app_name);
-    }
-    
-    (*OUT_inhibitors)[inhibit->priv->array->len] = NULL;
+    OUT_inhibitors = xfpm_inhibit_get_inhibit_list (inhibit);
+
+    xfpm_power_management_inhibit_complete_get_inhibitors (user_data,
+							   invocation,
+							   OUT_inhibitors);
+
+    g_free (OUT_inhibitors);
     
     return TRUE;
 }

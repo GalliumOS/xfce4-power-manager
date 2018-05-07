@@ -23,13 +23,13 @@
 #endif
 
 #include <libxfce4util/libxfce4util.h>
-#include <dbus/dbus-glib-lowlevel.h>
 #include <upower.h>
 
 #include "xfpm-power-common.h"
 #include "xfpm-enum-glib.h"
 
 #include "xfpm-icons.h"
+#include "xfpm-debug.h"
 
 
 /**
@@ -44,7 +44,7 @@ xfpm_power_translate_device_type (guint type)
         case UP_DEVICE_KIND_BATTERY:
             return _("Battery");
         case UP_DEVICE_KIND_UPS:
-            return _("UPS");
+            return _("Uninterruptible Power Supply");
         case UP_DEVICE_KIND_LINE_POWER:
             return _("Line power");
         case UP_DEVICE_KIND_MOUSE:
@@ -96,33 +96,6 @@ xfpm_power_translate_technology (guint value)
     return _("Unknown");
 }
 
-const gchar * G_GNUC_CONST
-xfpm_battery_get_icon_index (UpDeviceKind type, guint percent)
-{
-    if (percent < 10)
-    {
-        return "000";
-    }
-    else if (percent < 30)
-    {
-        return "020";
-    }
-    else if (percent < 50)
-    {
-        return "040";
-    }
-    else if (percent < 70)
-    {
-        return "060";
-    }
-    else if (percent < 90)
-    {
-        return "080";
-    }
-
-    return "100";
-}
-
 /*
  * Taken from gpm
  */
@@ -167,60 +140,6 @@ xfpm_battery_get_time_string (guint seconds)
     return timestring;
 }
 
-gchar *
-xfpm_battery_get_icon_prefix_device_enum_type (UpDeviceKind type)
-{
-    /* mapped from
-     * http://cgit.freedesktop.org/upower/tree/libupower-glib/up-types.h
-     */
-    if ( type == UP_DEVICE_KIND_BATTERY )
-    {
-        return g_strdup (XFPM_PRIMARY_ICON_PREFIX);
-    }
-    else if ( type == UP_DEVICE_KIND_UPS )
-    {
-        return g_strdup (XFPM_UPS_ICON_PREFIX);
-    }
-    else if ( type == UP_DEVICE_KIND_MOUSE )
-    {
-        return g_strdup (XFPM_MOUSE_ICON_PREFIX);
-    }
-    else if ( type == UP_DEVICE_KIND_KEYBOARD )
-    {
-        return g_strdup (XFPM_KBD_ICON_PREFIX);
-    }
-    else if ( type == UP_DEVICE_KIND_PHONE )
-    {
-        return g_strdup (XFPM_PHONE_ICON_PREFIX);
-    }
-    else if ( type == UP_DEVICE_KIND_PDA )
-    {
-        return g_strdup (XFPM_PDA_ICON_PREFIX);
-    }
-    else if ( type == UP_DEVICE_KIND_MEDIA_PLAYER )
-    {
-        return g_strdup (XFPM_MEDIA_PLAYER_PREFIX);
-    }
-    else if ( type == UP_DEVICE_KIND_LINE_POWER )
-    {
-        return g_strdup (XFPM_AC_ADAPTER_ICON);
-    }
-    else if ( type == UP_DEVICE_KIND_MONITOR )
-    {
-        return g_strdup (XFPM_MONITOR_PREFIX);
-    }
-    else if ( type == UP_DEVICE_KIND_TABLET )
-    {
-        return g_strdup (XFPM_TABLET_ICON_PREFIX);
-    }
-    else if ( type == UP_DEVICE_KIND_COMPUTER )
-    {
-        return g_strdup (XFPM_COMPUTER_ICON_PREFIX);
-    }
-
-    return g_strdup (XFPM_PRIMARY_ICON_PREFIX);
-}
-
 static gboolean
 is_display_device (UpClient *upower, UpDevice *device)
 {
@@ -243,69 +162,65 @@ is_display_device (UpClient *upower, UpDevice *device)
 gchar*
 get_device_icon_name (UpClient *upower, UpDevice *device)
 {
-    gchar *icon_name = NULL, *icon_prefix;
-    guint type = 0, state = 0;
-    gboolean online;
-    gboolean present;
-    gdouble percentage;
+    gchar *icon_name = NULL;
+    gchar *icon_suffix;
+    gsize icon_base_length;
+    gchar *upower_icon;
+    guint type = 0;
 
     /* hack, this depends on XFPM_DEVICE_TYPE_* being in sync with UP_DEVICE_KIND_* */
     g_object_get (device,
-		  "kind", &type,
-		  "state", &state,
-		  "is-present", &present,
-		  "percentage", &percentage,
-		  "online", &online,
-		   NULL);
+                  "kind", &type,
+                  "icon-name", &upower_icon,
+                  NULL);
 
-    icon_prefix = xfpm_battery_get_icon_prefix_device_enum_type (type);
-
-    if ( type == UP_DEVICE_KIND_LINE_POWER )
+    /* Strip away the symbolic suffix for the device icons for the devices tab
+     * and the panel plugin's menu */
+    icon_suffix = g_strrstr (upower_icon, "-symbolic");
+    if (icon_suffix != NULL)
     {
-	if ( online )
-	{
-	    icon_name = g_strdup_printf ("%s", XFPM_AC_ADAPTER_ICON);
-	}
-	else
-	{
-	    icon_name = g_strdup_printf ("%s060", XFPM_PRIMARY_ICON_PREFIX);
-	}
-    }
-    else if ( type == UP_DEVICE_KIND_BATTERY || type == UP_DEVICE_KIND_UPS )
-    {
-	if (!present)
-	{
-	    icon_name = g_strdup_printf ("%s%s", icon_prefix, "missing");
-	}
-	else if (state == UP_DEVICE_STATE_FULLY_CHARGED )
-	{
-	    icon_name = g_strdup_printf ("%s%s", icon_prefix, "charged");
-	}
-	else if ( state == UP_DEVICE_STATE_CHARGING || state == UP_DEVICE_STATE_PENDING_CHARGE)
-	{
-	    icon_name = g_strdup_printf ("%s%s-%s", icon_prefix, xfpm_battery_get_icon_index (type, percentage), "charging");
-	}
-	else if ( state == UP_DEVICE_STATE_DISCHARGING || state == UP_DEVICE_STATE_PENDING_DISCHARGE)
-	{
-	    icon_name = g_strdup_printf ("%s%s", icon_prefix, xfpm_battery_get_icon_index (type, percentage));
-	}
-	else if ( state == UP_DEVICE_STATE_EMPTY)
-	{
-	    icon_name = g_strdup_printf ("%s%s", icon_prefix, "000");
-	}
+        icon_base_length = icon_suffix - upower_icon;
     }
     else
     {
-        if (is_display_device (upower, device))
-	{
-	    /* Desktop system with no batteries */
-	    icon_name = g_strdup_printf ("%s", XFPM_AC_ADAPTER_ICON);
-	}
-	else
-	{
-	    icon_name = icon_prefix;
-	}
+        icon_base_length = G_MAXINT;
     }
+
+    XFPM_DEBUG ("icon_suffix %s, icon_base_length %ld, upower_icon %s",
+                icon_suffix, icon_base_length, upower_icon);
+
+    /* mapped from
+     * http://cgit.freedesktop.org/upower/tree/libupower-glib/up-types.h
+     * because UPower doesn't return device-specific icon-names
+     */
+    if ( type == UP_DEVICE_KIND_UPS )
+        icon_name = g_strdup (XFPM_UPS_ICON);
+    else if ( type == UP_DEVICE_KIND_MOUSE )
+        icon_name = g_strdup (XFPM_MOUSE_ICON);
+    else if ( type == UP_DEVICE_KIND_KEYBOARD )
+        icon_name = g_strdup (XFPM_KBD_ICON);
+    else if ( type == UP_DEVICE_KIND_PHONE )
+        icon_name = g_strdup (XFPM_PHONE_ICON);
+    else if ( type == UP_DEVICE_KIND_PDA )
+        icon_name = g_strdup (XFPM_PDA_ICON);
+    else if ( type == UP_DEVICE_KIND_MEDIA_PLAYER )
+        icon_name = g_strdup (XFPM_MEDIA_PLAYER_ICON);
+    else if ( type == UP_DEVICE_KIND_LINE_POWER )
+        icon_name = g_strdup (XFPM_AC_ADAPTER_ICON);
+    else if ( type == UP_DEVICE_KIND_MONITOR )
+        icon_name = g_strdup (XFPM_MONITOR_ICON);
+    else if ( type == UP_DEVICE_KIND_TABLET )
+        icon_name = g_strdup (XFPM_TABLET_ICON);
+    else if ( type == UP_DEVICE_KIND_COMPUTER )
+        icon_name = g_strdup (XFPM_COMPUTER_ICON);
+    /* As UPower does not tell us whether a system is a desktop or a laptop we
+       decide this based on whether there is a battery and/or a a lid */
+    else if (!up_client_get_lid_is_present (upower) &&
+             !up_client_get_on_battery (upower) &&
+             g_strcmp0 (upower_icon, "battery-missing-symbolic") == 0)
+        icon_name = g_strdup (XFPM_AC_ADAPTER_ICON);
+    else if ( g_strcmp0 (upower_icon, "") != 0 )
+        icon_name = g_strndup (upower_icon, icon_base_length);
 
     return icon_name;
 }
@@ -342,6 +257,11 @@ get_device_description (UpClient *upower, UpDevice *device)
         g_free (model);
         model = g_strdup ("");
     }
+
+    if (vendor == NULL)
+        vendor = g_strdup ("");
+    if (model == NULL)
+        model = g_strdup ("");
 
     /* If we get a vendor or model we can use it, otherwise translate the
      * device type into something readable (works for things like ac_power)

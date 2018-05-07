@@ -21,6 +21,8 @@
 #ifndef __XFPM_SETTINGS_H
 #define __XFPM_SETTINGS_H
 
+#include <gtk/gtkx.h>
+#include <xfconf/xfconf.h>
 
 GtkWidget *xfpm_settings_dialog_new (XfconfChannel *channel,
                                      gboolean auth_suspend,
@@ -34,7 +36,10 @@ GtkWidget *xfpm_settings_dialog_new (XfconfChannel *channel,
                                      gboolean has_sleep_button,
                                      gboolean has_hibernate_button,
                                      gboolean has_power_button,
-                                     GdkNativeWindow id,
-                                     gchar *device_id);
+                                     Window id,
+                                     gchar *device_id,
+                                     GtkApplication *gtk_app);
+
+void     xfpm_settings_show_device_id (gchar *device_id);
 
 #endif /* __XFPM_SETTINGS_H */
