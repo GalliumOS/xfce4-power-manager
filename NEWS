@@ -1,19 +1,139 @@
-1.4.4
+1.6.1
 =====
 New stable release of xfce4-power-manager.
 
-* Re-introduce the trayicon for better support of other DEs (Bug #11054)
-* Miscellaneous bug fixes:
- - Fix dbus call for CK2 suspend (Bug #11610)
- - Function check_for_consolekit2 is not used if !UP_CHECK_VERSION(0, 99, 0) (Bug #11657)
- - Fix xfpm panel plugin crashes at startup when the locale is not UTF8
- - The scalemenuitem is actually an imagemenuitem
+* Bugfixes:
+ - plugin:
+   - Use libxfce4panel function to obtain desired icon size
+   - Fix menu leak, attach menu to button (Bug #13466)
+   - Hide label in unknown state (Bug #12851)
+   - Add properties dialog (Bug #13270)
+   - Set ac-adapter icon for desktop systems (Bug #13959)
+   - Hide label by default on desktop systems
+   - Block panel autohide if the menu is open
+   - Drop deprecated CSS styles
+ - Fix xfpm startup dialog ignoring response (Bug #13700)
+ - Fix handling of dialog responses for suspend and hibernate (Bug #13405)
+ - Set the transient hint for notifications
+ - Fix scale description and values for light-locker (Bug #13303)
+ - Drop period at end of all tooltip texts (Bug #12342)
+ - Make tooltip more concise (Bug #12342)
+ - When locking fallback to xflock4 first (Bug #12603)
+ - Fix a crash when warning about the screenlocker (Bug #12603)
+ - Fix showing inhibits in the systray (Bug #12605)
+ - Fix the g_object_bindings in xfce-screensaver
+ - Handle screensaver activity with it's own class (Bug #12603)
+ - Fix the 3.20 deprecation warnings
+ - Use the kernel-supplied backlight type rather than a whitelist (Bug #12553)
+ - Fix build on FreeBSD and DragonFlyBSD (Bug #13984)
+ - Add MATE to NotShowIn list (Bug #12506)
 
 * Translation updates:
- Bulgarian (bg), Chinese (China) (zh_CN), Croatian (hr),
- Czech (cs), Dutch (nl), French (fr), German (de),
- Italian (it), Korean (ko), Malay (ms), Russian (ru),
- Spanish (es), Serbian (sr), Thai (th).
+  Arabic, Asturian, Basque, Bulgarian, Catalan, Chinese (China),
+  Chinese (Hong Kong), Chinese (Taiwan), Croatian, Czech, Danish,
+  Dutch (Flemish), English (Australia), English (Great Britain),
+  Estonian, Finnish, French, Galician, German, Greek, Hebrew, Hungarian,
+  Icelandic, Indonesian, Italian, Japanese, Kazakh, Korean, Lithuanian,
+  Malay, Norwegian Bokmål, Norwegian Nynorsk, Occitan, Polish, Portuguese,
+  Portuguese (Brazilian), Romanian, Russian, Serbian, Slovak, Slovenian,
+  Spanish, Swedish, Thai, Turkish, Ukrainian, Uyghur, Vietnamese
+
+1.6.0
+=====
+New stable release of xfce4-power-manager.
+
+* Bugfixes:
+ - plugin: Fix a couple memory leaks (Bug #12332)
+ - Fix a crash when the brightness slider is released
+ - Fix keyboard-brightness icon names (Bug #12292)
+ - Draw border around device details
+ - Add bitrig to backend detection (Bug #12242)
+ - Replace XTestFakeKeyEvent with inhibit/heartbeat (Bug #11083)
+   /xfce4-power-manager/heartbeat-command is the xfconf property.
+ - Fix a crash on logout (Bug #12465)
+ - Show inhibitors in the plugin menu (Bug #9090)
+
+* Translation updates:
+  ar, ca, cs, da, de, el, en_AU, eu, fi, fr, gl, he, hr,
+  is, it, ja, kk, ko, lt, ms, nb, nl, oc, pl, pt, pt_BR,
+  ru, sk, sl, sr, sv, th, tr, uk, zh_CN, and zh_TW
+
+1.5.2
+=====
+New development release of xfce4-power-manager.
+
+* New feature:
+ - Use XScreenSaverSuspend and XTestFakeKeyEvent (Bug #11083)
+   We now suspend the screensaver when we're in presentation mode
+   or something has requested an screensaver inhibit lock.
+
+* Bugfixes:
+ - Set label so we don't crash (Bug #11967)
+ - Make the settings-app icon 256px for the about dialog
+ - Bring back the about dialog (Bug #11982)
+
+* Translation updates:
+Bulgarian (bg), Croatian (hr), Dutch (Flemish) (nl),
+English (Australia) (en_AU), French (fr), Korean (ko),
+Lithuanian (lt), Spanish (Castilian) (es).
+
+1.5.1
+=====
+New development release of xfce4-power-manager.
+
+* New feature:
+ - Hidden option to show percentage and/or remaining time in the panel plugin
+   (Bug #4499)
+   To use it, create the property /xfce4-power-manager/show-panel-label as INT
+   in the channel xfce4-power-manager. The possible settings are 0 (don't show
+   label), 1 (percentage), 2 (remaining time) and 3 (remaining time and
+   percentage).
+
+* Bugfixes:
+ - Prevent a crash on device update (Bug #11932)
+ - Fix wrong panel plugin button size (bug #11898)
+ - Fix loading of icons for plugin and systray
+
+* Translation updates:
+Swedish, Turkish.
+
+1.5.0
+=====
+New development release of xfce4-power-manager.
+This release marks the transition to several new 
+technologies.
+
+* Port to Gtk3 (Eric, Simon)
+* Port to gdbus (Peter)
+* Drop LXDE panel plugin
+* Bumped dependencies:
+ - UPower>= 0.99  
+ - Gtk3 >= 3.14
+ - libxfce4ui-2
+
+* Miscellaneous improvements:
+ - The settings dialog has been ported to GtkApplication
+ - The panel plugin now uses UPower's icon names
+   directly and is consequently compatible with all
+   major icon themes out of the box
+ - The panel plugin uses symbolic icons
+ - The systray icon uses colored icons
+ - The settings dialog now has a unique icon name
+   (xfce4-power-manager-settings)
+
+* And finally some bug fixes:
+ - Fix for panel icon on Desktop systems (Bug #11840)
+ - Never use symbolic icons for the systray (Bug #11756)
+ - Look up the schema for light-locker's settings recursively (Bug #11488)
+ - Don't crash when UPower returns "" for the icon-name (Bug #11756)
+
+* Translation updates:
+Asturian, Chinese (China), Chinese (Taiwan), Czech,
+French, German, Greek, Indonesian, Italian, Japanese,
+Kazakh, Korean, Lithuanian, Malay, Norwegian Bokmål,
+Polish, Portuguese, Portuguese (Brazilian), Russian,
+Serbian, Slovak, Slovenian, Spanish, Swedish, Thai,
+Ukrainian.
 
 1.4.3
 =====

@@ -26,9 +26,6 @@
 #ifdef XFCE_PLUGIN
 #include <libxfce4panel/xfce-panel-plugin.h>
 #endif
-#ifdef LXDE_PLUGIN
-#include <lxpanel/plugin.h>
-#endif
 
 G_BEGIN_DECLS
 
@@ -59,16 +56,11 @@ GType                    power_manager_button_get_type (void) G_GNUC_CONST;
 #ifdef XFCE_PLUGIN
 GtkWidget               *power_manager_button_new       (XfcePanelPlugin *plugin);
 #endif
-#ifdef LXDE_PLUGIN
-GtkWidget               *power_manager_button_new       (void);
-#endif
 #ifdef XFPM_SYSTRAY
 GtkWidget               *power_manager_button_new       (void);
 #endif
 
 void                     power_manager_button_show      (PowerManagerButton *button);
-
-void                     power_manager_button_set_width (PowerManagerButton *button, gint width);
 
 void                     power_manager_button_show_menu (PowerManagerButton *button);
 

@@ -1,22 +1,30 @@
-xfce4-power-manager (1.4.4-4ubuntu2) xenial; urgency=high
+xfce4-power-manager (1.6.1-0ubuntu1) devel; urgency=medium
 
-  * Drop redundant libsystemd-login-dev build-dependency. This package
-    doesn't link against libsystemd, and instead detects logind presence
-    dynamically and calls out to it via DBus.
+  * New upstream release.
 
- -- Dimitri John Ledkov <xnox@ubuntu.com>  Mon, 04 Jan 2016 15:05:59 +0000
+ -- Unit 193 <unit193@ubuntu.com>  Tue, 20 Feb 2018 01:17:28 -0500
 
-xfce4-power-manager (1.4.4-4ubuntu1) wily; urgency=medium
+xfce4-power-manager (1.6.0-1) experimental; urgency=medium
 
-  * Merge from Debian. Remaining Ubuntu changes:
-  * debian/control
-    - Add libsystemd-login-dev build dep to use logind for session tracking.
-    - Enable building of lxpanel plugin
-    - Update depends for xfce4-power-manager-plugins to xfce4-panel | lxpanel
-  * debian/rules
-    - Do not include xfce4-panel in shlibs
+  [ Mateusz Łukasik ]
+  * New upstream release:
+    - Use GTK+3 from now.
+  * Drop 01_fix-light-locker-schema-loading.patch -- included upstream.
+  * debian/control:
+    - Build-Depends on gtk3 instead of gtk2
+    - Build-Depends on libxfce4ui-2-dev instead of libxfce4ui-1-dev
+    - Build-Depends on libxfce4panel-2.0-dev instead of xfce4-panel-dev
+    - Build-Depends on libglib2.0-dev instead of libdbus-1-dev,
+      libdbus-glib-1-dev
+    - Add libsystemd-dev build dep on Linux to use logind for session tracking.
+  * debian/watch:
+    - Bump version to 4.
 
- -- Jackson Doak <noskcaj@ubuntu.com>  Tue, 26 May 2015 06:20:12 +1000
+  [ Yves-Alexis Perez ]
+  * debian/control:
+    - update standards version to 3.9.8.
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Fri, 26 Aug 2016 15:53:07 +0200
 
 xfce4-power-manager (1.4.4-4) unstable; urgency=medium
 
@@ -60,58 +68,6 @@ xfce4-power-manager (1.4.3-1) experimental; urgency=medium
 
  -- Yves-Alexis Perez <corsac@debian.org>  Sun, 08 Mar 2015 21:57:47 +0100
 
-xfce4-power-manager (1.4.3-0ubuntu1) vivid; urgency=medium
-
-  * New upstream release. LP: #1424887
-
- -- Jackson Doak <noskcaj@ubuntu.com>  Sun, 01 Mar 2015 12:18:45 +1100
-
-xfce4-power-manager (1.4.2-0ubuntu5) vivid; urgency=medium
-
-  * debian/patches/ll_integration.patch:
-    Remove Enable/Disable, update logind-handle-lid-switch property.
-
- -- Sean Davis <smd.seandavis@gmail.com>  Wed, 21 Jan 2015 06:59:19 -0500
-
-xfce4-power-manager (1.4.2-0ubuntu4) vivid; urgency=medium
-
-  * debian/patches/ll_integration.patch:
-    Also patch UI header file.
-
- -- Sean Davis <smd.seandavis@gmail.com>  Fri, 09 Jan 2015 07:01:36 -0500
-
-xfce4-power-manager (1.4.2-0ubuntu3) vivid; urgency=medium
-
-  * debian/patches: Add ll_integration.patch, for light-locker
-    integration in xfce4-power-manager-settings
-
- -- Sean Davis <smd.seandavis@gmail.com>  Thu, 08 Jan 2015 22:36:37 -0500
-
-xfce4-power-manager (1.4.2-0ubuntu2) vivid; urgency=medium
-
-  * debian/control: Drop depends on systemd-services, virtual package
-
- -- Sean Davis <smd.seandavis@gmail.com>  Mon, 01 Dec 2014 22:30:33 -0500
-
-xfce4-power-manager (1.4.2-0ubuntu1) vivid; urgency=medium
-
-  * New upstream release.
-  * debian/patches: dropped, included upstream.
-
- -- Sean Davis <smd.seandavis@gmail.com>  Mon, 01 Dec 2014 21:47:51 -0500
-
-xfce4-power-manager (1.4.1-2ubuntu1) vivid; urgency=medium
-
-  * Merge from Debian. Remaining Ubuntu changes:
-  * debian/control
-    - Add libsystemd-login-dev build dep to use logind for session tracking.
-    - Enable building of lxpanel plugin
-    - Update depends for xfce4-power-manager-plugins to xfce4-panel | lxpanel
-  * debian/rules
-    - Do not include xfce4-panel in shlibs
-
- -- Jackson Doak <noskcaj@ubuntu.com>  Fri, 31 Oct 2014 18:36:56 +1100
-
 xfce4-power-manager (1.4.1-2) unstable; urgency=medium
 
   * debian/patches:
@@ -132,20 +88,6 @@ xfce4-power-manager (1.4.1-1) unstable; urgency=medium
 
  -- Yves-Alexis Perez <corsac@debian.org>  Tue, 30 Sep 2014 21:49:35 +0200
 
-xfce4-power-manager (1.4.1-0ubuntu2) vivid; urgency=medium
-
-  * Build against upower 0.99 (LP: #1330037)
-
- -- Martin Pitt <martin.pitt@ubuntu.com>  Thu, 30 Oct 2014 13:25:04 +0100
-
-xfce4-power-manager (1.4.1-0ubuntu1) utopic; urgency=medium
-
-  * New upstream bugfix release.
-  * debian/patches/01_fix-logind-handle-lid-switch.patch:
-    - Dropped, included upstream.
-
- -- Sean Davis <smd.seandavis@gmail.com>  Thu, 25 Sep 2014 17:27:03 -0400
-
 xfce4-power-manager (1.4.0-2) unstable; urgency=medium
 
   * Upload to unstable
@@ -154,27 +96,6 @@ xfce4-power-manager (1.4.0-2) unstable; urgency=medium
       patch reverting the logind xfconf hidden variables.
 
  -- Yves-Alexis Perez <corsac@debian.org>  Sun, 21 Sep 2014 22:15:23 +0200
-
-xfce4-power-manager (1.4.0-1ubuntu2) utopic; urgency=medium
-
-  * debian/patches/01_fix-logind-handle-lid-switch.patch:
-    - Fixes suspend on lid-close (LP: #1349056)
-
- -- Sean Davis <smd.seandavis@gmail.com>  Wed, 17 Sep 2014 06:27:39 -0400
-
-xfce4-power-manager (1.4.0-1ubuntu1) utopic; urgency=medium
-
-  * Merge from Debian experimental. Remaining Ubuntu changes:
-  * debian/control
-    - Switch to using logind for session tracking. Depend on systemd-services
-      and add libsystemd-login-dev build dependency.
-    - Use upower << 0.99
-    - Enable building of lxpanel plugin
-    - Update depends for xfce4-power-manager-plugins to xfce4-panel | lxpanel
-  * debian/rules
-    - Do not include xfce4-panel in shlibs
-
- -- Sean Davis <smd.seandavis@gmail.com>  Mon, 15 Sep 2014 20:51:12 -0400
 
 xfce4-power-manager (1.4.0-1) experimental; urgency=medium
 
@@ -195,31 +116,6 @@ xfce4-power-manager (1.3.2-1) experimental; urgency=medium
 
  -- Yves-Alexis Perez <corsac@debian.org>  Mon, 25 Aug 2014 21:38:14 +0200
 
-xfce4-power-manager (1.3.2-0ubuntu2) utopic; urgency=medium
-
-  * debian/control
-    - Enable building of lxpanel plugin
-    - Update depends for xfce4-power-manager-plugins to xfce4-panel | lxpanel
-  * debian/rules
-    - Do not include xfce4-panel in shlibs
-
- -- Sean Davis <smd.seandavis@gmail.com>  Sun, 31 Aug 2014 21:18:26 -0400
-
-xfce4-power-manager (1.3.2-0ubuntu1) utopic; urgency=medium
-
-  * New upstream release.
-
- -- Sean Davis <smd.seandavis@gmail.com>  Wed, 20 Aug 2014 21:00:59 -0400
-
-xfce4-power-manager (1.3.1-1ubuntu1) utopic; urgency=medium
-
-  * Merge from debian. Remaining changes:
-    - Switch to using logind for session tracking. Depend on systemd-services
-      and add libsystemd-login-dev build dependency.
-  * Use upower << 0.99
-
- -- Sean Davis <smd.seandavis@gmail.com>  Thu, 14 Aug 2014 21:10:04 -0400
-
 xfce4-power-manager (1.3.1-1) experimental; urgency=medium
 
   * debian/NEWS:
@@ -230,16 +126,6 @@ xfce4-power-manager (1.3.1-1) experimental; urgency=medium
     - drop suggestion on udisks, not used anymore.
 
  -- Yves-Alexis Perez <corsac@debian.org>  Thu, 14 Aug 2014 14:50:52 +0200
-
-xfce4-power-manager (1.3.0-1ubuntu1) utopic; urgency=medium
-
-  * Merge from debian. (LP: #1334185) Remaining changes:
-    - Switch to using logind for session tracking. Depend on systemd-services
-      and add libsystemd-login-dev build dependency.
-  * Use upower << 0.99
-  * Drop all patches, fixed upstream
-
- -- Jackson Doak <noskcaj@ubuntu.com>  Wed, 25 Jun 2014 19:13:23 +1000
 
 xfce4-power-manager (1.3.0-1) experimental; urgency=low
 
@@ -280,25 +166,6 @@ xfce4-power-manager (1.2.0-5) unstable; urgency=medium
 
  -- Jackson Doak <noskcaj@ubuntu.com>  Thu, 17 Jul 2014 06:20:22 +1000
 
-xfce4-power-manager (1.2.0-4ubuntu1) utopic; urgency=medium
-
-  * Merge from debian. Remaining changes:
-    - 06_fix-suspend-auth-check.patch: added, correctly check for suspend
-      permissions before disabling the corresponding drop-down menu item.
-      lp #929537
-    - 08_show_preferences_lxde.patch: Hide settings menu only on desktop
-      environment which have another power manager.
-    - Switch to using logind for session tracking. Depend on systemd-services
-      instead of consolekit recommends, and add libsystemd-login-dev build
-      dependency.
-    - 05_dont-allow-systemd-to-handle-suspend-hibernate-events.patch
-    - 06_add-shutdown-reboot-functionality-for-systemd.patch
-    - 07_fix-screen-dimming.patch
-    - 09_sync_session_xfpm_lock_setting.patch
-    - 10_inhibit_logind.patch
-
- -- Jackson Doak <noskcaj@ubuntu.com>  Fri, 13 Jun 2014 06:43:15 +1000
-
 xfce4-power-manager (1.2.0-4) unstable; urgency=medium
 
   * debian/control:
@@ -309,58 +176,6 @@ xfce4-power-manager (1.2.0-4) unstable; urgency=medium
     - update standards version to 3.9.5.
 
  -- Yves-Alexis Perez <corsac@debian.org>  Wed, 11 Jun 2014 21:22:22 +0200
-
-xfce4-power-manager (1.2.0-3ubuntu6) utopic; urgency=medium
-
-  * Actually use the 10_inhibit_logind.patch
-
- -- Jackson Doak <noskcaj@ubuntu.com>  Mon, 02 Jun 2014 08:07:35 +1000
-
-xfce4-power-manager (1.2.0-3ubuntu5) utopic; urgency=medium
-
-  * Add 10_inhibit_logind.patch (Fixes LP: #1303736, Closes LP: #1323367)
-
- -- Sean Davis <smd.seandavis@gmail.com>  Tue, 27 May 2014 00:03:16 -0400
-
-xfce4-power-manager (1.2.0-3ubuntu4) trusty; urgency=medium
-
-  * Add 09_sync_session_xfpm_lock_setting.patch (LP: #1101982)
-
- -- Sean Davis <smd.seandavis@gmail.com>  Mon, 07 Apr 2014 10:09:14 -0500
-
-xfce4-power-manager (1.2.0-3ubuntu3) trusty; urgency=medium
-
-  * Add 07_fix-screen-dimming.patch. LP: #1067749
-  * Add DEP3 Header to 06_add-shutdown-reboot-functionality-for-systemd.patch
-
- -- Jackson Doak <noskcaj@ubuntu.com>  Wed, 22 Jan 2014 16:02:45 +1100
-
-xfce4-power-manager (1.2.0-3ubuntu2) trusty; urgency=medium
-
-  * Add patches from debian svn branch to fix systemd. LP: #1222021
-  * Force run of xdt-autogen to continue to allow ppc64el to build
-
- -- Jackson Doak <noskcaj@ubuntu.com>  Mon, 20 Jan 2014 07:04:09 +1100
-
-xfce4-power-manager (1.2.0-3ubuntu1) trusty; urgency=low
-
-  [ Jackson Doak ]
-  * Merged from debian unstable. Remaining changes:
-    - 06_fix-suspend-auth-check.patch: added, correctly check for suspend
-      permissions before disabling the corresponding drop-down menu item.
-      lp #929537
-    - 08_show_preferences_lxde.patch: Hide settings menu only on desktop
-      environment which have another power manager.
-    - Switch to using logind for session tracking. Depend on systemd-services
-      instead of consolekit recommends, and add libsystemd-login-dev build
-      dependency.
-  * Drop xubuntu_fix-status-icon-other-devices.patch, fixed in debian
-
-  [ Logan Rosen ]
-  * Get rid of 09_fix_insert_battery.patch, an Ubuntu patch that was applied
-    in Debian.
-
- -- Jackson Doak <noskcaj@ubuntu.com>  Wed, 11 Dec 2013 18:22:21 +1100
 
 xfce4-power-manager (1.2.0-3) unstable; urgency=medium
 
@@ -384,22 +199,6 @@ xfce4-power-manager (1.2.0-3) unstable; urgency=medium
 
  -- Yves-Alexis Perez <corsac@debian.org>  Mon, 09 Dec 2013 07:50:25 +0100
 
-xfce4-power-manager (1.2.0-2ubuntu1) saucy; urgency=low
-
-  * Merged from debian unstable. Remaining changes:
-    - 06_fix-suspend-auth-check.patch: added, correctly check for suspend
-      permissions before disabling the corresponding drop-down menu item.
-      lp #929537
-    - 08_show_preferences_lxde.patch: Hide settings menu only on desktop
-      environment which have another power manager.
-    - xubuntu_fix-status-icon-other-devices.patch: fix broken status icons
-      for other devices (phone, wireless kbd, mouse, etc.).
-    - Switch to using logind for session tracking. Depend on systemd-services
-    instead of consolekit recommends, and add libsystemd-login-dev build
-    dependency.
-
- -- Jackson Doak <noskcaj@ubuntu.com>  Tue, 13 Aug 2013 06:56:35 +1000
-
 xfce4-power-manager (1.2.0-2) unstable; urgency=low
 
   [ Lionel Le Folgoc ]
@@ -418,37 +217,6 @@ xfce4-power-manager (1.2.0-2) unstable; urgency=low
     - enable all hardening options.
 
  -- Lionel Le Folgoc <mrpouit@gmail.com>  Wed, 22 May 2013 00:46:08 +0200
-
-xfce4-power-manager (1.2.0-1ubuntu3) saucy; urgency=low
-
-  * Switch to using logind for session tracking. Depend on systemd-services
-    instead of consolekit recommends, and add libsystemd-login-dev build
-    dependency.
-
- -- Benjamin Kerensa <bkerensa@ubuntu.com>  Mon, 11 Mar 2013 01:46:13 -0700
-
-xfce4-power-manager (1.2.0-1ubuntu2) raring; urgency=low
-
-  * debian/patches:
-    - 02_translations-fix-invalid-format-strings.patch: updated to fix
-      crashes because of en_GB.po and tr.po. lp: #1054907
-
- -- Lionel Le Folgoc <mrpouit@ubuntu.com>  Mon, 29 Oct 2012 11:49:03 +0100
-
-xfce4-power-manager (1.2.0-1ubuntu1) quantal; urgency=low
-
-  * Merge from Debian experimental, remaining Ubuntu changes:
-    - 06_fix-suspend-auth-check.patch: added, correctly check for suspend
-      permissions before disabling the corresponding drop-down menu item.
-      lp #929537
-    - 08_show_preferences_lxde.patch: Hide settings menu only on desktop
-      environment which have another power manager.
-    - 09_fix_insert_battery.patch: Another patch to fix empty icon when
-      removing a battery. Thanks Henry Gebhardt for the patch.
-    - xubuntu_fix-status-icon-other-devices.patch: fix broken status icons
-      for other devices (phone, wireless kbd, mouse, etc.).
-
- -- Lionel Le Folgoc <mrpouit@ubuntu.com>  Fri, 18 May 2012 21:50:54 +0200
 
 xfce4-power-manager (1.2.0-1) experimental; urgency=low
 

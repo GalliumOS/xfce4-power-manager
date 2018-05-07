@@ -5,9 +5,9 @@ dnl
 
 m4_define([intltool_minimum_version], [0.31])
 m4_define([xfpm_version_major], [1])
-m4_define([xfpm_version_minor], [4])
-m4_define([xfpm_version_micro], [4])
-m4_define([xfpm_version_build], [883782b])
+m4_define([xfpm_version_minor], [6])
+m4_define([xfpm_version_micro], [1])
+m4_define([xfpm_version_build], [19005ca])
 m4_define([xfpm_version_tag],   [])
 m4_define([xfpm_version], [xfpm_version_major().xfpm_version_minor().xfpm_version_micro()ifelse(xfpm_version_tag(), [git], [xfpm_version_tag()-xfpm_version_build()], [xfpm_version_tag()])])
 
@@ -46,7 +46,7 @@ AC_HEADER_STDC()
 AC_CHECK_HEADERS([errno.h signal.h stddef.h sys/types.h memory.h stdlib.h   \
                   string.h sys/stat.h sys/user.h sys/wait.h time.h math.h   \
                   unistd.h sys/resource.h sys/socket.h sys/sysctl.h fcntl.h \
-                  sys/param.h procfs.h])
+                  sys/param.h procfs.h X11/extensions/scrnsaver.h ])
 
 AC_CHECK_FUNCS([getpwuid setsid sigaction])
 
@@ -55,46 +55,45 @@ AC_CHECK_FUNCS([getpwuid setsid sigaction])
 # ===================================================== #
 AC_CHECK_LIB([m], [round])
 
+
 # ===================================================== #
 # 		Check for i18n support 			#
 # ===================================================== #
 
-XDT_I18N([ar ast bg ca cs da de el en_AU en_GB es et eu fi fr gl he hr hu id is it ja kk ko lt ms nb nl nn oc pa pl pt_BR pt ro ru si sk sl sr sv te th tr ug uk ur_PK ur vi zh_CN zh_HK zh_TW ])
+XDT_I18N([ar ast bg ca cs da de el en_AU en_GB es et eu fi fr gl he hr hu id is it ja kk kn ko lt ms nb nl nn oc pa pl pt_BR pt ro ru si sk sl sr sv te th tr ug uk ur_PK ur vi zh_CN zh_HK zh_TW ])
+
+# ===================================================== #
+# 		Check for X11 support 			#
+# ===================================================== #
+XDT_CHECK_LIBX11_REQUIRE()
 
 #==================================================== #
 #          Check for required packages 		      #
 #=====================================================#
-m4_define([gtk_minimum_version], [2.24.0])
-m4_define([glib_minimum_version], [2.30.0])
-m4_define([dbus_minimum_version], [1.1])
-m4_define([dbus_glib_minimum_version], [0.84])
+m4_define([gtk_minimum_version], [3.14.0])
+m4_define([glib_minimum_version], [2.42.0])
 
-m4_define([xfconf_minimum_version], [4.10.0])
-m4_define([libxfce4ui_minimum_version],[4.10.0])
-m4_define([libxfce4util_minimum_version],[4.10.0])
-m4_define([libxfce4panel_minimum_version],[4.10.0])
-m4_define([lxdepanel_new_minimum_version],[0.7.0])
-m4_define([lxdepanel_minimum_version],[0.5.6])
+m4_define([xfconf_minimum_version], [4.12.0])
+m4_define([libxfce4ui_minimum_version],[4.12.0])
+m4_define([libxfce4util_minimum_version],[4.12.0])
+m4_define([libxfce4panel_minimum_version],[4.12.0])
 
 m4_define([libnotify_minimum_version], [0.4.1])
-m4_define([upower_minimum_version], [0.9.7])
+m4_define([upower_minimum_version], [0.99.0])
 m4_define([xrandr_minimum_version], [1.2.0])
-m4_define([x11_minimum_version], [1.0.0])
 
-XDT_CHECK_PACKAGE([GTK], [gtk+-2.0], [gtk_minimum_version])
+XDT_CHECK_PACKAGE([GTK], [gtk+-3.0], [gtk_minimum_version])
 XDT_CHECK_PACKAGE([GLIB], [glib-2.0], [glib_minimum_version])
 XDT_CHECK_PACKAGE([GOBJECT], [gobject-2.0], [glib_minimum_version])
 XDT_CHECK_PACKAGE([GTHREAD], [gthread-2.0], [glib_minimum_version])
 XDT_CHECK_PACKAGE([GMODULE], [gmodule-2.0], [glib_minimum_version])
-XDT_CHECK_PACKAGE([DBUS], [dbus-1], [dbus_minimum_version])
-XDT_CHECK_PACKAGE([DBUS_GLIB], [dbus-glib-1], [dbus_glib_minimum_version])
+XDT_CHECK_PACKAGE([GIO], [gio-2.0], [glib_minimum_version])
 XDT_CHECK_PACKAGE([XFCONF], [libxfconf-0],[xfconf_minimum_version])
-XDT_CHECK_PACKAGE([LIBXFCE4UI], [libxfce4ui-1],[libxfce4ui_minimum_version])
+XDT_CHECK_PACKAGE([LIBXFCE4UI], [libxfce4ui-2],[libxfce4ui_minimum_version])
 XDT_CHECK_PACKAGE([LIBXFCE4UTIL], [libxfce4util-1.0],[libxfce4util_minimum_version])
 XDT_CHECK_PACKAGE([LIBNOTIFY],[libnotify], [libnotify_minimum_version])
 XDT_CHECK_PACKAGE([UPOWER],[upower-glib], [upower_minimum_version])
 XDT_CHECK_PACKAGE([XRANDR],[xrandr], [xrandr_minimum_version])
-XDT_CHECK_PACKAGE([X11], [x11], [x11_minimum_version])
 
 #=======================================================#
 #              Polkit?			                #
@@ -117,7 +116,7 @@ AM_CONDITIONAL([ENABLE_POLKIT], [test "x$polkit" = "xyes"])
 #=======================================================#
 #           Check for DPMS support                      #
 #=======================================================#
-AC_CHECK_LIB([Xext], [DPMSQueryExtension], [DPMS_LIBS=" -lXext -lX11"],[])
+AC_CHECK_LIB([Xext], [DPMSQueryExtension], [DPMS_LIBS=" -lXext -lX11"],[], [$LIBX11_CFLAGS $LIBX11_LDFLAGS $LIBX11_LIBS])
 AC_SUBST([DPMS_LIBS])
 
 #=======================================================#
@@ -157,19 +156,12 @@ else
 	build_panel_plugins="yes"
 fi
 
-XDT_CHECK_OPTIONAL_PACKAGE([LIBXFCE4PANEL], [libxfce4panel-1.0], [libxfce4panel_minimum_version],
+XDT_CHECK_OPTIONAL_PACKAGE([LIBXFCE4PANEL], [libxfce4panel-2.0], [libxfce4panel_minimum_version],
 [xfce4panel], [To build plugin support for Xfce's panel])
 
-XDT_CHECK_OPTIONAL_PACKAGE([LXDEPANEL_NEW], [lxpanel], [lxdepanel_new_minimum_version],
-[lxdepanel],[To build plugin support for LXDE's panel])
-
-XDT_CHECK_OPTIONAL_PACKAGE([LXDEPANEL], [lxpanel], [lxdepanel_minimum_version],
-[lxdepanel],[To build plugin support for LXDE's panel])
 
 AM_CONDITIONAL([BUILD_PANEL_PLUGINS], [test "x$build_panel_plugins" = "xyes"])
 AM_CONDITIONAL([BUILD_XFCE_PLUGIN], [test "x$LIBXFCE4PANEL_FOUND" = "xyes" && test "x$build_panel_plugins" = "xyes"])
-AM_CONDITIONAL([BUILD_LXDE_NEW_PLUGIN], [test "x$LXDEPANEL_NEW_FOUND" = "xyes" && test "x$build_panel_plugins" = "xyes"])
-AM_CONDITIONAL([BUILD_LXDE_OLD_PLUGIN], [test "x$LXDEPANEL_NEW_FOUND" != "xyes" && test "x$LXDEPANEL_FOUND" = "xyes" && test "x$build_panel_plugins" = "xyes"])
 
 
 #=======================================================#
@@ -185,7 +177,7 @@ if test x$with_backend = x; then
 		[*-linux*],   [with_backend=linux],
 		[*-*freebsd*], [with_backend=freebsd],
 		[*-*dragonfly*], [with_backend=freebsd],
-		[*-openbsd*], [with_backend=openbsd])
+		[*-openbsd*|*-bitrig*], [with_backend=openbsd])
 fi
 AC_DEFINE_UNQUOTED(BACKEND, "$with_backend", [backend])
 AC_SUBST(BACKEND, "$with_backend")
@@ -236,14 +228,9 @@ src/Makefile
 settings/Makefile
 panel-plugins/Makefile
 panel-plugins/power-manager-plugin/Makefile
-panel-plugins/power-manager-plugin/lxde-0.7/Makefile
-panel-plugins/power-manager-plugin/lxde/Makefile
 panel-plugins/power-manager-plugin/xfce/Makefile
 data/Makefile
 data/icons/Makefile
-data/icons/16x16/Makefile
-data/icons/22x22/Makefile
-data/icons/24x24/Makefile
 data/icons/32x32/Makefile
 data/icons/48x48/Makefile
 data/icons/scalable/Makefile
@@ -261,9 +248,6 @@ echo "Build panel plugins:	${build_panel_plugins}"
 if test "x$build_panel_plugins" = "xyes"; then
     if test "x$LIBXFCE4PANEL_FOUND" = "xyes"; then
         echo " Xfce plugins:          yes"
-    fi
-    if test "x$LXDEPANEL_FOUND" = "xyes"; then
-        echo " LXDE plugins:          yes"
     fi
 fi
 echo "Backend:		${with_backend}"

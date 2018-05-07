@@ -33,8 +33,6 @@
 #include <errno.h>
 #endif
 
-#include <dbus/dbus-glib.h>
-#include <dbus/dbus-glib-lowlevel.h>
 #include <upower.h>
 #include <gdk/gdkx.h>
 
@@ -62,6 +60,7 @@
 #include "xfpm-systemd.h"
 #include "xfpm-suspend.h"
 #include "xfpm-brightness.h"
+#include "xfce-screensaver.h"
 
 static void xfpm_power_finalize     (GObject *object);
 
@@ -89,7 +88,7 @@ static void xfpm_power_dbus_init (XfpmPower *power);
 
 struct XfpmPowerPrivate
 {
-    DBusGConnection *bus;
+    GDBusConnection *bus;
 
     UpClient        *upower;
 
@@ -111,6 +110,8 @@ struct XfpmPowerPrivate
     EggIdletime     *idletime;
 
     gboolean	     inhibited;
+    gboolean	     screensaver_inhibited;
+    XfceScreenSaver *screensaver;
 
     XfpmNotify	    *notify;
 #ifdef ENABLE_POLKIT
@@ -169,7 +170,6 @@ static guint signals [LAST_SIGNAL] = { 0 };
 G_DEFINE_TYPE (XfpmPower, xfpm_power, G_TYPE_OBJECT)
 
 
-#if UP_CHECK_VERSION(0, 99, 0)
 /* This checks if consolekit returns TRUE for either suspend or
  * hibernate showing support. This means that ConsoleKit2 is running
  * (and the system is capable of those actions).
@@ -202,7 +202,6 @@ check_for_consolekit2 (XfpmPower *power)
 
     return FALSE;
 }
-#endif
 
 #ifdef ENABLE_POLKIT
 static void
@@ -217,11 +216,6 @@ xfpm_power_check_polkit_auth (XfpmPower *power)
     }
     else
     {
-#if !UP_CHECK_VERSION(0, 99, 0)
-	XFPM_DEBUG ("using upower suspend backend");
-	suspend   = POLKIT_AUTH_SUSPEND_UPOWER;
-	hibernate = POLKIT_AUTH_HIBERNATE_UPOWER;
-#else
 	if (power->priv->console != NULL)
 	{
 	    /* ConsoleKit2 supports suspend and hibernate */
@@ -238,7 +232,6 @@ xfpm_power_check_polkit_auth (XfpmPower *power)
 		hibernate = POLKIT_AUTH_HIBERNATE_XFPM;
 	    }
 	}
-#endif
     }
     power->priv->auth_suspend = xfpm_polkit_check_auth (power->priv->polkit,
 							suspend);
@@ -305,10 +298,6 @@ xfpm_power_get_properties (XfpmPower *power)
     gboolean lid_is_closed;
     gboolean lid_is_present;
 
-#if !UP_CHECK_VERSION(0, 99, 0)
-    power->priv->can_suspend = up_client_get_can_suspend(power->priv->upower);
-    power->priv->can_hibernate = up_client_get_can_hibernate(power->priv->upower);
-#else
     if ( LOGIND_RUNNING () )
     {
         g_object_get (G_OBJECT (power->priv->systemd),
@@ -335,7 +324,7 @@ xfpm_power_get_properties (XfpmPower *power)
 	    power->priv->can_hibernate = xfpm_suspend_can_hibernate ();
 	}
     }
-#endif
+
     g_object_get (power->priv->upower,
                   "on-battery", &on_battery,
                   "lid-is-closed", &lid_is_closed,
@@ -370,9 +359,7 @@ xfpm_power_report_error (XfpmPower *power, const gchar *error, const gchar *icon
 				   error,
 				   icon_name,
 				   10000,
-				   FALSE,
-				   XFPM_NOTIFY_CRITICAL,
-				   battery);
+				   XFPM_NOTIFY_CRITICAL);
 
 }
 
@@ -389,15 +376,21 @@ xfpm_power_sleep (XfpmPower *power, const gchar *sleep_time, gboolean force)
 
     if ( power->priv->inhibited && force == FALSE)
     {
+	GtkWidget *dialog;
 	gboolean ret;
 
-	ret = xfce_dialog_confirm (NULL,
-				   GTK_STOCK_OK, _("_Hibernate"),
-				   _("An application is currently disabling the automatic sleep. "
-				     "Doing this action now may damage the working state of this application."),
-				   _("Are you sure you want to hibernate the system?"));
+	dialog = gtk_message_dialog_new (NULL,
+                                         GTK_DIALOG_MODAL,
+                                         GTK_MESSAGE_QUESTION,
+                                         GTK_BUTTONS_YES_NO,
+                                         _("An application is currently disabling the automatic sleep. "
+				           "Doing this action now may damage the working state of this application.\n"
+				           "Are you sure you want to hibernate the system?"));
+	ret = gtk_dialog_run (GTK_DIALOG (dialog));
+	gtk_widget_destroy (dialog);
 
-	if ( !ret )
+
+	if ( !ret || ret == GTK_RESPONSE_NO)
 	    return;
     }
 
@@ -431,19 +424,24 @@ xfpm_power_sleep (XfpmPower *power, const gchar *sleep_time, gboolean force)
             g_usleep (2000000);
 	}
 #endif
-        if (!xfpm_lock_screen ())
+        if (!xfce_screensaver_lock (power->priv->screensaver))
         {
+	    GtkWidget *dialog;
 	    gboolean ret;
 
-	    ret = xfce_dialog_confirm (NULL,
-				       GTK_STOCK_OK, _("Continue"),
-			               _("None of the screen lock tools ran "
-				         "successfully, the screen will not "
-					 "be locked."),
-				       _("Do you still want to continue to "
-				         "suspend the system?"));
+	    dialog = gtk_message_dialog_new (NULL,
+				             GTK_DIALOG_MODAL,
+				             GTK_MESSAGE_QUESTION,
+				             GTK_BUTTONS_YES_NO,
+				             _("None of the screen lock tools ran "
+				               "successfully, the screen will not "
+				               "be locked.\n"
+				               "Do you still want to continue to "
+				               "suspend the system?"));
+	    ret = gtk_dialog_run (GTK_DIALOG (dialog));
+	    gtk_widget_destroy (dialog);
 
-	    if ( !ret )
+	    if ( !ret || ret == GTK_RESPONSE_NO)
 		return;
         }
     }
@@ -460,16 +458,6 @@ xfpm_power_sleep (XfpmPower *power, const gchar *sleep_time, gboolean force)
     }
     else
     {
-#if !UP_CHECK_VERSION(0, 99, 0)
-	if (!g_strcmp0 (sleep_time, "Hibernate"))
-	{
-	    up_client_hibernate_sync(power->priv->upower, NULL, &error);
-	}
-	else
-	{
-	    up_client_suspend_sync(power->priv->upower, NULL, &error);
-	}
-#else
 	if (!g_strcmp0 (sleep_time, "Hibernate"))
         {
 	    if (check_for_consolekit2 (power))
@@ -492,12 +480,11 @@ xfpm_power_sleep (XfpmPower *power, const gchar *sleep_time, gboolean force)
                 xfpm_suspend_try_action (XFPM_SUSPEND);
 	    }
         }
-#endif
     }
 
     if ( error )
     {
-	if ( g_error_matches (error, DBUS_GERROR, DBUS_GERROR_NO_REPLY) )
+	if ( g_error_matches (error, G_DBUS_ERROR, G_DBUS_ERROR_NO_REPLY) )
 	{
 	    XFPM_DEBUG ("D-Bus time out, but should be harmless");
 	}
@@ -651,10 +638,9 @@ xfpm_power_show_critical_action_notification (XfpmPower *power, XfpmBattery *bat
 	xfpm_notify_new_notification (power->priv->notify,
 				      _("Power Manager"),
 				      message,
-				      gtk_status_icon_get_icon_name (GTK_STATUS_ICON (battery)),
+				      xfpm_battery_get_icon_name (battery),
 				      20000,
-				      XFPM_NOTIFY_CRITICAL,
-				      GTK_STATUS_ICON (battery));
+				      XFPM_NOTIFY_CRITICAL);
 
     xfpm_power_add_actions_to_notification (power, n);
     xfpm_notify_critical (power->priv->notify, n);
@@ -694,7 +680,7 @@ xfpm_power_show_critical_action_gtk (XfpmPower *power)
                "Save your work to avoid losing data");
 
     dialog = gtk_dialog_new_with_buttons (_("Power Manager"), NULL, GTK_DIALOG_MODAL,
-                                          NULL);
+                                          NULL, NULL);
 
     gtk_dialog_set_default_response (GTK_DIALOG (dialog),
                                      GTK_RESPONSE_CANCEL);
@@ -736,7 +722,7 @@ xfpm_power_show_critical_action_gtk (XfpmPower *power)
 			          G_CALLBACK (xfpm_power_shutdown_clicked), power);
     }
 
-    cancel = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
+    cancel = gtk_button_new_with_label (_("_Cancel"));
     gtk_dialog_add_action_widget (GTK_DIALOG (dialog), cancel, GTK_RESPONSE_NONE);
 
     g_signal_connect_swapped (cancel, "clicked",
@@ -859,11 +845,9 @@ xfpm_power_battery_charge_changed_cb (XfpmBattery *battery, XfpmPower *power)
 		xfpm_notify_show_notification (power->priv->notify,
 					       _("Power Manager"),
 					       _("System is running on low power"),
-					       gtk_status_icon_get_icon_name (GTK_STATUS_ICON (battery)),
+					       xfpm_battery_get_icon_name (battery),
 					       10000,
-					       FALSE,
-					       XFPM_NOTIFY_NORMAL,
-					       GTK_STATUS_ICON (battery));
+					       XFPM_NOTIFY_NORMAL);
 
 	}
 	else if ( battery_charge == XFPM_BATTERY_CHARGE_LOW )
@@ -883,11 +867,9 @@ xfpm_power_battery_charge_changed_cb (XfpmBattery *battery, XfpmPower *power)
 		xfpm_notify_show_notification (power->priv->notify,
 					       _("Power Manager"),
 					       msg,
-					       gtk_status_icon_get_icon_name (GTK_STATUS_ICON (battery)),
+					       xfpm_battery_get_icon_name (battery),
 					       10000,
-					       FALSE,
-					       XFPM_NOTIFY_NORMAL,
-					       GTK_STATUS_ICON (battery));
+					       XFPM_NOTIFY_NORMAL);
 		g_free (msg);
 		g_free (time_str);
 	    }
@@ -921,11 +903,11 @@ xfpm_power_add_device (UpDevice *device, XfpmPower *power)
 	 device_type == UP_DEVICE_KIND_KEYBOARD	||
 	 device_type == UP_DEVICE_KIND_PHONE)
     {
-	GtkStatusIcon *battery;
+	GtkWidget *battery;
 	XFPM_DEBUG( "Battery device type '%s' detected at: %s",
 		     up_device_kind_to_string(device_type), object_path);
 	battery = xfpm_battery_new ();
-	gtk_status_icon_set_visible (battery, FALSE);
+
 	xfpm_battery_monitor_device (XFPM_BATTERY (battery),
 				     object_path,
 				     device_type);
@@ -940,10 +922,6 @@ xfpm_power_add_device (UpDevice *device, XfpmPower *power)
 static void
 xfpm_power_get_power_devices (XfpmPower *power)
 {
-#if !UP_CHECK_VERSION(0, 99, 0)
-    /* the device-add callback is called for each device */
-    up_client_enumerate_devices_sync(power->priv->upower, NULL, NULL);
-#else
     GPtrArray *array = NULL;
     guint i;
 
@@ -960,7 +938,6 @@ xfpm_power_get_power_devices (XfpmPower *power)
 	}
 	g_ptr_array_free (array, TRUE);
     }
-#endif
 }
 
 static void
@@ -972,14 +949,44 @@ xfpm_power_remove_device (XfpmPower *power, const gchar *object_path)
 static void
 xfpm_power_inhibit_changed_cb (XfpmInhibit *inhibit, gboolean is_inhibit, XfpmPower *power)
 {
-    power->priv->inhibited = is_inhibit;
+    if (power->priv->inhibited != is_inhibit)
+    {
+        power->priv->inhibited = is_inhibit;
+
+        XFPM_DEBUG ("is_inhibit %s, screensaver_inhibited %s, presentation_mode %s",
+	            power->priv->inhibited ? "TRUE" : "FALSE",
+	            power->priv->screensaver_inhibited ? "TRUE" : "FALSE",
+	            power->priv->presentation_mode ? "TRUE" : "FALSE");
+
+        /* If we are inhibited make sure we inhibit the screensaver too */
+        if (is_inhibit)
+        {
+            if (!power->priv->screensaver_inhibited)
+            {
+                xfce_screensaver_inhibit (power->priv->screensaver, TRUE);
+                power->priv->screensaver_inhibited = TRUE;
+            }
+        }
+        else
+        {
+            /* Or make sure we remove the screensaver inhibit */
+            if (power->priv->screensaver_inhibited && !power->priv->presentation_mode)
+            {
+                xfce_screensaver_inhibit (power->priv->screensaver, FALSE);
+                power->priv->screensaver_inhibited = FALSE;
+            }
+        }
+    }
+
+    XFPM_DEBUG ("is_inhibit %s, screensaver_inhibited %s, presentation_mode %s",
+		power->priv->inhibited ? "TRUE" : "FALSE",
+		power->priv->screensaver_inhibited ? "TRUE" : "FALSE",
+		power->priv->presentation_mode ? "TRUE" : "FALSE");
 }
 
 static void
 xfpm_power_changed_cb (UpClient *upower,
-#if UP_CHECK_VERSION(0, 99, 0)
 		       GParamSpec *pspec,
-#endif
 		       XfpmPower *power)
 {
     xfpm_power_get_properties (power);
@@ -991,20 +998,11 @@ xfpm_power_device_added_cb (UpClient *upower, UpDevice *device, XfpmPower *power
     xfpm_power_add_device (device, power);
 }
 
-#if UP_CHECK_VERSION(0, 99, 0)
 static void
 xfpm_power_device_removed_cb (UpClient *upower, const gchar *object_path, XfpmPower *power)
 {
     xfpm_power_remove_device (power, object_path);
 }
-#else
-static void
-xfpm_power_device_removed_cb (UpClient *upower, UpDevice *device, XfpmPower *power)
-{
-    const gchar *object_path = up_device_get_object_path(device);
-    xfpm_power_remove_device (power, object_path);
-}
-#endif
 
 #ifdef ENABLE_POLKIT
 static void
@@ -1205,6 +1203,7 @@ xfpm_power_init (XfpmPower *power)
     power->priv->notify  = xfpm_notify_new ();
     power->priv->conf    = xfpm_xfconf_new ();
     power->priv->upower  = up_client_new ();
+    power->priv->screensaver = xfce_screensaver_new ();
 
     power->priv->systemd = NULL;
     power->priv->console = NULL;
@@ -1222,7 +1221,7 @@ xfpm_power_init (XfpmPower *power)
     g_signal_connect (power->priv->inhibit, "has-inhibit-changed",
 		      G_CALLBACK (xfpm_power_inhibit_changed_cb), power);
 
-    power->priv->bus = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
+    power->priv->bus = g_bus_get_sync (G_BUS_TYPE_SYSTEM, NULL, &error);
 
     if ( error )
     {
@@ -1233,11 +1232,8 @@ xfpm_power_init (XfpmPower *power)
 
     g_signal_connect (power->priv->upower, "device-added", G_CALLBACK (xfpm_power_device_added_cb), power);
     g_signal_connect (power->priv->upower, "device-removed", G_CALLBACK (xfpm_power_device_removed_cb), power);
-#if UP_CHECK_VERSION(0, 99, 0)
     g_signal_connect (power->priv->upower, "notify", G_CALLBACK (xfpm_power_changed_cb), power);
-#else
-    g_signal_connect (power->priv->upower, "changed", G_CALLBACK (xfpm_power_changed_cb), power);
-#endif
+
     xfpm_power_get_power_devices (power);
     xfpm_power_get_properties (power);
 #ifdef ENABLE_POLKIT
@@ -1337,13 +1333,14 @@ xfpm_power_finalize (GObject *object)
     g_object_unref (power->priv->inhibit);
     g_object_unref (power->priv->notify);
     g_object_unref (power->priv->conf);
+    g_object_unref (power->priv->screensaver);
 
     if ( power->priv->systemd != NULL )
         g_object_unref (power->priv->systemd);
     if ( power->priv->console != NULL )
         g_object_unref (power->priv->console);
 
-    dbus_g_connection_unref (power->priv->bus);
+    g_object_unref (power->priv->bus);
 
     g_hash_table_destroy (power->priv->hash);
 
@@ -1458,23 +1455,47 @@ xfpm_power_change_presentation_mode (XfpmPower *power, gboolean presentation_mod
     if (power->priv->presentation_mode == presentation_mode)
         return;
 
-    XFPM_DEBUG ("presentation mode %s, changing to %s",
-                power->priv->presentation_mode ? "TRUE" : "FALSE",
-                presentation_mode ? "TRUE" : "FALSE");
-
     power->priv->presentation_mode = presentation_mode;
 
     /* presentation mode inhibits dpms */
     xfpm_dpms_inhibit (power->priv->dpms, presentation_mode);
 
-    if (presentation_mode == FALSE)
+    XFPM_DEBUG ("is_inhibit %s, screensaver_inhibited %s, presentation_mode %s",
+		power->priv->inhibited ? "TRUE" : "FALSE",
+		power->priv->screensaver_inhibited ? "TRUE" : "FALSE",
+		power->priv->presentation_mode ? "TRUE" : "FALSE");
+
+    if (presentation_mode)
     {
-        EggIdletime *idletime;
+	/* presentation mode inhibits the screensaver */
+	if (!power->priv->screensaver_inhibited)
+	{
+	    xfce_screensaver_inhibit (power->priv->screensaver, TRUE);
+	    power->priv->screensaver_inhibited = TRUE;
+	}
+    }
+    else
+    {
+	EggIdletime *idletime;
+
+	/* make sure we remove the screensaver inhibit */
+	if (power->priv->screensaver_inhibited && !power->priv->inhibited)
+	{
+	    xfce_screensaver_inhibit (power->priv->screensaver, FALSE);
+	    power->priv->screensaver_inhibited = FALSE;
+	}
+
+	/* reset the timers */
         idletime = egg_idletime_new ();
         egg_idletime_alarm_reset_all (idletime);
 
         g_object_unref (idletime);
     }
+
+    XFPM_DEBUG ("is_inhibit %s, screensaver_inhibited %s, presentation_mode %s",
+		power->priv->inhibited ? "TRUE" : "FALSE",
+		power->priv->screensaver_inhibited ? "TRUE" : "FALSE",
+		power->priv->presentation_mode ? "TRUE" : "FALSE");
 
     xfpm_update_blank_time (power);
 }
@@ -1494,65 +1515,113 @@ xfpm_power_is_in_presentation_mode (XfpmPower *power)
  *
  */
 static gboolean xfpm_power_dbus_shutdown (XfpmPower *power,
-				        GError **error);
+					  GDBusMethodInvocation *invocation,
+					  gpointer user_data);
 
 static gboolean xfpm_power_dbus_reboot   (XfpmPower *power,
-					GError **error);
+					  GDBusMethodInvocation *invocation,
+					  gpointer user_data);
 
 static gboolean xfpm_power_dbus_hibernate (XfpmPower * power,
-					 GError **error);
+					   GDBusMethodInvocation *invocation,
+					   gpointer user_data);
 
 static gboolean xfpm_power_dbus_suspend (XfpmPower * power,
-				       GError ** error);
+				         GDBusMethodInvocation *invocation,
+				         gpointer user_data);
 
 static gboolean xfpm_power_dbus_can_reboot (XfpmPower * power,
-					  gboolean * OUT_can_reboot,
-					  GError ** error);
+					    GDBusMethodInvocation *invocation,
+					    gpointer user_data);
 
 static gboolean xfpm_power_dbus_can_shutdown (XfpmPower * power,
-					    gboolean * OUT_can_reboot,
-					    GError ** error);
+					      GDBusMethodInvocation *invocation,
+					      gpointer user_data);
 
 static gboolean xfpm_power_dbus_can_hibernate (XfpmPower * power,
-					     gboolean * OUT_can_hibernate,
-					     GError ** error);
+					       GDBusMethodInvocation *invocation,
+					       gpointer user_data);
 
 static gboolean xfpm_power_dbus_can_suspend (XfpmPower * power,
-					   gboolean * OUT_can_suspend,
-					   GError ** error);
+					     GDBusMethodInvocation *invocation,
+					     gpointer user_data);
 
 static gboolean xfpm_power_dbus_get_on_battery (XfpmPower * power,
-					      gboolean * OUT_on_battery,
-					      GError ** error);
+					        GDBusMethodInvocation *invocation,
+					        gpointer user_data);
 
 static gboolean xfpm_power_dbus_get_low_battery (XfpmPower * power,
-					       gboolean * OUT_low_battery,
-					       GError ** error);
+					         GDBusMethodInvocation *invocation,
+					         gpointer user_data);
 
 #include "org.freedesktop.PowerManagement.h"
 
 static void
 xfpm_power_dbus_class_init (XfpmPowerClass * klass)
 {
-    dbus_g_object_type_install_info (G_TYPE_FROM_CLASS (klass),
-                                     &dbus_glib_xfpm_power_object_info);
 }
 
 static void
 xfpm_power_dbus_init (XfpmPower *power)
 {
-    DBusGConnection *bus = dbus_g_bus_get (DBUS_BUS_SESSION, NULL);
+    GDBusConnection *bus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
+    XfpmPowerManagement *power_dbus;
 
     TRACE ("entering");
 
-    dbus_g_connection_register_g_object (bus,
-                                         "/org/freedesktop/PowerManagement",
-                                         G_OBJECT (power));
+    power_dbus = xfpm_power_management_skeleton_new ();
+    g_dbus_interface_skeleton_export (G_DBUS_INTERFACE_SKELETON (power_dbus),
+                                      bus,
+                                      "/org/freedesktop/PowerManagement",
+                                      NULL);
+
+    g_signal_connect_swapped (power_dbus,
+			      "handle-shutdown",
+			      G_CALLBACK (xfpm_power_dbus_shutdown),
+			      power);
+    g_signal_connect_swapped (power_dbus,
+			      "handle-reboot",
+			      G_CALLBACK (xfpm_power_dbus_reboot),
+			      power);
+    g_signal_connect_swapped (power_dbus,
+			      "handle-hibernate",
+			      G_CALLBACK (xfpm_power_dbus_hibernate),
+			      power);
+    g_signal_connect_swapped (power_dbus,
+			      "handle-suspend",
+			      G_CALLBACK (xfpm_power_dbus_suspend),
+			      power);
+    g_signal_connect_swapped (power_dbus,
+			      "handle-can-reboot",
+			      G_CALLBACK (xfpm_power_dbus_can_reboot),
+			      power);
+    g_signal_connect_swapped (power_dbus,
+			      "handle-can-shutdown",
+			      G_CALLBACK (xfpm_power_dbus_can_shutdown),
+			      power);
+    g_signal_connect_swapped (power_dbus,
+			      "handle-can-hibernate",
+			      G_CALLBACK (xfpm_power_dbus_can_hibernate),
+			      power);
+    g_signal_connect_swapped (power_dbus,
+			      "handle-can-suspend",
+			      G_CALLBACK (xfpm_power_dbus_can_suspend),
+			      power);
+    g_signal_connect_swapped (power_dbus,
+			      "handle-get-on-battery",
+			      G_CALLBACK (xfpm_power_dbus_get_on_battery),
+			      power);
+    g_signal_connect_swapped (power_dbus,
+			      "handle-get-low-battery",
+			      G_CALLBACK (xfpm_power_dbus_get_low_battery),
+			      power);
 }
 
 static gboolean xfpm_power_dbus_shutdown (XfpmPower *power,
-				        GError **error)
+					  GDBusMethodInvocation *invocation,
+					  gpointer user_data)
 {
+    GError *error = NULL;
     gboolean can_reboot;
 
     if ( LOGIND_RUNNING () )
@@ -1570,22 +1639,36 @@ static gboolean xfpm_power_dbus_shutdown (XfpmPower *power,
 
     if ( !can_reboot)
     {
-	g_set_error (error, XFPM_ERROR, XFPM_ERROR_PERMISSION_DENIED,
-                    _("Permission denied"));
-        return FALSE;
+	g_dbus_method_invocation_return_error (invocation,
+					       XFPM_ERROR,
+					       XFPM_ERROR_PERMISSION_DENIED,
+					       _("Permission denied"));
+        return TRUE;
     }
 
     if ( LOGIND_RUNNING () )
-        xfpm_systemd_shutdown (power->priv->systemd, error);
+        xfpm_systemd_shutdown (power->priv->systemd, &error);
     else
-	xfpm_console_kit_shutdown (power->priv->console, error);
+	xfpm_console_kit_shutdown (power->priv->console, &error);
+
+    if (error)
+    {
+	g_dbus_method_invocation_return_gerror (invocation, error);
+        g_error_free (error);
+    }
+    else
+    {
+	xfpm_power_management_complete_shutdown (user_data, invocation);
+    }
 
     return TRUE;
 }
 
 static gboolean xfpm_power_dbus_reboot   (XfpmPower *power,
-					GError **error)
+					  GDBusMethodInvocation *invocation,
+					  gpointer user_data)
 {
+    GError *error = NULL;
     gboolean can_reboot;
 
     if ( LOGIND_RUNNING () )
@@ -1603,139 +1686,180 @@ static gboolean xfpm_power_dbus_reboot   (XfpmPower *power,
 
     if ( !can_reboot)
     {
-	g_set_error (error, XFPM_ERROR, XFPM_ERROR_PERMISSION_DENIED,
-                    _("Permission denied"));
-        return FALSE;
+	g_dbus_method_invocation_return_error (invocation,
+					       XFPM_ERROR,
+					       XFPM_ERROR_PERMISSION_DENIED,
+					       _("Permission denied"));
+        return TRUE;
     }
 
-   if ( LOGIND_RUNNING () )
-        xfpm_systemd_reboot (power->priv->systemd, error);
+    if ( LOGIND_RUNNING () )
+        xfpm_systemd_reboot (power->priv->systemd, &error);
     else
-	xfpm_console_kit_reboot (power->priv->console, error);
+	xfpm_console_kit_reboot (power->priv->console, &error);
 
+    if (error)
+    {
+	g_dbus_method_invocation_return_gerror (invocation, error);
+        g_error_free (error);
+    }
+    else
+    {
+        xfpm_power_management_complete_reboot (user_data, invocation);
+    }
 
     return TRUE;
 }
 
 static gboolean xfpm_power_dbus_hibernate (XfpmPower * power,
-					 GError **error)
+					   GDBusMethodInvocation *invocation,
+					   gpointer user_data)
 {
     if ( !power->priv->auth_hibernate )
     {
-	g_set_error (error, XFPM_ERROR, XFPM_ERROR_PERMISSION_DENIED,
-                    _("Permission denied"));
-        return FALSE;
-
+	g_dbus_method_invocation_return_error (invocation,
+					       XFPM_ERROR,
+					       XFPM_ERROR_PERMISSION_DENIED,
+					       _("Permission denied"));
+        return TRUE;
     }
 
     if (!power->priv->can_hibernate )
     {
-	g_set_error (error, XFPM_ERROR, XFPM_ERROR_NO_HARDWARE_SUPPORT,
-                    _("Suspend not supported"));
-        return FALSE;
+	g_dbus_method_invocation_return_error (invocation,
+					       XFPM_ERROR,
+					       XFPM_ERROR_NO_HARDWARE_SUPPORT,
+					       _("Suspend not supported"));
+        return TRUE;
     }
 
     xfpm_power_sleep (power, "Hibernate", FALSE);
+
+    xfpm_power_management_complete_hibernate (user_data, invocation);
 
     return TRUE;
 }
 
 static gboolean xfpm_power_dbus_suspend (XfpmPower * power,
-				       GError ** error)
+					 GDBusMethodInvocation *invocation,
+					 gpointer user_data)
 {
     if ( !power->priv->auth_suspend )
     {
-	g_set_error (error, XFPM_ERROR, XFPM_ERROR_PERMISSION_DENIED,
-                    _("Permission denied"));
-        return FALSE;
-
+	g_dbus_method_invocation_return_error (invocation,
+					       XFPM_ERROR,
+					       XFPM_ERROR_PERMISSION_DENIED,
+					       _("Permission denied"));
+        return TRUE;
     }
 
     if (!power->priv->can_suspend )
     {
-	g_set_error (error, XFPM_ERROR, XFPM_ERROR_NO_HARDWARE_SUPPORT,
-                    _("Suspend not supported"));
-        return FALSE;
+	g_dbus_method_invocation_return_error (invocation,
+					       XFPM_ERROR,
+					       XFPM_ERROR_NO_HARDWARE_SUPPORT,
+					       _("Suspend not supported"));
+        return TRUE;
     }
 
     xfpm_power_sleep (power, "Suspend", FALSE);
+
+    xfpm_power_management_complete_suspend (user_data, invocation);
 
     return TRUE;
 }
 
 static gboolean xfpm_power_dbus_can_reboot (XfpmPower * power,
-					  gboolean * OUT_can_reboot,
-					  GError ** error)
+					    GDBusMethodInvocation *invocation,
+					    gpointer user_data)
 {
+    gboolean can_reboot;
 
     if ( LOGIND_RUNNING () )
     {
         g_object_get (G_OBJECT (power->priv->systemd),
-                      "can-reboot", OUT_can_reboot,
+                      "can-reboot", &can_reboot,
                       NULL);
     }
     else
     {
         g_object_get (G_OBJECT (power->priv->console),
-                      "can-reboot", OUT_can_reboot,
+                      "can-reboot", &can_reboot,
 		      NULL);
     }
+
+    xfpm_power_management_complete_can_reboot (user_data,
+                                               invocation,
+                                               can_reboot);
 
     return TRUE;
 }
 
 static gboolean xfpm_power_dbus_can_shutdown (XfpmPower * power,
-					    gboolean * OUT_can_shutdown,
-					    GError ** error)
+					      GDBusMethodInvocation *invocation,
+					      gpointer user_data)
 {
+    gboolean can_shutdown;
 
     if ( LOGIND_RUNNING () )
     {
         g_object_get (G_OBJECT (power->priv->systemd),
-                  "can-shutdown", OUT_can_shutdown,
+                  "can-shutdown", &can_shutdown,
                   NULL);
     }
     else
     {
 	g_object_get (G_OBJECT (power->priv->console),
-		      "can-shutdown", OUT_can_shutdown,
+		      "can-shutdown", &can_shutdown,
 		      NULL);
     }
+
+    xfpm_power_management_complete_can_shutdown (user_data,
+                                                 invocation,
+                                                 can_shutdown);
 
     return TRUE;
 }
 
 static gboolean xfpm_power_dbus_can_hibernate (XfpmPower * power,
-					     gboolean * OUT_can_hibernate,
-					     GError ** error)
+					       GDBusMethodInvocation *invocation,
+					       gpointer user_data)
 {
-    *OUT_can_hibernate = power->priv->can_hibernate;
+    xfpm_power_management_complete_can_hibernate (user_data,
+                                                  invocation,
+                                                  power->priv->can_hibernate);
     return TRUE;
 }
 
 static gboolean xfpm_power_dbus_can_suspend (XfpmPower * power,
-					   gboolean * OUT_can_suspend,
-					   GError ** error)
+					     GDBusMethodInvocation *invocation,
+					     gpointer user_data)
 {
-    *OUT_can_suspend = power->priv->can_suspend;
+    xfpm_power_management_complete_can_suspend (user_data,
+                                                invocation,
+                                                power->priv->can_suspend);
 
     return TRUE;
 }
 
 static gboolean xfpm_power_dbus_get_on_battery (XfpmPower * power,
-					      gboolean * OUT_on_battery,
-					      GError ** error)
+					        GDBusMethodInvocation *invocation,
+					        gpointer user_data)
 {
-    *OUT_on_battery = power->priv->on_battery;
+    xfpm_power_management_complete_get_on_battery (user_data,
+                                                   invocation,
+                                                   power->priv->on_battery);
 
     return TRUE;
 }
 
 static gboolean xfpm_power_dbus_get_low_battery (XfpmPower * power,
-					       gboolean * OUT_low_battery,
-					       GError ** error)
+					         GDBusMethodInvocation *invocation,
+					         gpointer user_data)
 {
-    *OUT_low_battery = power->priv->on_low_battery;
+    xfpm_power_management_complete_get_low_battery (user_data,
+                                                    invocation,
+                                                    power->priv->on_low_battery);
 
     return TRUE;
 }

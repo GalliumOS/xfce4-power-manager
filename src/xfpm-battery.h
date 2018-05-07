@@ -23,7 +23,6 @@
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
-#include <dbus/dbus-glib.h>
 #include <upower.h>
 
 #include "xfpm-enum-glib.h"
@@ -38,23 +37,23 @@ typedef struct XfpmBatteryPrivate XfpmBatteryPrivate;
 
 typedef struct
 {
-    GtkStatusIcon      	    parent;
-    
+    GtkWidget      	        parent;
+
     XfpmBatteryPrivate     *priv;
-    
+
 } XfpmBattery;
 
 typedef struct
 {
-    GtkStatusIconClass 	    parent_class;
-    
+    GtkWidgetClass 	    parent_class;
+
     void		    (*battery_charge_changed)	 (XfpmBattery *battery);
-    
+
 } XfpmBatteryClass;
 
 GType        		    xfpm_battery_get_type        (void) G_GNUC_CONST;
 
-GtkStatusIcon              *xfpm_battery_new             (void);
+GtkWidget              *xfpm_battery_new             (void);
 
 void			    xfpm_battery_monitor_device  (XfpmBattery *battery,
 							  const char *object_path,
@@ -67,6 +66,8 @@ XfpmBatteryCharge	    xfpm_battery_get_charge      (XfpmBattery *battery);
 const gchar 		   *xfpm_battery_get_battery_name(XfpmBattery *battery);
 
 gchar 			   *xfpm_battery_get_time_left   (XfpmBattery *battery);
+
+const gchar        *xfpm_battery_get_icon_name   (XfpmBattery *battery);
 
 G_END_DECLS
 
