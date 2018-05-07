@@ -1,0 +1,748 @@
+xfce4-power-manager (1.4.4-4ubuntu2) xenial; urgency=high
+
+  * Drop redundant libsystemd-login-dev build-dependency. This package
+    doesn't link against libsystemd, and instead detects logind presence
+    dynamically and calls out to it via DBus.
+
+ -- Dimitri John Ledkov <xnox@ubuntu.com>  Mon, 04 Jan 2016 15:05:59 +0000
+
+xfce4-power-manager (1.4.4-4ubuntu1) wily; urgency=medium
+
+  * Merge from Debian. Remaining Ubuntu changes:
+  * debian/control
+    - Add libsystemd-login-dev build dep to use logind for session tracking.
+    - Enable building of lxpanel plugin
+    - Update depends for xfce4-power-manager-plugins to xfce4-panel | lxpanel
+  * debian/rules
+    - Do not include xfce4-panel in shlibs
+
+ -- Jackson Doak <noskcaj@ubuntu.com>  Tue, 26 May 2015 06:20:12 +1000
+
+xfce4-power-manager (1.4.4-4) unstable; urgency=medium
+
+  * debian/rules:
+    - use linux suspend/hibernate backend on Linux and Hurd, and freebsd on
+    kFreeBSD.
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Sat, 16 May 2015 10:32:12 +0200
+
+xfce4-power-manager (1.4.4-3) unstable; urgency=medium
+
+  * Upload to unstable.
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Wed, 06 May 2015 18:15:26 +0200
+
+xfce4-power-manager (1.4.4-2) experimental; urgency=medium
+
+  * debian/patches:
+    - 01_fix-light-locker-schema-loading added, make schema search recursive,
+      fix detection of light-locker settings.
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Thu, 23 Apr 2015 23:13:34 +0200
+
+xfce4-power-manager (1.4.4-1) experimental; urgency=medium
+
+  * New upstream release.
+    - the tray icon is back.                                    closes: #755551
+  * debian/NEWS: add a note about the re-introduction of the tray icon. 
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Sun, 22 Mar 2015 15:29:32 +0100
+
+xfce4-power-manager (1.4.3-1) experimental; urgency=medium
+
+  * New upstream release.
+    - add symlinks for UPS icons.                               closes: #762500
+  * debian/patches:
+    - 0001-Use-translated-device-type-for-unknown-devices-bug-1 dropped,
+      included upstream.
+  * debian/control:
+    - drop libsystemd-daemon-dev build-dep, obsolete.           closes: #779778
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Sun, 08 Mar 2015 21:57:47 +0100
+
+xfce4-power-manager (1.4.3-0ubuntu1) vivid; urgency=medium
+
+  * New upstream release. LP: #1424887
+
+ -- Jackson Doak <noskcaj@ubuntu.com>  Sun, 01 Mar 2015 12:18:45 +1100
+
+xfce4-power-manager (1.4.2-0ubuntu5) vivid; urgency=medium
+
+  * debian/patches/ll_integration.patch:
+    Remove Enable/Disable, update logind-handle-lid-switch property.
+
+ -- Sean Davis <smd.seandavis@gmail.com>  Wed, 21 Jan 2015 06:59:19 -0500
+
+xfce4-power-manager (1.4.2-0ubuntu4) vivid; urgency=medium
+
+  * debian/patches/ll_integration.patch:
+    Also patch UI header file.
+
+ -- Sean Davis <smd.seandavis@gmail.com>  Fri, 09 Jan 2015 07:01:36 -0500
+
+xfce4-power-manager (1.4.2-0ubuntu3) vivid; urgency=medium
+
+  * debian/patches: Add ll_integration.patch, for light-locker
+    integration in xfce4-power-manager-settings
+
+ -- Sean Davis <smd.seandavis@gmail.com>  Thu, 08 Jan 2015 22:36:37 -0500
+
+xfce4-power-manager (1.4.2-0ubuntu2) vivid; urgency=medium
+
+  * debian/control: Drop depends on systemd-services, virtual package
+
+ -- Sean Davis <smd.seandavis@gmail.com>  Mon, 01 Dec 2014 22:30:33 -0500
+
+xfce4-power-manager (1.4.2-0ubuntu1) vivid; urgency=medium
+
+  * New upstream release.
+  * debian/patches: dropped, included upstream.
+
+ -- Sean Davis <smd.seandavis@gmail.com>  Mon, 01 Dec 2014 21:47:51 -0500
+
+xfce4-power-manager (1.4.1-2ubuntu1) vivid; urgency=medium
+
+  * Merge from Debian. Remaining Ubuntu changes:
+  * debian/control
+    - Add libsystemd-login-dev build dep to use logind for session tracking.
+    - Enable building of lxpanel plugin
+    - Update depends for xfce4-power-manager-plugins to xfce4-panel | lxpanel
+  * debian/rules
+    - Do not include xfce4-panel in shlibs
+
+ -- Jackson Doak <noskcaj@ubuntu.com>  Fri, 31 Oct 2014 18:36:56 +1100
+
+xfce4-power-manager (1.4.1-2) unstable; urgency=medium
+
+  * debian/patches:
+    - 0001-Use-translated-device-type-for-unknown-devices-bug-1 added,
+    cherry-picked from upstream to fix extra long battery names when the
+    battery is not recognized by the system.                    closes: #763713
+  * debian/control:
+    - update standards version to 3.9.6.
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Thu, 30 Oct 2014 23:08:40 +0100
+
+xfce4-power-manager (1.4.1-1) unstable; urgency=medium
+
+  * New upstream release.
+  * debian/patches:
+    - 0001-Fix-handle-lid-switch-with-loginD-Bug-11160 dropped, included
+      upstream.
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Tue, 30 Sep 2014 21:49:35 +0200
+
+xfce4-power-manager (1.4.1-0ubuntu2) vivid; urgency=medium
+
+  * Build against upower 0.99 (LP: #1330037)
+
+ -- Martin Pitt <martin.pitt@ubuntu.com>  Thu, 30 Oct 2014 13:25:04 +0100
+
+xfce4-power-manager (1.4.1-0ubuntu1) utopic; urgency=medium
+
+  * New upstream bugfix release.
+  * debian/patches/01_fix-logind-handle-lid-switch.patch:
+    - Dropped, included upstream.
+
+ -- Sean Davis <smd.seandavis@gmail.com>  Thu, 25 Sep 2014 17:27:03 -0400
+
+xfce4-power-manager (1.4.0-2) unstable; urgency=medium
+
+  * Upload to unstable
+  * debian/patches:
+    - 0001-Fix-handle-lid-switch-with-loginD-Bug-11160 added, fix incomplete
+      patch reverting the logind xfconf hidden variables.
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Sun, 21 Sep 2014 22:15:23 +0200
+
+xfce4-power-manager (1.4.0-1ubuntu2) utopic; urgency=medium
+
+  * debian/patches/01_fix-logind-handle-lid-switch.patch:
+    - Fixes suspend on lid-close (LP: #1349056)
+
+ -- Sean Davis <smd.seandavis@gmail.com>  Wed, 17 Sep 2014 06:27:39 -0400
+
+xfce4-power-manager (1.4.0-1ubuntu1) utopic; urgency=medium
+
+  * Merge from Debian experimental. Remaining Ubuntu changes:
+  * debian/control
+    - Switch to using logind for session tracking. Depend on systemd-services
+      and add libsystemd-login-dev build dependency.
+    - Use upower << 0.99
+    - Enable building of lxpanel plugin
+    - Update depends for xfce4-power-manager-plugins to xfce4-panel | lxpanel
+  * debian/rules
+    - Do not include xfce4-panel in shlibs
+
+ -- Sean Davis <smd.seandavis@gmail.com>  Mon, 15 Sep 2014 20:51:12 -0400
+
+xfce4-power-manager (1.4.0-1) experimental; urgency=medium
+
+  * New upstream stable release.
+  * debian/rules:
+    - stop calling xdt-autogen, not needed anymore.
+  * debian/control:
+    - drop build-dep on dh-autoreconf, xfce4-dev-tools and libtool.
+  * debian/xfce4-power-manager-plugins.install:
+    - update plugin install path.
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Mon, 15 Sep 2014 19:09:13 +0200
+
+xfce4-power-manager (1.3.2-1) experimental; urgency=medium
+
+  [ Jackson Doak ]
+  * New upstream release
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Mon, 25 Aug 2014 21:38:14 +0200
+
+xfce4-power-manager (1.3.2-0ubuntu2) utopic; urgency=medium
+
+  * debian/control
+    - Enable building of lxpanel plugin
+    - Update depends for xfce4-power-manager-plugins to xfce4-panel | lxpanel
+  * debian/rules
+    - Do not include xfce4-panel in shlibs
+
+ -- Sean Davis <smd.seandavis@gmail.com>  Sun, 31 Aug 2014 21:18:26 -0400
+
+xfce4-power-manager (1.3.2-0ubuntu1) utopic; urgency=medium
+
+  * New upstream release.
+
+ -- Sean Davis <smd.seandavis@gmail.com>  Wed, 20 Aug 2014 21:00:59 -0400
+
+xfce4-power-manager (1.3.1-1ubuntu1) utopic; urgency=medium
+
+  * Merge from debian. Remaining changes:
+    - Switch to using logind for session tracking. Depend on systemd-services
+      and add libsystemd-login-dev build dependency.
+  * Use upower << 0.99
+
+ -- Sean Davis <smd.seandavis@gmail.com>  Thu, 14 Aug 2014 21:10:04 -0400
+
+xfce4-power-manager (1.3.1-1) experimental; urgency=medium
+
+  * debian/NEWS:
+    - inform users about the tray icon replacement by the Xfce panel plugin so
+      they get a chance to install it.
+  * New upstream release.
+  * debian/control:
+    - drop suggestion on udisks, not used anymore.
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Thu, 14 Aug 2014 14:50:52 +0200
+
+xfce4-power-manager (1.3.0-1ubuntu1) utopic; urgency=medium
+
+  * Merge from debian. (LP: #1334185) Remaining changes:
+    - Switch to using logind for session tracking. Depend on systemd-services
+      and add libsystemd-login-dev build dependency.
+  * Use upower << 0.99
+  * Drop all patches, fixed upstream
+
+ -- Jackson Doak <noskcaj@ubuntu.com>  Wed, 25 Jun 2014 19:13:23 +1000
+
+xfce4-power-manager (1.3.0-1) experimental; urgency=low
+
+  [ Evgeni Golov ]
+  * Correct Vcs-* URLs to point to anonscm.debian.org
+
+  [ Jackson Doak ]
+  * debian/control: 
+    - Bump standards-version to 3.9.5
+    - Build-depend on dh-autoreconf
+    - Drop redondant "Section" category
+  * debian/rules: --with autoreconf
+  * Created debian/source/options
+  * Create manpages for xfce4-power-information 
+    and xfpm-power-backlight-helper
+
+  [ Yves-Alexis Perez ]
+  * New upstream release.
+  * debian/control:
+    - add build-dep on libupower-glib-dev.
+    - version upower dependency to >= 0.99. 
+    - replace consolekit recommends by libpam-systemd on linux-any since we
+      need logind support. 
+    - promote xfce4-power-manager-plugins to recommends since the tray icon is
+      now gone and the panel plugin is the preferred way to interact with the
+      daemon.
+    - remove spurious Sections:
+    - update VCS links since xfpm got moved from goodies to desktop. 
+  * debian/rules:
+    - remove .la files.
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Mon, 23 Jun 2014 23:26:09 +0200
+
+xfce4-power-manager (1.2.0-5) unstable; urgency=medium
+
+  * Add patch to support upower 0.99. Closes: #752428
+  * Bump upower depend to >= 0.99
+
+ -- Jackson Doak <noskcaj@ubuntu.com>  Thu, 17 Jul 2014 06:20:22 +1000
+
+xfce4-power-manager (1.2.0-4ubuntu1) utopic; urgency=medium
+
+  * Merge from debian. Remaining changes:
+    - 06_fix-suspend-auth-check.patch: added, correctly check for suspend
+      permissions before disabling the corresponding drop-down menu item.
+      lp #929537
+    - 08_show_preferences_lxde.patch: Hide settings menu only on desktop
+      environment which have another power manager.
+    - Switch to using logind for session tracking. Depend on systemd-services
+      instead of consolekit recommends, and add libsystemd-login-dev build
+      dependency.
+    - 05_dont-allow-systemd-to-handle-suspend-hibernate-events.patch
+    - 06_add-shutdown-reboot-functionality-for-systemd.patch
+    - 07_fix-screen-dimming.patch
+    - 09_sync_session_xfpm_lock_setting.patch
+    - 10_inhibit_logind.patch
+
+ -- Jackson Doak <noskcaj@ubuntu.com>  Fri, 13 Jun 2014 06:43:15 +1000
+
+xfce4-power-manager (1.2.0-4) unstable; urgency=medium
+
+  * debian/control:
+    - replace consolekit recommends by libpam-systemd, and add systemd-shim |
+      system-sysv as well in order to not force systemd as init to users for
+      now.
+  * debian/control:
+    - update standards version to 3.9.5.
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Wed, 11 Jun 2014 21:22:22 +0200
+
+xfce4-power-manager (1.2.0-3ubuntu6) utopic; urgency=medium
+
+  * Actually use the 10_inhibit_logind.patch
+
+ -- Jackson Doak <noskcaj@ubuntu.com>  Mon, 02 Jun 2014 08:07:35 +1000
+
+xfce4-power-manager (1.2.0-3ubuntu5) utopic; urgency=medium
+
+  * Add 10_inhibit_logind.patch (Fixes LP: #1303736, Closes LP: #1323367)
+
+ -- Sean Davis <smd.seandavis@gmail.com>  Tue, 27 May 2014 00:03:16 -0400
+
+xfce4-power-manager (1.2.0-3ubuntu4) trusty; urgency=medium
+
+  * Add 09_sync_session_xfpm_lock_setting.patch (LP: #1101982)
+
+ -- Sean Davis <smd.seandavis@gmail.com>  Mon, 07 Apr 2014 10:09:14 -0500
+
+xfce4-power-manager (1.2.0-3ubuntu3) trusty; urgency=medium
+
+  * Add 07_fix-screen-dimming.patch. LP: #1067749
+  * Add DEP3 Header to 06_add-shutdown-reboot-functionality-for-systemd.patch
+
+ -- Jackson Doak <noskcaj@ubuntu.com>  Wed, 22 Jan 2014 16:02:45 +1100
+
+xfce4-power-manager (1.2.0-3ubuntu2) trusty; urgency=medium
+
+  * Add patches from debian svn branch to fix systemd. LP: #1222021
+  * Force run of xdt-autogen to continue to allow ppc64el to build
+
+ -- Jackson Doak <noskcaj@ubuntu.com>  Mon, 20 Jan 2014 07:04:09 +1100
+
+xfce4-power-manager (1.2.0-3ubuntu1) trusty; urgency=low
+
+  [ Jackson Doak ]
+  * Merged from debian unstable. Remaining changes:
+    - 06_fix-suspend-auth-check.patch: added, correctly check for suspend
+      permissions before disabling the corresponding drop-down menu item.
+      lp #929537
+    - 08_show_preferences_lxde.patch: Hide settings menu only on desktop
+      environment which have another power manager.
+    - Switch to using logind for session tracking. Depend on systemd-services
+      instead of consolekit recommends, and add libsystemd-login-dev build
+      dependency.
+  * Drop xubuntu_fix-status-icon-other-devices.patch, fixed in debian
+
+  [ Logan Rosen ]
+  * Get rid of 09_fix_insert_battery.patch, an Ubuntu patch that was applied
+    in Debian.
+
+ -- Jackson Doak <noskcaj@ubuntu.com>  Wed, 11 Dec 2013 18:22:21 +1100
+
+xfce4-power-manager (1.2.0-3) unstable; urgency=medium
+
+  [ Evgeni Golov ]
+  * Correct Vcs-* URLs to point to anonscm.debian.org
+
+  [ Jackson Doak ]
+  * debian/control: 
+    - Bump standards-version to 3.9.4
+    - Build-depend on dh-autoreconf
+    - Drop redandant "Section" category
+  * debian/rules: --with autoreconf
+  * Created debian/source/options
+  * Create manpages for xfce4-power-information 
+    and xfpm-power-backlight-helper
+
+  [ Yves-Alexis Perez ]
+  * debian/patches:
+    - 04_fix-missing-icons-for-non-system-batteries added, fix icon missing in
+      the system tray for non system batteries.                 closes: #728257
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Mon, 09 Dec 2013 07:50:25 +0100
+
+xfce4-power-manager (1.2.0-2ubuntu1) saucy; urgency=low
+
+  * Merged from debian unstable. Remaining changes:
+    - 06_fix-suspend-auth-check.patch: added, correctly check for suspend
+      permissions before disabling the corresponding drop-down menu item.
+      lp #929537
+    - 08_show_preferences_lxde.patch: Hide settings menu only on desktop
+      environment which have another power manager.
+    - xubuntu_fix-status-icon-other-devices.patch: fix broken status icons
+      for other devices (phone, wireless kbd, mouse, etc.).
+    - Switch to using logind for session tracking. Depend on systemd-services
+    instead of consolekit recommends, and add libsystemd-login-dev build
+    dependency.
+
+ -- Jackson Doak <noskcaj@ubuntu.com>  Tue, 13 Aug 2013 06:56:35 +1000
+
+xfce4-power-manager (1.2.0-2) unstable; urgency=low
+
+  [ Lionel Le Folgoc ]
+  * debian/patches:
+    - 02_translations-fix-invalid-format-strings.patch: updated to fix
+      crashes because of en_GB.po and tr.po.
+
+  [ Yves-Alexis Perez ]
+  * Upload to unstable.
+  * debian/patches:
+    - 01_Remove_custom_OSD_brightness_popup,_use_libnotify_instead added, use
+      libnotify for brightness notifications.
+    - 03_fix-insert-battery added, fix spurious space appearing when
+      removing/adding battery.                                  closes: #626224
+  * debian/rules:
+    - enable all hardening options.
+
+ -- Lionel Le Folgoc <mrpouit@gmail.com>  Wed, 22 May 2013 00:46:08 +0200
+
+xfce4-power-manager (1.2.0-1ubuntu3) saucy; urgency=low
+
+  * Switch to using logind for session tracking. Depend on systemd-services
+    instead of consolekit recommends, and add libsystemd-login-dev build
+    dependency.
+
+ -- Benjamin Kerensa <bkerensa@ubuntu.com>  Mon, 11 Mar 2013 01:46:13 -0700
+
+xfce4-power-manager (1.2.0-1ubuntu2) raring; urgency=low
+
+  * debian/patches:
+    - 02_translations-fix-invalid-format-strings.patch: updated to fix
+      crashes because of en_GB.po and tr.po. lp: #1054907
+
+ -- Lionel Le Folgoc <mrpouit@ubuntu.com>  Mon, 29 Oct 2012 11:49:03 +0100
+
+xfce4-power-manager (1.2.0-1ubuntu1) quantal; urgency=low
+
+  * Merge from Debian experimental, remaining Ubuntu changes:
+    - 06_fix-suspend-auth-check.patch: added, correctly check for suspend
+      permissions before disabling the corresponding drop-down menu item.
+      lp #929537
+    - 08_show_preferences_lxde.patch: Hide settings menu only on desktop
+      environment which have another power manager.
+    - 09_fix_insert_battery.patch: Another patch to fix empty icon when
+      removing a battery. Thanks Henry Gebhardt for the patch.
+    - xubuntu_fix-status-icon-other-devices.patch: fix broken status icons
+      for other devices (phone, wireless kbd, mouse, etc.).
+
+ -- Lionel Le Folgoc <mrpouit@ubuntu.com>  Fri, 18 May 2012 21:50:54 +0200
+
+xfce4-power-manager (1.2.0-1) experimental; urgency=low
+
+  * New upstream stable release.
+  * debian/control:
+    - bump b-deps for Xfce 4.10.
+  * debian/patches:
+    - 02_translations-fix-invalid-format-strings.patch: refreshed, some
+      translations have been fixed.
+
+ -- Lionel Le Folgoc <mrpouit@gmail.com>  Sat, 05 May 2012 14:24:30 +0200
+
+xfce4-power-manager (1.1.0-1) experimental; urgency=low
+
+  [ Yves-Alexis Perez ]
+  * New upstream development release.
+  * debian/patches:
+    - 03_trap-x-errors, 04_clear-idles-for-removed-batteries,
+      05_fix-brightness-key-modifiers: dropped, included upstream.
+
+  [ Lionel Le Folgoc ]
+  * debian/patches:
+    - 02_translations-fix-invalid-format-strings: refreshed to apply cleanly.
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Sun, 15 Apr 2012 20:23:42 +0200
+
+xfce4-power-manager (1.0.11-2) unstable; urgency=low
+
+  [ Lionel Le Folgoc ]
+  * debian/patches:
+    - 02_translations-fix-invalid-format-strings.patch: drop translated
+      strings when format strings don't match the original ones. This leads
+      to hard to reproduce random crashes depending on the locale used…
+
+  [ Yves-Alexis Perez ]
+  * debian/rules:
+    - build with --parallel.
+
+ -- Lionel Le Folgoc <mrpouit@gmail.com>  Sun, 08 Apr 2012 22:25:40 +0200
+
+xfce4-power-manager (1.0.11-1) unstable; urgency=low
+
+  [ Lionel Le Folgoc ]
+  * debian/patches: add missing DEP3 headers.
+
+  [ Yves-Alexis Perez ]
+  * New upstream release.
+  * debian/patches:
+    - 0001-Solaris-specific-code-for-determining-the-start-time dropped,
+    included upstream.
+    - 02_fix-notify-detect as well.
+  * debian/control:
+    - update standards version to 3.9.3.
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Thu, 29 Mar 2012 10:49:47 +0200
+
+xfce4-power-manager (1.0.10-5) unstable; urgency=low
+
+  [ Lionel Le Folgoc ]
+  * debian/patches:
+    - 03_trap-x-errors.patch: added, fix crash when all outputs don't support
+      the backlight property.                                   Closes: #658916
+    - 04_clear-idles-for-removed-batteries.patch: added, fix crash when xfpm
+      tries to refresh the status icon of a removed battery.
+    - 05_fix-brightness-key-modifiers.patch: added, let the brightness keys
+      work even when numlock is on.
+  * debian/rules:
+    - use debhelper 9 hardening support.
+  * debian/compat bumped to 9.
+  * debian/control:
+    - drop hardening-includes build-dep.
+    - update debhelper build-dep to 9 for hardening support.
+    - add dpkg-dev 1.16.1 build-dep for hardening support.
+
+  [ Yves-Alexis Perez ]
+  * debian/watch updated, xfpm has moved to xfce section.
+
+ -- Lionel Le Folgoc <mrpouit@gmail.com>  Mon, 06 Feb 2012 21:38:26 +0100
+
+xfce4-power-manager (1.0.10-4) unstable; urgency=low
+
+  * debian/patches:
+    - 02_fix-notify-detect added, fix libnotify detection.      closes: #630309
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Tue, 14 Jun 2011 21:44:04 +0200
+
+xfce4-power-manager (1.0.10-3) unstable; urgency=low
+
+  * debian/patches:
+    - 0001-Solaris-specific-code-for-determining-the-start-time cherry-picked
+      from master. We don't have solaris but it should fix the build-failure
+      on GNU/Hurd anyway.
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Fri, 22 Apr 2011 23:32:17 +0200
+
+xfce4-power-manager (1.0.10-2) unstable; urgency=low
+
+  [ Lionel Le Folgoc ]
+  * Upload to unstable.                                         closes: #623392
+  * debian/control:
+    - remove Simon and Emanuele from uploaders, thanks to them.
+    - bump b-deps for Xfce 4.8.
+  * debian/rules: switch to --fail-missing.
+  * debian/xfce4-power-manager.install: add missing sysfs backlight
+    helper and its pk policy.
+
+  [ Yves-Alexis Perez ]
+  * debian/control:
+    - update standards version to 3.9.2.
+
+ -- Lionel Le Folgoc <mrpouit@gmail.com>  Tue, 19 Apr 2011 23:19:53 +0200
+
+xfce4-power-manager (1.0.10-1) experimental; urgency=low
+
+  [ Yves-Alexis Perez ]
+  * New upstream release.
+  * debian/control:
+    - switch libxfcegui4 build-dep to libxfce4ui.
+    - add build-dep on libpolkit-gobject-1-dev, libxext-dev and libx11-dev.
+    - replace dep on hal by upower.
+    - add suggest on udisks for disk spinning.
+    - add build-dep on hardening-includes.
+  * debian/rules:
+    - add -O1, -z,defs and --as-needed to LDFLAGS.
+    - add hardening flags to {C,LD}FLAGS.
+
+  [ Lionel Le Folgoc ]
+  * debian/control:
+    - add myself to Uploaders
+    - bump Standards-Version to 3.9.1, no changes required.
+  * Switch to 3.0 (quilt).
+  * debian/rules:
+    - use dpkg-buildflags for cflags/ldflags handling.
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Sun, 20 Feb 2011 14:56:52 +0100
+
+xfce4-power-manager (0.8.5-3) unstable; urgency=low
+
+  [ Lionel Le Folgoc ]
+  * Switch to 3.0 (quilt) source format.
+  * debian/patches:
+    - 01_assume-hal-is-available.patch: do not check for hal presence on
+      the bus, it'll be spawned automatically on demand.        Closes: #612611
+    - 02_fix-indirect-dso-linking.patch: fix FTBFS with --no-add-needed.
+    - series: add them.
+  * debian/rules: call xdt-autogen before configure, and clean up
+    autogenerated files on clean.
+  * debian/control:
+    - build-depends on automake, autoconf, libtool and xfce4-dev-tools.
+    - bump hal dep to (>= 0.5.14-4~) for the dbus activation.
+    - add myself to Uploaders.
+
+  [ Yves-Alexis Perez ]
+  * debian/control:
+    - update standards version to 3.9.1.
+
+ -- Lionel Le Folgoc <mrpouit@gmail.com>  Sat, 19 Feb 2011 22:39:26 +0100
+
+xfce4-power-manager (0.8.5-2) unstable; urgency=low
+
+  * debian/control:
+    - add recommends on consolekit so user gets the authorization to
+      suspend/hibernate.                                        closes: #603325
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Sat, 13 Nov 2010 13:48:37 +0100
+
+xfce4-power-manager (0.8.5-1) unstable; urgency=low
+
+  * New upstream release.
+  * debian/control:
+    - update standards version to 3.8.4.
+    - update obsolete relation form < to <<.
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Tue, 02 Mar 2010 23:19:53 +0100
+
+xfce4-power-manager (0.8.4.2-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Sat, 21 Nov 2009 14:37:32 +0100
+
+xfce4-power-manager (0.8.4.1-1) unstable; urgency=low
+
+  * New upstream release.
+    - fix xfpm crashing when closing LID.                       closes: #552692
+    - allow setting lower value in battery warnings.            closes: #549207
+    - fix FTBFS when building twice in a row.                   closes: #549650 
+  * debian/xfce4-power-manager.xml: ship a default config to ask user when
+    pressing the power button.                                  closes: #544858
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Mon, 02 Nov 2009 22:20:58 +0100
+
+xfce4-power-manager (0.8.4-1) unstable; urgency=low
+
+  * New upstream release.
+  * debian/control:
+    - add Recommends on librsvg2-common, all icons are svg.
+    - update standards version to 3.8.3. 
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Tue, 29 Sep 2009 11:33:13 +0200
+
+xfce4-power-manager (0.8.3.1-1) unstable; urgency=low
+
+  * New upstream bugfix release.
+  * debian/watch edited to track Xfce archive reorganisation.
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Mon, 10 Aug 2009 08:25:55 +0200
+
+xfce4-power-manager (0.8.3-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Mon, 03 Aug 2009 15:20:09 +0200
+
+xfce4-power-manager (0.8.2-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Thu, 09 Jul 2009 23:41:28 +0200
+
+xfce4-power-manager (0.8.1.1-1) unstable; urgency=low
+
+  [ Evgeni Golov ]
+  * Fix Vcs-* fields, they were missing 'trunk' in the path.
+
+  [ Yves-Alexis Perez ]
+  * New upstream release.
+  * debian/control:
+    - drop build-dep on libglade.
+    - update standards version to 3.8.2. 
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Tue, 07 Jul 2009 00:29:41 +0200
+
+xfce4-power-manager (0.8.0-1) unstable; urgency=low
+
+  * New upstream release.
+  * debian/control:
+    - update long description, thanks to Gerfried Fuchs.        closes: #531812
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Tue, 09 Jun 2009 23:25:26 +0200
+
+xfce4-power-manager (0.8.0~rc2-4) unstable; urgency=low
+
+  * debian/rules:
+    - don't use --fail-missing in dh_install since we have an arch:all
+      package. Fixes FTBFS on all arches.                       closes: #530399
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Sun, 24 May 2009 18:37:32 +0200
+
+xfce4-power-manager (0.8.0~rc2-3) unstable; urgency=low
+
+  * *really* upload to unstable this time.
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Thu, 21 May 2009 12:10:21 +0200
+
+xfce4-power-manager (0.8.0~rc2-2) experimental; urgency=low
+
+  * Upload to unstable.
+  * debian/control:
+    - update -plugins description now that inhibit was moved to the main
+      program.
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Thu, 21 May 2009 01:22:31 +0200
+
+xfce4-power-manager (0.8.0~rc2-1) experimental; urgency=low
+
+  [ Yves-Alexis Perez ]
+  * New upstream beta release.
+  * debian/control:
+    - update standards version to 3.8.1.
+    - add build-dep on libglade2-dev.
+    - add build-dep on xfce4-panel-dev for panel plugins.
+    - add a new package for the panel plugins.
+    - add a new package for arch-indep files.
+    - move to xfce section.
+    - drop libhal-dev build-dep, now useless.
+    - add dep on hal.
+  * debian/rules:
+    - run dh_install with --fail-missing.
+    - add -Wl,-z,defs -Wl,--as-needed to LDFLAGS.
+  * debian/copyright: update dates and copyright holders.
+  * debian/xfce4-power-manager.install:
+    - install manpages in xfpm package.
+  * debian/xfce4-power-manager.1 dropped, included upstream.
+  * debian/xfce4-power-manager.manpages dropped, useless.
+
+  [ Evgeni Golov ]
+  * debian/control:
+    - fix depends of -plugins
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Tue, 19 May 2009 23:49:06 +0200
+
+xfce4-power-manager (0.6.2-1) experimental; urgency=low
+
+  * Initial release.                                            closes: #503636
+
+ -- Yves-Alexis Perez <corsac@debian.org>  Sat, 28 Feb 2009 23:59:10 +0100

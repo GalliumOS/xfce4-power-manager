@@ -1,0 +1,391 @@
+1.4.4
+=====
+New stable release of xfce4-power-manager.
+
+* Re-introduce the trayicon for better support of other DEs (Bug #11054)
+* Miscellaneous bug fixes:
+ - Fix dbus call for CK2 suspend (Bug #11610)
+ - Function check_for_consolekit2 is not used if !UP_CHECK_VERSION(0, 99, 0) (Bug #11657)
+ - Fix xfpm panel plugin crashes at startup when the locale is not UTF8
+ - The scalemenuitem is actually an imagemenuitem
+
+* Translation updates:
+ Bulgarian (bg), Chinese (China) (zh_CN), Croatian (hr),
+ Czech (cs), Dutch (nl), French (fr), German (de),
+ Italian (it), Korean (ko), Malay (ms), Russian (ru),
+ Spanish (es), Serbian (sr), Thai (th).
+
+1.4.3
+=====
+New stable release of xfce4-power-manager.
+
+* Miscellaneous bug fixes:
+ - Handle autotools m4 stuff properly
+ - Plug a memory leak (Bug #11538)
+ - Add support for ConsoleKit2
+ - Correctly check for hibernation
+   permissions (bug #11529)
+ - Use sysctl(3) to get or set brightness
+   level on FreeBSD and DragonFly systems
+ - Light Locker Integration (Bug #11488)
+ - Add gmux_backlight as supported
+   interface (bug #11406)
+ - Reformat code in xfpm_power_get_property
+ - Reformat code in xfpm_power_set_property
+
+* Translation updates:
+ Arabic (ar), Asturian (ast), Bulgarian (bg),
+ Czech (cs), Danish (da), German (de),
+ Spanish (Castilian) (es), Finnish (fi),
+ French (fr), Hebrew (he), Hungarian (hu),
+ Icelandic (is), Italian (it), Kazakh (kk),
+ Korean (ko), Malay (ms), Norwegian Bokmål (nb),
+ Dutch (Flemish) (nl), Polish (pl), Portuguese (pt),
+ Portuguese (Brazilian) (pt_BR), Russian (ru),
+ Slovak (sk), Slovenian (sl), Serbian (sr), Thai (th),
+ Turkish (tr), Ukrainian (uk), Chinese (China) (zh_CN).
+
+1.4.2
+=====
+New stable release of xfce4-power-manager.
+
+* Miscellaneous bug fixes:
+ Harald Judt:
+ - Shorten label for system inactivity time (bug #11129)
+ - Initially disable DPMS widgets when not handling DPMS
+ - Use translated device type for unknown devices (bug #11217)
+ Simon P.:
+ - Fix for critical battery action (Bug #11237)
+ Simon Steinbeiss:
+ - Add symlinks for UPS-charged icon (Debian Bug #762500)
+ Marcus Overhagen:
+ - xrandr brightness: Check for eDP devices too (bug #11308)
+
+Translation updates: Catalan (ca), Czech (cs),
+ Danish (da), German (de), English (Australia) (en_AU),
+ Spanish (Castilian) (es), French (fr), Italian (it),
+ Japanese (ja), Kazakh (kk), Korean (ko), Malay (ms),
+ Dutch (Flemish) (nl), Polish (pl), Portuguese (pt),
+ Portuguese (Brazilian) (pt_BR), Russian (ru),
+ Serbian (sr), Thai (th), Turkish (tr), Ukrainian (uk),
+ Chinese (China) (zh_CN), Chinese (Taiwan) (zh_TW).
+
+1.4.1
+=====
+
+* Miscellaneous bug fixes:
+ - Fix for panel icon not always updating depending on the
+   version of UPower in use.
+ - Fix handle lid switch with loginD (Bug 11160) Fixed by Simon P.
+
+Translation updates: Czech (cs), Hebrew (he), Polish (pl),
+  Serbian (sr), Ukrainian (uk)
+
+1.4.0
+=====
+
+* Miscellaneous bug fixes:
+ - Conditionally use xfce_dialog_show_help_with_version
+ - Add support for lxpanel 0.7+ (Bug 11108)
+ - Yves-Alexis Perez fixed the logic of xfconf logind inhibition keys
+ - plugin: update desktop file install location
+ - plugin: Fix crash when devices (dis)connect
+ - Point to versioned help docs
+ - Add DragonflyBSD to host check
+ - Only use batteries for current charge state that are
+   used for power supply
+ - fix minor build warnings
+ - Sync the brightness slider with blank and DPMS settings
+ - plugin: Use the brightness-slider-min-level for the scroll wheel
+ - Draw a bubble with a question mark if the device state is unknown
+ - Keep blank and DPMS timeout settings in order
+ - Fix typos in debug messages
+ - Update AppData info about the panel plugins
+ - Never try to display the -missing icons
+ - Add timestamp for 1.3.2 release to AppData
+ - Add trailing colons in labels for Comboboxes and Spinbuttons
+
+Translation updates: Bulgarian (bg), Chinese (China) (zh_CN),
+ Chinese (Taiwan) (zh_TW), Croatian (hr), Czech (cs),
+ Dutch (Flemish) (nl), English (Australia) (en_AU),
+ Finnish (fi), French (fr), German (de), Indonesian (id),
+ Italian (it), Japanese (ja), Kazakh (kk), Malay (ms),
+ Norwegian Nynorsk (nn), Polish (pl),
+ Portuguese (Brazilian) (pt_BR), Russian (ru),
+ Serbian (sr), Thai (th), Ukrainian (uk)
+
+1.3.2
+=====
+[Please note that this is a development release.]
+
+Development release of xfce4-power-manager.
+Please report all problems at bugzilla.xfce.org.
+
+  Since there is only one panel plugin left it was renamed from "Battery
+Indicator Plugin" to "Power Manager Plugin", which is more fitting as it
+doesn't merely show the battery status.
+
+  Xfce4-power-manager does not rely on special device icons anymore
+that illustrate the load-status. Instead, the load-status is now drawn
+with cairo on top of normal device icons that follow the naming of the
+Adwaita icon-theme.
+
+  Other changes:
+
+ - Fix crash with slider on 32bit systems (Bug #11076)
+ - Fix version number output on the commandline
+ - Remove unused code
+ - Add dedicated icons for the keyboard brightness notifications
+ - Various icon improvements
+ - Reorder parts of the settings dialog
+
+Translation updates: Bulgarian (bg), Dutch (Flemish) (nl),
+ French (fr), German (de), Italian (it), Malay (ms), Polish (pl),
+ Portuguese (Brazilian) (pt_BR), Spanish (Castilian) (es).
+
+1.3.1
+=====
+[Please note that this is a development release.]
+
+Development release of xfce4-power-manager.
+Please report all problems at bugzilla.xfce.org.
+
+ Xfce4-power-manager has changed how the xfce4-pm-helper application
+is used. Now the pm-helper is called by pkexec (provided by polkit),
+which means for users of xfpm that have UPower 0.99 installed and
+aren't using LoginD everything will work as before. In 1.3.0 options
+in the settings dialogs were unavailable because xfpm was still
+looking for the old UPower authorization rules which get uninstalled
+on the upgrade to UPower 0.99.
+
+  Simon Steinbeiss and Harald Judt have contributed many improvements
+to the power manager settings dialog. Harald also added a minimum xfconf
+value setting for the brightness slider so that users whose display goes
+completely dark at 0 can exclude that value if they desire.
+
+  The battery plugin can now be built as an LXDE plugin (Bug 10929).
+
+  The brightness plugin has been merged into the battery indicator plugin.
+This allows for the removal of duplicated code, puts all those settings in
+one plugin, and allows us to easily provide that functionality to LXDE.
+
+  The disk spin down feature was removed. The default settings for it
+actually had it configured so that it would never work, it was using
+the old UDisks 1 API, and would be useless for SSD drives and non-Linux
+users.
+
+  Other Changes:
+
+ - Simon P fixed a memory corruption crash (Bug 11018).
+ - OnlyShowIn was changed to a NotShowIn for the .desktop files (Bug 11009)
+ - Selecting a device in the plugin brings up the details in the settings
+   dialog.
+ - Improve strings in devices tab and add percentage (Bug #6652)
+ - Fork before gtk/dbus init
+ - Andrzej Added support for multi-row panel layouts for the plugin
+ - Restore screen power after sleep (Bug 10535)
+ - Samuli Suominen fixed suspend/hibernate with UPower 0.9.23 (Bug 10931)
+ - Carl Simonson added a notification popup when changing keyboard brightness
+ - Minumum UPower requirement was lowere to 0.9.7 to support FreeBSD
+ - Devices tab flickers on update (Bug 10937)
+ - Improve lid-action strings (Bug #6515)
+ - Carl Simonson added a reasonable step value for keyboard brightness
+ - Let xfpm control X11's screensaver extension
+
+Translation updates: Arabic (ar), Asturian (ast), Bulgarian (bg),
+ Chinese (Taiwan) (zh_TW), Croatian (hr), Dutch (Flemish) (nl),
+ English (Australia) (en_AU), French (fr), German (de), Hungarian (hu),
+ Indonesian (id), Italian (it), Japanese (ja),  Korean (ko), Malay (ms),
+ Norwegian Bokmål (nb), Polish (pl), Portuguese (pt),
+ Portuguese (Brazilian) (pt_BR), Russian (ru), Swedish (sv),
+ Spanish (Castilian) (es), Thai (th), Ukrainian (uk).
+
+1.3.0
+=====
+[Please note that this is a development release.]
+
+Development release of xfce4-power-manager.
+Please report all problems at bugzilla.xfce.org.
+
+  This release has a large number of changes contributed by many
+developers and translators.
+
+  One of the most noticable changes to xfpm is a new panel plugin
+to monitor battery and device charge levels which replaces the
+trayicon. If anyone outside of Xfce was using xfce4-power-manager
+in a different panel, such as LXDE, and wants xfpm to continue to
+work there, request it in bugzilla and we'll work on it.
+
+  The settings dialog has been completely restructured for better
+oversight. Additionally, xfce4-power-information, a stand-alone
+application has now been embedded inside the settings dialog.
+
+  A new version of Upower, 0.99.0, breaks it's API compability
+and xfpm required quite a bit of work to provide the same
+functionality as previous versions of Upower. Concurrently,
+several developers added support for systemd-logind in xfpm.
+Xfce4-power-manager added a xfce4-pm-helper application to
+suspend/hibernate on systems using upower 0.99.0 and higher.
+
+  Jannis Pohlmann removed custom OSD brightness popup code and
+it now uses libnotify so they can appear with any installed
+notification daemon.
+
+  Simon Steinbeiss created new icons for xfpm (based on the
+Adwaita icon-theme) covering all the different device types
+supported as well as all their individual states.
+
+  Sonal Santan added support for keyboard backlight control.
+This feature is useful when the firmware does not handle the
+keyboard brightness control automatically.
+
+
+- Fix brightness level from glong to gint32 to match RandR property,
+  patch written by Martin Matuska.
+- Fix incorrect check for suspend permissions (bug #8438),
+  patch written by Lionel Le Folgoc
+- Port xfpm to libupower-glib / add support for upower-0.99.0 API
+  patch written by Stefan Seyfried
+- Add shutdown/reboot functionality for systemd (Bug 10167)
+  patch written by Andreas Müller and Guido Berhoerster
+- Don't allow systemd to handle suspend/hibernate events
+  patch written by Mikhail Efremov
+- Add support for logind suspend/resume (Bug 9963)
+- Allow individual inhibition of systemd events
+  patch written by Sean Davis
+- Get rid of XfpmDeviceState and XfpmDeviceType
+  patch written by Stefan Seyfried
+- xfpm_backlight_button_pressed_cb: fix popup display
+  patch written by Stefan Seyfried
+- Fix empty systray icon in some panels on battery removal and
+  addition, patch written by Henry Gebhardt
+- Display power percentage in the device details, patch written
+  by Pascal de Bruijn
+- Add current percentage of batteries to device details, patch
+  written by Stefan Seyfried
+- do not show an icon for HID devices, patch written by
+  Stefan Seyfried
+- Fix status icon for devices other than battery and ups (Bug 8188)
+  patch written by Daniel Schubert and Dean Montgomery
+- Add support for keyboard backlight control (Bug 10470)
+  patch written by Sonal Santan
+- Don't call g_thread_init on newer versions of glib.
+- Fix typo in xfpm-power.c, patch written by Benjamin Kerensa
+- Fix typo in error message, patch written by Ian
+- Updates from the pre-4.8 panel registration method for panel
+  plugins
+- Update xfce4-session lock-screen setting to by in sync with
+  xfce4-session
+- Point to the online docs for xfpm's help
+- Fix uninitialized variables
+- Add a option for network manager sleep (Bug 10702)
+- Warn when no lock tool succeeded (Bug 6413)
+- Add support for suspend/hibernate via an xfce4-pm-helper since
+  it was dropped in UPower 0.99. This way suspend/hibernate
+  continues to work for the user as expected.
+- Show the settings menu outside of XFCE
+  patch written by Julien Lavergne
+- Fix an untranslatable string in battery-indicator-plugin
+  patch written by Masato Hashimoto
+- Autotools updates, patch written by Nick Schermer
+- Remove custom OSD brightness popup, use libnotify instead
+  patch written by Jannis Pohlmann
+
+Translation updates: Arabic (ar), Asturian (ast), Basque (eu),
+ Bulgarian (bg), Catalan (ca), Chinese (China) (zh_CN),
+ Chinese (Hong Kong) (zh_HK), Chinese (Taiwan) (zh_TW),
+ Croatian (hr), Czech (cs), Danish (da), Dutch (Flemish) (nl),
+ English (Australia) (en_AU), English (United Kingdom) (en_GB),
+ Estonian (et), Finnish (fi), French (fr), Galician (gl),
+ German (de), Greek (el), Hebrew (he), Hungarian (hu),
+ Indonesian (id), Italian (it), Japanese (ja), Kazakh (kk),
+ Korean (ko), Lithuanian (lt), Malay (ms), Norwegian Bokmål (nb),
+ Norwegian Nynorsk (nn), Occitan (post 1500) (oc),
+ Panjabi (Punjabi) (pa), Polish (pl), Portuguese (pt),
+ Portuguese (Brazilian) (pt_BR), Romanian (ro), Russian (ru),
+ Serbian (sr), Sinhala (si), Slovak (sk), Slovenian (sl),
+ Swedish (sv), Spanish (Castilian) (es), Telugu (te), Thai (th),
+ Turkish (tr), Ukrainian (uk), Uyghur (ug), Vietnamese (vi)
+
+1.2.0
+=====
+- Fix compilation without dpms.
+- Fix incorrect dialog message and error.
+- Plug memory leak.
+- Use valid printf string.
+- Fix compilation with polkit in freebsd (bug #8712).
+- Translation updates: Czech, Danish, German, English (United
+  Kingdom), Spanish (Castilian), Basque, Finnish, French, Galician,
+  Croatian, Hungarian, Italian, Japanese, Kazakh, Korean, Lithuanian,
+  Dutch (Flemish), Norwegian Nynorsk, Portuguese, Portuguese
+  (Brazilian), Romanian, Russian, Slovak, Ukrainian, Chinese (China),
+  Chinese (Taiwan).
+
+
+1.1.0
+=====
+- Show dialog in settings category.
+- Store brightness properties as uint (bug #7791).
+- Put traps around X functions (bug #7999).
+- Prevent idle being called on removed battery (bug #7851).
+- Fix brightness not working with numlock on (bug #6549).
+- Translation updates: Greek, French, Japanese, Korean, Dutch
+  (Flemish), Polish, Portuguese, Turkish.
+
+
+1.0.11
+======
+- Solaris-specific code for determining the start time of a process.
+- Don't attach to the status icon if libnotify >= 0.7.
+- Corrected check for Solaris macros
+- Fix default spin down toggle value.
+- Fix a bunch of set but unused variables.
+- Support NetworkManager 0.9
+- Fix configure.ac.in with openbsd.
+- Fix libnotify detection of notify_notification_attach_to_status_icon.
+- Fix Broken empty battery icon.
+- Change backlight property type to long.
+- Only dim brightness if the current level is brighter.
+- Refresh adaptor icon when battery device removed.
+- Optimize icons.
+- Translation updates (ar, bg, ca, cs, da, de, es, et, eu, fi, fr, hr,
+  hu, id, is, it, ja, kk, ko, lt, nl, nn, pl, pt, pt_BR, ru, sk, sv,
+  te, tr, uk, zh_CN, zh_TW).
+
+
+[...]
+
+
+0.8.4.1
+=======
+- Because on some systems we might not have the brightness keys mapped.
+  LCD brightness change are not reflected to xfpm when keys are pressed, so
+  save the actual brightness before dimming the screen on idle to restore it
+  afterword. (bug #5811).
+- Check if DPMS is enabled before doing action on lid close event (bug #5805).
+- Allow 1% as a minimum critical charge level.
+- Build fix with xextproto > 7.0.5 (bug #5897).
+
+0.8.4
+=======
+- Don't lock screen on lid event when multiple monitor are connected.
+- Force DPMSModeOff on lid close event if it is not done in Hardware.
+- Fix a crash in set_client_id (bug #5673).
+- Reduce memory usage on some places.
+
+0.8.3.1
+=======
+- Missing signal handler for power button settings (bug #5656).
+- Allow 5% as a minimum critical charge instead of 10%.
+- Change some property names, specially for buttons to avoid
+  problems with old 0.6 configuration.
+
+0.8.3
+=======
+- Provides more standard org.fd.PowerManagement DBus methods and signal (bug #5569).
+- Make it possible to compile without network manager support.
+- Add never show icon to the system tray configuration (bug #5613).
+- Fix a typo that prevents from getting the correct critical configuration (bug #5619).
+- Use Gtk as a popup indicator to show the brightness level as the cairo seems to be
+  problematic on some hardware. (bug #5544 #5632).
+- Better alignement in the interface file, worked by Josef Havran.
