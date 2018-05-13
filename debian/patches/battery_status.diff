@@ -66,12 +66,12 @@
 --- a/src/xfpm-manager.c
 +++ b/src/xfpm-manager.c
 @@ -62,6 +62,7 @@
- #include "xfpm-enum-types.h"
  #include "xfpm-dbus-monitor.h"
  #include "xfpm-systemd.h"
+ #include "xfce-screensaver.h"
 +#include "xfpm-battery.h"
  #include "../panel-plugins/power-manager-plugin/power-manager-button.h"
- 
+
  static void xfpm_manager_finalize   (GObject *object);
 @@ -483,6 +484,7 @@
  	XFPM_DEBUG_ENUM (action, XFPM_TYPE_LID_TRIGGER_ACTION, "LID opened");

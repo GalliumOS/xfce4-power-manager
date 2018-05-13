@@ -1,34 +1,12 @@
+diff --git a/src/xfpm-power.c b/src/xfpm-power.c
+index a1f6851..fa7f7ee 100644
 --- a/src/xfpm-power.c
 +++ b/src/xfpm-power.c
-@@ -306,16 +306,12 @@
+@@ -324,6 +324,7 @@ xfpm_power_get_properties (XfpmPower *power)
+ 	    power->priv->can_hibernate = xfpm_suspend_can_hibernate ();
+ 	}
+     }
++    power->priv->can_hibernate = FALSE;
  
- #if !UP_CHECK_VERSION(0, 99, 0)
-     power->priv->can_suspend = up_client_get_can_suspend(power->priv->upower);
--    power->priv->can_hibernate = up_client_get_can_hibernate(power->priv->upower);
- #else
-     if ( LOGIND_RUNNING () )
-     {
-         g_object_get (G_OBJECT (power->priv->systemd),
-                       "can-suspend", &power->priv->can_suspend,
-                       NULL);
--	g_object_get (G_OBJECT (power->priv->systemd),
--                      "can-hibernate", &power->priv->can_hibernate,
--                      NULL);
-     }
-     else
-     {
-@@ -324,14 +320,10 @@
- 	    g_object_get (G_OBJECT (power->priv->console),
- 			  "can-suspend", &power->priv->can_suspend,
- 			  NULL);
--	    g_object_get (G_OBJECT (power->priv->console),
--			  "can-hibernate", &power->priv->can_hibernate,
--			  NULL);
- 	}
- 	else
- 	{
- 	    power->priv->can_suspend   = xfpm_suspend_can_suspend ();
--	    power->priv->can_hibernate = xfpm_suspend_can_hibernate ();
- 	}
-     }
- #endif
+     g_object_get (power->priv->upower,
+                   "on-battery", &on_battery,

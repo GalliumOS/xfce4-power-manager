@@ -1,11 +1,13 @@
+diff --git a/panel-plugins/power-manager-plugin/power-manager-button.c b/panel-plugins/power-manager-plugin/power-manager-button.c
+index d6e2e69..632354b 100644
 --- a/panel-plugins/power-manager-plugin/power-manager-button.c
 +++ b/panel-plugins/power-manager-plugin/power-manager-button.c
-@@ -44,7 +44,7 @@
+@@ -47,7 +47,7 @@
  
  
  #define SET_LEVEL_TIMEOUT (50)
 -#define SAFE_SLIDER_MIN_LEVEL (5)
 +#define SAFE_SLIDER_MIN_LEVEL (50)
+ #define PANEL_DEFAULT_ICON ("battery-full-charged")
+ #define PANEL_DEFAULT_ICON_SYMBOLIC ("battery-full-charged-symbolic")
  
- #define POWER_MANAGER_BUTTON_GET_PRIVATE(o) \
- (G_TYPE_INSTANCE_GET_PRIVATE ((o), POWER_MANAGER_TYPE_BUTTON, PowerManagerButtonPrivate))

@@ -1,6 +1,8 @@
+diff --git a/common/xfpm-brightness.c b/common/xfpm-brightness.c
+index 563c12c..5473023 100644
 --- a/common/xfpm-brightness.c
 +++ b/common/xfpm-brightness.c
-@@ -55,6 +55,7 @@
+@@ -55,6 +55,7 @@ struct XfpmBrightnessPrivate
      gint32		max_level;
      gint32		current_level;
      gint32		min_level;
@@ -8,18 +10,18 @@
      gint32		step;
  };
  
-@@ -212,6 +213,7 @@
+@@ -212,6 +213,7 @@ xfpm_brightness_setup_xrandr (XfpmBrightness *brightness)
  		ret = TRUE;
  		brightness->priv->output = brightness->priv->resource->outputs[i];
  		brightness->priv->step =  max <= 20 ? 1 : max / 10;
 +	        brightness->priv->min_on_level = max <= 100 ? 1 : max / 50;
  	    }
- 	    
+ 
  	}
-@@ -282,7 +284,14 @@
+@@ -282,7 +284,14 @@ xfpm_brightness_xrand_down (XfpmBrightness *brightness, gint32 *new_level)
  	return TRUE;
      }
-     
+ 
 -    set_level = MAX (hw_level - brightness->priv->step, brightness->priv->min_level);
 +    if ( hw_level <= brightness->priv->step && hw_level > brightness->priv->min_on_level )
 +    {
@@ -29,10 +31,10 @@
 +    {
 +        set_level = MAX (hw_level - brightness->priv->step, brightness->priv->min_level);
 +    }
-     
+ 
      g_warn_if_fail (xfpm_brightness_xrandr_set_level (brightness, brightness->priv->output, set_level));
- 	
-@@ -363,6 +372,7 @@
+ 
+@@ -363,6 +372,7 @@ xfpm_brightness_setup_helper (XfpmBrightness *brightness)
  	brightness->priv->helper_has_hw = TRUE;
  	brightness->priv->min_level = 0;
  	brightness->priv->max_level = ret;
@@ -40,10 +42,10 @@
  	brightness->priv->step =  ret <= 20 ? 1 : ret / 10;
      }
  
-@@ -512,7 +522,14 @@
+@@ -512,7 +522,14 @@ xfpm_brightness_helper_down (XfpmBrightness *brightness, gint32 *new_level)
  	return TRUE;
      }
-     
+ 
 -    set_level = MAX (hw_level - brightness->priv->step, brightness->priv->min_level);
 +    if ( hw_level <= brightness->priv->step && hw_level > brightness->priv->min_on_level )
 +    {
@@ -53,10 +55,10 @@
 +    {
 +        set_level = MAX (hw_level - brightness->priv->step, brightness->priv->min_level);
 +    }
-     
+ 
      g_warn_if_fail (xfpm_brightness_helper_set_level (brightness, set_level));
- 	
-@@ -556,6 +573,7 @@
+ 
+@@ -556,6 +573,7 @@ xfpm_brightness_init (XfpmBrightness *brightness)
      brightness->priv->helper_has_hw = FALSE;
      brightness->priv->max_level = 0;
      brightness->priv->min_level = 0;
