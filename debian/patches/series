@@ -8,3 +8,4 @@ force_suspend.patch
 reinit_keymap_on_mappingnotify_event.patch
 add_backlight_min_on_substep.diff
 battery_status.diff
+add-lxde-files-to-potfiles.diff

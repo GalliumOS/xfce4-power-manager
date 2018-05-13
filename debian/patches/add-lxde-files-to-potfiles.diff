@@ -1,0 +1,11 @@
+diff --git a/po/POTFILES.in b/po/POTFILES.in
+index 4f3c2c7..ec53c4d 100644
+--- a/po/POTFILES.in
++++ b/po/POTFILES.in
+@@ -24,4 +24,6 @@ panel-plugins/power-manager-plugin/power-manager-button.c
+ panel-plugins/power-manager-plugin/scalemenuitem.c
+ panel-plugins/power-manager-plugin/xfce/xfce-power-manager-plugin.c
+ panel-plugins/power-manager-plugin/xfce/power-manager-plugin.desktop.in.in
++panel-plugins/power-manager-plugin/lxde-0.7/lxde-power-manager-plugin.c
++panel-plugins/power-manager-plugin/lxde/lxde-power-manager-plugin.c
+ data/appdata/xfce4-power-manager.appdata.xml.in
