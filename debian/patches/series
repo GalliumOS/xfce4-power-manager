@@ -1,5 +1,5 @@
 suspendandbrightness.diff
-lock_on_suspend.diff
+#SKIP-notneeded#lock_on_suspend.diff
 chromebook_power_button.patch
 disable_hibernate.patch
 #SKIP-oknow?#low_battery_status_fix.patch
